@@ -48,8 +48,8 @@
     "wait-on": "^7.2.0"
   },
   "build": {
-    "appId": "com.yourcompany.fitnesstracker",
-    "productName": "Fitness Tracker",
+    "appId": "com.silent.fitnesstracker",
+    "productName": "SilentFit",
     "directories": {
       "buildResources": "build"
     },
