@@ -118,6 +118,7 @@ function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js'), 
+            devTools: true,
             
             // 恢复默认 webSecurity，因为它现在应该能正常工作了
             webSecurity: true, 

@@ -1003,7 +1003,7 @@ const Sidebar: React.FC<{ currentPage: Page; setCurrentPage: React.Dispatch<Reac
         <aside className="w-20 md:w-64 bg-gray-800 p-4 shadow-2xl flex flex-col border-r border-gray-700">
             <div className="flex items-center p-2 mb-8 mt-2">
                 <DumbbellIcon className="w-8 h-8 text-emerald-400 mr-2" />
-                <h1 className="hidden md:block text-xl font-bold text-white">训练日志</h1>
+                <h1 className="hidden md:block text-xl font-bold text-white">SilentFit</h1>
             </div>
             
             <nav className="flex-1 space-y-2">
@@ -1013,12 +1013,11 @@ const Sidebar: React.FC<{ currentPage: Page; setCurrentPage: React.Dispatch<Reac
                         onClick={() => setCurrentPage(item.id as Page)}
                         className={`
                             flex items-center w-full py-3 px-3 rounded-xl 
-                            text-sm font-medium transition duration-200
+                            text-sm font-medium transition duration-200 bg-gray-700
                             ${currentPage === item.id 
-                                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50' 
+                                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50 bg-indigo-700' 
                                 : 'text-gray-400 hover:bg-gray-700 hover:text-white'
                             }
-                            ${item.id === 'metrics' ? (currentPage === item.id ? 'bg-indigo-600 shadow-indigo-900/50' : 'hover:text-indigo-400') : ''}
                         `}
                     >
                         <item.icon className="w-5 h-5 mr-3" />
