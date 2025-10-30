@@ -74,14 +74,4 @@ This project comes with a set of useful scripts defined in `package.json`:
 | `cap:sync`           | Syncs the web build with the native mobile platforms (Android/iOS).                                      |
 | `cap:open:android`   | Opens the project in Android Studio.                                                                     |
 
-## 📸 Screenshots
 
-*(Here you can add screenshots of your application. For example:)*
-
-| Dashboard                                        | Record Training                                  |
-| ------------------------------------------------ | ------------------------------------------------ |
-| ![Dashboard](link-to-your-dashboard-screenshot.png) | ![Record Training](link-to-your-training-screenshot.png) |
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
