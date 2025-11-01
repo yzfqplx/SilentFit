@@ -11,6 +11,7 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx", // <-- 确保这里是 'react-jsx'
 
@@ -20,9 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts","src", "src/**/*.tsx", "src/global.d.ts", "vite.config.ts"],
-  "references": [
-    
-    // 如果您有 tsconfig.node.json 或其他，需要在这里引用
-  ]
+  "include": ["src/**/*.ts","src", "src/**/*.tsx", "src/global.d.ts"],
+  "references": []
 }

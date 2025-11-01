@@ -15,6 +15,7 @@ const MetricsPage: React.FC = () => {
         handleMetricDelete,
         handleCancelMetricEdit,
         setCurrentPage,
+        showConfirm,
     } = useAppContext();
 
     return (
@@ -42,7 +43,12 @@ const MetricsPage: React.FC = () => {
                             key={metric._id} 
                             metric={metric} 
                             handleEdit={(met) => handleMetricEdit(met, setCurrentPage)} 
-                            handleDelete={(id) => handleMetricDelete(id, window.confirm)}
+                            handleDelete={(id) => {
+                                showConfirm(
+                                    '确认删除此围度记录吗?',
+                                    () => handleMetricDelete(id)
+                                );
+                            }}
                         />
                     ))}
                 </div>

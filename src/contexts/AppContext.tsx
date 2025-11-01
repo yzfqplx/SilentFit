@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import type { Page, TrainingRecord, MetricRecord, DataAPI } from '../types/data';
 import { webStore } from '../utils/webStore';
 import { STRENGTH_ACTIVITIES } from '../constants/activities';
@@ -94,7 +95,8 @@ const useTrainingData = (
   records: TrainingRecord[], 
   setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>, 
   fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
-  showAlert: (message: string) => void
+  showAlert: (message: string) => void,
+  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void
 ) => {
   const [formData, setFormData] = useState<Partial<TrainingRecord>>({
     type: 'Weightlifting',
@@ -176,17 +178,22 @@ const useTrainingData = (
     setCurrentPage('records');
   }, []);
 
-  const handleRecordDelete = useCallback(async (id: string, confirm: (message: string) => boolean) => {
-    const store: DataAPI = getDataStore();
-    if (!store || !confirm(`确认删除此训练记录吗?`)) return;
-    try {
-      await store.remove('training', { _id: id }, {});
-      console.log("Training Record deleted successfully!");
-      fetchRecords('training', setRecords);
-    } catch (error) {
-      console.error("Error deleting record:", error);
-    }
-  }, [fetchRecords, setRecords]);
+  const handleRecordDelete = useCallback((id: string) => {
+    showConfirm(
+      '确认删除此训练记录吗?',
+      async () => {
+        const store: DataAPI = getDataStore();
+        if (!store) return;
+        try {
+          await store.remove('training', { _id: id }, {});
+          console.log("Training Record deleted successfully!");
+          fetchRecords('training', setRecords);
+        } catch (error) {
+          console.error("Error deleting record:", error);
+        }
+      }
+    );
+  }, [fetchRecords, setRecords, showConfirm]);
 
   const handleCancelRecordEdit = useCallback(() => {
     setEditingId(null); 
@@ -259,7 +266,8 @@ const useMetricData = (
   metrics: MetricRecord[], 
   setMetrics: React.Dispatch<React.SetStateAction<MetricRecord[]>>, 
   fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
-  showAlert: (message: string) => void
+  showAlert: (message: string) => void,
+  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void
 ) => {
   const [metricFormData, setMetricFormData] = useState<Partial<MetricRecord>>({
     date: new Date().toISOString().substring(0, 10),
@@ -374,17 +382,22 @@ const useMetricData = (
     setCurrentPage('metrics');
   }, []);
   
-  const handleMetricDelete = useCallback(async (id: string, confirm: (message: string) => boolean) => {
-    const store: DataAPI = getDataStore();
-    if (!store || !confirm(`确认删除此围度记录吗?`)) return;
-    try {
-      await store.remove('metrics', { _id: id }, {});
-      console.log("Metric Record deleted successfully!");
-      fetchRecords('metrics', setMetrics);
-    } catch (error) {
-      console.error("Error deleting metric record:", error);
-    }
-  }, [fetchRecords, setMetrics]);
+  const handleMetricDelete = useCallback((id: string) => {
+    showConfirm(
+      '确认删除此围度记录吗?',
+      async () => {
+        const store: DataAPI = getDataStore();
+        if (!store) return;
+        try {
+          await store.remove('metrics', { _id: id }, {});
+          console.log("Metric Record deleted successfully!");
+          fetchRecords('metrics', setMetrics);
+        } catch (error) {
+          console.error("Error deleting metric record:", error);
+        }
+      }
+    );
+  }, [fetchRecords, setMetrics, showConfirm]);
 
   const handleCancelMetricEdit = useCallback(() => {
     setEditingMetricId(null); 
@@ -480,6 +493,21 @@ interface AppContextType {
   alertMessage: string | null;
   setAlertMessage: React.Dispatch<React.SetStateAction<string | null>>;
 
+  // Confirm Dialog state
+  confirmDialog: {
+    isOpen: boolean;
+    message: string | null;
+    onConfirm: () => void;
+    onCancel: () => void;
+  };
+  setConfirmDialog: React.Dispatch<React.SetStateAction<{
+    isOpen: boolean;
+    message: string | null;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }>>;
+  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void;
+
   // Data fetching
   records: TrainingRecord[];
   metrics: MetricRecord[];
@@ -494,7 +522,7 @@ interface AppContextType {
   handleRecordChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   handleRecordSubmit: (e: React.FormEvent) => Promise<void>;
   handleRecordEdit: (record: TrainingRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => void;
-  handleRecordDelete: (id: string, confirm: (message: string) => boolean) => Promise<void>;
+  handleRecordDelete: (id: string) => void;
   handleCancelRecordEdit: () => void;
   totalWeightliftingSessions: number;
   totalSets: number;
@@ -507,7 +535,7 @@ interface AppContextType {
   handleMetricChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleMetricSubmit: (e: React.FormEvent) => Promise<void>;
   handleMetricEdit: (metric: MetricRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => void;
-  handleMetricDelete: (id: string, confirm: (message: string) => boolean) => Promise<void>;
+  handleMetricDelete: (id: string) => void;
   handleCancelMetricEdit: () => void;
 
   // Settings data
@@ -527,14 +555,40 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // --- 创建 Provider 组件 ---
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [authReady, setAuthReady] = useState(true); // Simplified for context
+  const [authReady] = useState(true); // Simplified for context
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    message: string | null;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }>({
+    isOpen: false,
+    message: null,
+    onConfirm: () => {},
+    onCancel: () => {},
+  });
+
+  const showConfirm = (message: string, onConfirm: () => void, onCancel?: () => void) => {
+    setConfirmDialog({
+      isOpen: true,
+      message,
+      onConfirm: () => {
+        setConfirmDialog({ isOpen: false, message: null, onConfirm: () => {}, onCancel: () => {} });
+        onConfirm();
+      },
+      onCancel: () => {
+        setConfirmDialog({ isOpen: false, message: null, onConfirm: () => {}, onCancel: () => {} });
+        if (onCancel) onCancel();
+      },
+    });
+  };
 
   const { records, setRecords, metrics, setMetrics, fetchRecords } = useDataFetching(authReady);
   
-  const trainingData = useTrainingData(records, setRecords, fetchRecords, setAlertMessage);
-  const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage);
+  const trainingData = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, showConfirm);
+  const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage, showConfirm);
   const settingsData = useSettingsData();
   const derivedData = useDerivedData(metrics, settingsData.heightCm);
 
@@ -543,6 +597,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCurrentPage,
     alertMessage,
     setAlertMessage,
+    confirmDialog,
+    setConfirmDialog,
+    showConfirm,
     records,
     metrics,
     ...trainingData,

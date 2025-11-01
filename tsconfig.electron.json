@@ -7,7 +7,8 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "outDir": "dist-electron", // **【关键】** Electron 编译输出目录
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["electron"] // 显式包含 Electron 类型定义
   },
   "include": ["electron/**/*.ts"]
 }

@@ -1,15 +1,15 @@
-import React from 'react';
+import { useAppContext } from './contexts/AppContext';
 import Sidebar from './components/Sidebar';
-import AlertDialog from './components/AlertDialog';
 import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/RecordsPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
-import { useAppContext } from './contexts/AppContext';
+import AlertDialog from './components/AlertDialog';
+import ConfirmDialog from './components/ConfirmDialog';
+import './App.css';
 
-// --- 主应用组件 (App) ---
-const App: React.FC = () => {
-  const { currentPage, setCurrentPage, alertMessage, setAlertMessage } = useAppContext();
+function App() {
+  const { currentPage, setCurrentPage, alertMessage, setAlertMessage, confirmDialog } = useAppContext();
 
   // --- 渲染内容 ---
   const renderContent = () => {
@@ -39,7 +39,19 @@ const App: React.FC = () => {
       </main>
 
       {/* Alert Dialog */}
-      <AlertDialog message={alertMessage} onClose={() => setAlertMessage(null)} />
+      <AlertDialog 
+        isOpen={!!alertMessage} 
+        message={alertMessage} 
+        onConfirm={() => setAlertMessage(null)} 
+      />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={confirmDialog.onCancel}
+      />
 
     </div>
   );

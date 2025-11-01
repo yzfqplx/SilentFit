@@ -31,9 +31,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage }) => {
                         onClick={() => setCurrentPage(item.id as Page)}
                         className={`
                             flex items-center w-full py-3 px-3 rounded-xl 
-                            text-sm font-medium transition duration-200 bg-gray-700 focus:outline-none
+                            text-sm font-medium transition duration-200 focus:outline-none
                             ${currentPage === item.id 
-                                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50 bg-indigo-700' 
+                                ? 'bg-indigo-700 text-white shadow-lg shadow-indigo-900/50' 
                                 : 'text-gray-400 hover:bg-gray-700 hover:text-white'
                             }
                         `}

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MetricRecord } from '../types/data';
 import { TapeMeasureIcon, Edit2Icon, Trash2Icon } from './icons/Icons';
+import Tooltip from './Tooltip';
 
 interface MetricRecordCardProps {
     metric: MetricRecord;
@@ -43,7 +44,9 @@ const MetricRecordCard: React.FC<MetricRecordCardProps> = ({ metric, handleEdit,
                         </span>
                     </div>
                     {metric.notes && (
-                        <p className="text-xs text-gray-500 mt-1 italic max-w-md truncate">备注: {metric.notes}</p>
+                        <Tooltip content={metric.notes}>
+                            <p className="text-xs text-gray-500 mt-1 italic max-w-md truncate">备注: {metric.notes}</p>
+                        </Tooltip>
                     )}
                 </div>
             </div>

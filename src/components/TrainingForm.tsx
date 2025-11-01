@@ -64,7 +64,7 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
                         type="number"
                         id="weightKg"
                         name="weightKg"
-                        value={formData.weightKg || ''}
+                        value={formData.weightKg === 0 ? '' : formData.weightKg || ''}
                         onChange={handleRecordChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                         required
@@ -79,7 +79,7 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
                         type="number"
                         id="sets"
                         name="sets"
-                        value={formData.sets === undefined || formData.sets === null ? '' : formData.sets}
+                        value={formData.sets === 0 ? '' : formData.sets === undefined || formData.sets === null ? '' : formData.sets}
                         onChange={handleRecordChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                         required
@@ -92,7 +92,7 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
                         type="number"
                         id="reps"
                         name="reps"
-                        value={formData.reps === undefined || formData.reps === null ? '' : formData.reps}
+                        value={formData.reps === 0 ? '' : formData.reps === undefined || formData.reps === null ? '' : formData.reps}
                         onChange={handleRecordChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                         required

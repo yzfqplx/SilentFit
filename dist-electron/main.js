@@ -137,47 +137,59 @@ function registerIpcHandlers() {
 // Electron 窗口创建
 // ----------------------------------------------------
 function createWindow() {
+    // 创建启动屏幕窗口
+    const splash = new electron_1.BrowserWindow({
+        width: 400,
+        height: 300,
+        transparent: true,
+        frame: false,
+        alwaysOnTop: true,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            devTools: false,
+        },
+    });
+    // 加载启动屏幕 HTML 文件
+    const splashPath = path.join(electron_1.app.getAppPath(), 'public', 'splash.html');
+    splash.loadURL((0, url_1.pathToFileURL)(splashPath).href);
+    // 创建主窗口
     const win = new electron_1.BrowserWindow({
         width: 1200,
         height: 800,
         minWidth: 800,
         minHeight: 600,
-        // Windows: 隐藏菜单栏（Alt 可暂时显示，或通过 setMenuBarVisibility(false) 完全隐藏）
+        show: false, // 初始时隐藏主窗口
         autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js'),
-            devTools: !electron_1.app.isPackaged, // 生产环境禁用开发者工具
-            // 恢复默认 webSecurity，因为它现在应该能正常工作了
+            devTools: !electron_1.app.isPackaged,
             webSecurity: true,
         },
     });
-    // 【核心修复】: 使用 app.isPackaged 替代可能错误的环境变量
+    // 主窗口准备好显示时，显示主窗口并关闭启动屏幕
+    win.once('ready-to-show', () => {
+        splash.destroy(); // 关闭启动屏幕
+        win.show(); // 显示主窗口
+    });
     if (!electron_1.app.isPackaged) {
-        // 开发环境：加载 Vite 服务器地址
         win.webContents.openDevTools();
         win.loadURL('http://localhost:5173/');
     }
     else {
-        // 生产环境：加载构建后的 HTML 文件
         const indexPath = path.join(DIST_ROOT, 'index.html');
-        // 使用 loadURL 和 pathToFileURL 确保路径格式正确
         const fileUrl = (0, url_1.pathToFileURL)(indexPath).href;
-        // 生产环境不输出详细日志
-        // console.log(`[Prod Load] Attempting to load URL: ${fileUrl}`); 
         win.loadURL(fileUrl).catch(err => {
-            // 生产环境只输出错误日志
             console.error(`Failed to load index.html from URL: ${fileUrl}`, err);
         });
     }
-    // 移除应用菜单（特别是 Windows 的 File/Edit/View 菜单）
     try {
         electron_1.Menu.setApplicationMenu(null);
         win.setMenuBarVisibility(false);
     }
     catch (e) {
-        // 生产环境只输出警告日志
         console.warn('Failed to hide menu bar:', e);
     }
 }

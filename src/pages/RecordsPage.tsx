@@ -11,10 +11,15 @@ const RecordsPage: React.FC = () => {
         handleRecordChange,
         handleRecordSubmit,
         handleRecordEdit,
-        handleRecordDelete,
+        handleRecordDelete: handleRecordDeleteWithContext,
         handleCancelRecordEdit,
         setCurrentPage,
     } = useAppContext();
+
+    // 创建包装函数以匹配 TrainingRecordCard 期望的签名
+    const handleRecordDelete = (id: string) => {
+        handleRecordDeleteWithContext(id);
+    };
 
     return (
         <div className="space-y-8">
@@ -38,7 +43,7 @@ const RecordsPage: React.FC = () => {
                             key={record._id} 
                             record={record} 
                             handleEdit={(rec) => handleRecordEdit(rec, setCurrentPage)} 
-                            handleDelete={(id) => handleRecordDelete(id, window.confirm)}
+                            handleDelete={handleRecordDelete}
                         />
                     ))}
                 </div>

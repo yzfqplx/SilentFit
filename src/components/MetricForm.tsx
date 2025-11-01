@@ -43,7 +43,7 @@ const MetricForm: React.FC<MetricFormProps> = ({
                         type="number"
                         id="shoulderCm"
                         name="shoulderCm"
-                        value={metricFormData.shoulderCm || ''}
+                        value={metricFormData.shoulderCm === 0 ? '' : metricFormData.shoulderCm || ''}
                         onChange={handleMetricChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
                         min="0" step="0.1" required
@@ -55,7 +55,7 @@ const MetricForm: React.FC<MetricFormProps> = ({
                         type="number"
                         id="chestCm"
                         name="chestCm"
-                        value={metricFormData.chestCm || ''}
+                        value={metricFormData.chestCm === 0 ? '' : metricFormData.chestCm || ''}
                         onChange={handleMetricChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
                         min="0" step="0.1" required
@@ -67,7 +67,7 @@ const MetricForm: React.FC<MetricFormProps> = ({
                         type="number"
                         id="armCm"
                         name="armCm"
-                        value={metricFormData.armCm || ''}
+                        value={metricFormData.armCm === 0 ? '' : metricFormData.armCm || ''}
                         onChange={handleMetricChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
                         min="0" step="0.1"
@@ -79,7 +79,7 @@ const MetricForm: React.FC<MetricFormProps> = ({
                         type="number"
                         id="waistCm"
                         name="waistCm"
-                        value={metricFormData.waistCm || ''}
+                        value={metricFormData.waistCm === 0 ? '' : metricFormData.waistCm || ''}
                         onChange={handleMetricChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
                         min="0" step="0.1"
@@ -91,7 +91,7 @@ const MetricForm: React.FC<MetricFormProps> = ({
                         type="number"
                         id="weightKg"
                         name="weightKg"
-                        value={metricFormData.weightKg || ''}
+                        value={metricFormData.weightKg === 0 ? '' : metricFormData.weightKg || ''}
                         onChange={handleMetricChange}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
                         min="0" step="0.1"

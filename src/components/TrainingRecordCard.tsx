@@ -1,6 +1,7 @@
 import React from 'react';
 import type { TrainingRecord } from '../types/data';
 import { DumbbellIcon, Edit2Icon, Trash2Icon } from './icons/Icons';
+import Tooltip from './Tooltip';
 
 interface TrainingRecordCardProps {
     record: TrainingRecord;
@@ -32,7 +33,9 @@ const TrainingRecordCard: React.FC<TrainingRecordCardProps> = ({ record, handleE
                         x {record.reps} 次 x {record.sets} 组
                     </div>
                     {record.notes && (
-                        <p className="text-xs text-gray-500 mt-1 italic max-w-md truncate">备注: {record.notes}</p>
+                        <Tooltip content={record.notes}>
+                            <p className="text-xs text-gray-500 mt-1 italic max-w-md truncate">备注: {record.notes}</p>
+                        </Tooltip>
                     )}
                 </div>
             </div>

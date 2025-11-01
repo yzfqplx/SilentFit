@@ -2,6 +2,7 @@
   "name": "fitness-tracker-app",
   "version": "1.0.0-Alpha",
   "description": "A fitness data tracker application.",
+  "author": "yzfqplx",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
@@ -29,8 +30,11 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.4",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.9.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@types/slice-ansi": "^5.0.2",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^5.1.0",
@@ -84,7 +88,10 @@
     "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
     "files": [
       "dist/**/*",
-      "dist-electron/**/*"
+      "dist-electron/**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,user,bak,vcproj,filters,lib,scc}"
     ]
   }
 }
