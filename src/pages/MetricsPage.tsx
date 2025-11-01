@@ -3,6 +3,7 @@ import type { MetricRecord } from '../types/data';
 import MetricForm from '../components/MetricForm';
 import MetricHistoryChart from '../components/charts/MetricHistoryChart';
 import MetricRecordCard from '../components/MetricRecordCard';
+import AlertDialog from '../components/AlertDialog'; // Import AlertDialog
 
 interface MetricsPageProps {
     metrics: MetricRecord[];
@@ -13,6 +14,8 @@ interface MetricsPageProps {
     handleMetricEdit: (metric: MetricRecord) => void;
     handleMetricDelete: (id: string) => Promise<void>;
     handleCancelEdit: () => void;
+    alertMessage: string | null; // Add alertMessage prop
+    handleCloseAlert: () => void; // Add handleCloseAlert prop
 }
 
 const ITEMS_PER_PAGE = 5; // Number of items to display per page
@@ -26,6 +29,8 @@ const MetricsPage: React.FC<MetricsPageProps> = ({
     handleMetricEdit,
     handleMetricDelete,
     handleCancelEdit,
+    alertMessage, // Destructure alertMessage
+    handleCloseAlert, // Destructure handleCloseAlert
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -98,6 +103,8 @@ const MetricsPage: React.FC<MetricsPageProps> = ({
                     </div>
                 )}
             </div>
+            {/* Render custom AlertDialog */}
+            <AlertDialog message={alertMessage} onClose={handleCloseAlert} />
         </div>
     );
 };

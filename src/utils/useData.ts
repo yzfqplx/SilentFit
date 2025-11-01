@@ -97,6 +97,7 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
   const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<string>(STRENGTH_ACTIVITIES[0]);
   const [trendRange, setTrendRange] = useState<'30' | '90' | 'all'>('all');
+  const [trainingAlertMessage, setTrainingAlertMessage] = useState<string | null>(null); // State for custom alert message
 
   const handleRecordChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -117,7 +118,7 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
     if (formData.sets === undefined || (formData.sets as number) < 1) missing.push('组数');
     if (formData.reps === undefined || (formData.reps as number) < 1) missing.push('次数');
     if (missing.length) {
-      alert(`请检查以下字段：${missing.join('、')}`);
+      setTrainingAlertMessage(`请检查以下字段：${missing.join('、')}`);
       return;
     }
     const store: DataAPI = getDataStore();
@@ -167,7 +168,9 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
 
   const handleRecordDelete = useCallback(async (id: string, confirm: (message: string) => boolean) => {
     const store: DataAPI = getDataStore();
-    if (!store || !confirm(`确认删除此训练记录吗?`)) return;
+    // Using custom alert for confirmation as well
+    const confirmed = window.confirm(`确认删除此训练记录吗?`); // Keep native confirm for now, or replace with custom
+    if (!store || !confirmed) return;
     try {
       await store.remove('training', { _id: id }, {});
       console.log("Training Record deleted successfully!");
@@ -188,6 +191,10 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
         weightKg: 0, 
         notes: '' 
     });
+  }, []);
+
+  const handleCloseTrainingAlert = useCallback(() => {
+    setTrainingAlertMessage(null);
   }, []);
 
   const totalWeightliftingSessions = records.filter(r => r.type === 'Weightlifting').length;
@@ -240,6 +247,8 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
     totalSets,
     maxWeightByActivity,
     activityTrendData,
+    trainingAlertMessage, // Return alert state
+    handleCloseTrainingAlert, // Return alert close handler
   };
 };
 
@@ -255,6 +264,7 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     notes: '',
   });
   const [editingMetricId, setEditingMetricId] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null); // State for custom alert message
 
   const handleMetricChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -268,7 +278,7 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
   const handleMetricSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!metricFormData.date) {
-      alert('请选择日期');
+      setAlertMessage('请选择日期');
       return;
     }
     
@@ -307,13 +317,13 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     });
 
     if (invalidFields.length > 0) {
-      alert(`请检查以下测量值，确保在合理范围内：${invalidFields.join('、')}\n(例如围度在 ${MIN_CM}-${MAX_CM}cm，体重在 ${MIN_KG}-${MAX_KG}kg)`);
+      setAlertMessage(`请检查以下测量值，确保在合理范围内：${invalidFields.join('、')}\n(例如围度在 ${MIN_CM}-${MAX_CM}cm，体重在 ${MIN_KG}-${MAX_KG}kg)`);
       return;
     }
 
     // 确保用户至少输入了一项有效数据
     if (shoulder === 0 && chest === 0 && arm === 0 && waist === 0 && weight === 0) {
-      alert('请至少填写一项有效的身体测量值');
+      setAlertMessage('请至少填写一项有效的身体测量值');
       return;
     }
     
@@ -360,7 +370,9 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
   
   const handleMetricDelete = useCallback(async (id: string, confirm: (message: string) => boolean) => {
     const store: DataAPI = getDataStore();
-    if (!store || !confirm(`确认删除此围度记录吗?`)) return;
+    // Using custom alert for confirmation as well
+    const confirmed = window.confirm(`确认删除此围度记录吗?`); // Keep native confirm for now, or replace with custom
+    if (!store || !confirmed) return;
     try {
       await store.remove('metrics', { _id: id }, {});
       console.log("Metric Record deleted successfully!");
@@ -378,6 +390,10 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     });
   }, []);
 
+  const handleCloseAlert = useCallback(() => {
+    setAlertMessage(null);
+  }, []);
+
   const latestMetrics = metrics.length > 0 ? metrics[0] : null; 
 
   return {
@@ -391,6 +407,8 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     handleMetricDelete,
     handleCancelMetricEdit,
     latestMetrics,
+    alertMessage, // Return alert state
+    handleCloseAlert, // Return alert close handler
   };
 };
 

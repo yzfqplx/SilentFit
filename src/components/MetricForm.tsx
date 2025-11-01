@@ -45,8 +45,6 @@ const MetricForm: React.FC<MetricFormProps> = ({
                         name="shoulderCm"
                         value={metricFormData.shoulderCm || ''}
                         onChange={handleMetricChange}
-                        onFocus={() => console.log('shoulderCm input focused')}
-                        onBlur={() => console.log('shoulderCm input blurred')}
                         className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
                         min="0" step="0.1" required
                     />

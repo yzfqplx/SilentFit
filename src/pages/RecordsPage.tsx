@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { TrainingRecord } from '../types/data';
 import TrainingForm from '../components/TrainingForm';
 import TrainingRecordCard from '../components/TrainingRecordCard';
+import AlertDialog from '../components/AlertDialog'; // Import AlertDialog
 
 interface RecordsPageProps {
     records: TrainingRecord[];
@@ -12,6 +13,8 @@ interface RecordsPageProps {
     handleRecordEdit: (record: TrainingRecord) => void;
     handleRecordDelete: (id: string) => Promise<void>;
     handleCancelEdit: () => void;
+    trainingAlertMessage: string | null; // Add trainingAlertMessage prop
+    handleCloseTrainingAlert: () => void; // Add handleCloseTrainingAlert prop
 }
 
 const ITEMS_PER_PAGE = 5; // Number of items to display per page
@@ -25,6 +28,8 @@ const RecordsPage: React.FC<RecordsPageProps> = ({
     handleRecordEdit,
     handleRecordDelete,
     handleCancelEdit,
+    trainingAlertMessage, // Destructure trainingAlertMessage
+    handleCloseTrainingAlert, // Destructure handleCloseTrainingAlert
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -94,6 +99,8 @@ const RecordsPage: React.FC<RecordsPageProps> = ({
                     </div>
                 )}
             </div>
+            {/* Render custom AlertDialog */}
+            <AlertDialog message={trainingAlertMessage} onClose={handleCloseTrainingAlert} />
         </div>
     );
 };
