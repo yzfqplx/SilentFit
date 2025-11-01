@@ -118,7 +118,7 @@ function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js'), 
-            devTools: true,
+            devTools: !app.isPackaged, // 生产环境禁用开发者工具
             
             // 恢复默认 webSecurity，因为它现在应该能正常工作了
             webSecurity: true, 
@@ -136,9 +136,11 @@ function createWindow() {
         
         // 使用 loadURL 和 pathToFileURL 确保路径格式正确
         const fileUrl = pathToFileURL(indexPath).href; 
-        console.log(`[Prod Load] Attempting to load URL: ${fileUrl}`); 
+        // 生产环境不输出详细日志
+        // console.log(`[Prod Load] Attempting to load URL: ${fileUrl}`); 
 
         win.loadURL(fileUrl).catch(err => {
+            // 生产环境只输出错误日志
             console.error(`Failed to load index.html from URL: ${fileUrl}`, err);
         });
     }
@@ -148,6 +150,7 @@ function createWindow() {
         Menu.setApplicationMenu(null);
         win.setMenuBarVisibility(false);
     } catch (e) {
+        // 生产环境只输出警告日志
         console.warn('Failed to hide menu bar:', e);
     }
 }
