@@ -145,6 +145,11 @@ function createWindow() {
         });
     }
 
+    // 尝试在窗口加载完成后显式聚焦 webContents，解决 Windows 上的输入焦点问题
+    win.webContents.on('did-finish-load', () => {
+        win.webContents.focus();
+    });
+
     // 移除应用菜单（特别是 Windows 的 File/Edit/View 菜单）
     try {
         Menu.setApplicationMenu(null);
