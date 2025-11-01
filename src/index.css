@@ -86,3 +86,9 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+/* 强制移除 Recharts 图表内部 SVG 元素的焦点轮廓 (Outline) */
+.recharts-wrapper * {
+  outline: none !important;
+  /* 移除移动端点击时的半透明灰色高亮 */
+  -webkit-tap-highlight-color: transparent; 
+}
