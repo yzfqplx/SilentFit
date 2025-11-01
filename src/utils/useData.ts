@@ -351,11 +351,11 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     }
   }, [metricFormData, editingMetricId, fetchRecords, setMetrics]);
 
-  const handleMetricEdit = useCallback((metric: MetricRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => {
+  const handleMetricEdit = useCallback((metric: MetricRecord) => {
     setEditingMetricId(metric._id);
     const { createdAt, ...formMetric } = metric;
     setMetricFormData(formMetric);
-    setCurrentPage('metrics');
+    // Removed setCurrentPage('metrics') as it's redundant when editing from the metrics page
   }, []);
   
   const handleMetricDelete = useCallback(async (id: string, confirm: (message: string) => boolean) => {
