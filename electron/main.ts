@@ -154,11 +154,13 @@ function createWindow() {
 
     // 针对 Windows 上的输入焦点问题，当 Electron 窗口重新获得焦点时，显式聚焦 webContents
     win.on('focus', () => {
-        // 使用 setImmediate 延迟聚焦，有时可以解决 Windows 上的焦点丢失问题
-        setImmediate(() => {
+        // 使用 setTimeout 延迟聚焦，有时可以解决 Windows 上的焦点丢失问题
+        // 尝试一个稍长的延迟，以确保操作系统有足够时间处理窗口焦点
+        setTimeout(() => {
             win.webContents.focus();
-        });
+        }, 100); // 100ms 延迟
     });
+
 
     // 移除应用菜单（特别是 Windows 的 File/Edit/View 菜单）
     try {
