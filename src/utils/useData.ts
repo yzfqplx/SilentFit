@@ -78,12 +78,6 @@ export const useDataFetching = (authReady: boolean) => {
   useEffect(() => {
     fetchRecords('training', setRecords);
     fetchRecords('metrics', setMetrics);
-    
-    const interval = setInterval(() => {
-      fetchRecords('training', setRecords);
-      fetchRecords('metrics', setMetrics);
-    }, 5000); 
-    return () => clearInterval(interval);
   }, [fetchRecords]);
 
   return { records, setRecords, metrics, setMetrics, fetchRecords };
