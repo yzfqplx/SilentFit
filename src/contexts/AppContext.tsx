@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import type { TrainingRecord, MetricRecord, DataAPI, Page } from '../types/data';
-import { webStore } from './webStore';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
+import type { Page, TrainingRecord, MetricRecord, DataAPI } from '../types/data';
+import { webStore } from '../utils/webStore';
 import { STRENGTH_ACTIVITIES } from '../constants/activities';
-import { normalizeActivity } from './data';
+import { normalizeActivity } from '../utils/data';
 
 // Helper to get the data store (Electron API or webStore)
 const getDataStore = (): DataAPI => {
@@ -39,7 +39,7 @@ const SHOULDER_WAIST_RATIO_CATEGORIES: ShoulderWaistRatioCategory[] = [
 ];
 
 // --- useDataFetching Hook ---
-export const useDataFetching = (authReady: boolean) => {
+const useDataFetching = (authReady: boolean) => {
   const [records, setRecords] = useState<TrainingRecord[]>([]);
   const [metrics, setMetrics] = useState<MetricRecord[]>([]);
 
@@ -90,7 +90,12 @@ export const useDataFetching = (authReady: boolean) => {
 };
 
 // --- useTrainingData Hook ---
-export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>, fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>) => {
+const useTrainingData = (
+  records: TrainingRecord[], 
+  setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>, 
+  fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
+  showAlert: (message: string) => void
+) => {
   const [formData, setFormData] = useState<Partial<TrainingRecord>>({
     type: 'Weightlifting',
     activity: STRENGTH_ACTIVITIES[0],
@@ -123,7 +128,7 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
     if (formData.sets === undefined || (formData.sets as number) < 1) missing.push('组数');
     if (formData.reps === undefined || (formData.reps as number) < 1) missing.push('次数');
     if (missing.length) {
-      alert(`请检查以下字段：${missing.join('、')}`);
+      showAlert(`请检查以下字段：${missing.join('、')}`);
       return;
     }
     const store: DataAPI = getDataStore();
@@ -162,7 +167,7 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
     } catch (error) {
       console.error("Error saving training record:", error);
     }
-  }, [formData, editingId, fetchRecords, setRecords]);
+  }, [formData, editingId, fetchRecords, setRecords, showAlert]);
 
   const handleRecordEdit = useCallback((record: TrainingRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => {
     setEditingId(record._id);
@@ -250,7 +255,12 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
 };
 
 // --- useMetricData Hook ---
-export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatch<React.SetStateAction<MetricRecord[]>>, fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>) => {
+const useMetricData = (
+  metrics: MetricRecord[], 
+  setMetrics: React.Dispatch<React.SetStateAction<MetricRecord[]>>, 
+  fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
+  showAlert: (message: string) => void
+) => {
   const [metricFormData, setMetricFormData] = useState<Partial<MetricRecord>>({
     date: new Date().toISOString().substring(0, 10),
     shoulderCm: 0,
@@ -274,7 +284,7 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
   const handleMetricSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!metricFormData.date) {
-      alert('请选择日期');
+      showAlert('请选择日期');
       return;
     }
     
@@ -313,13 +323,13 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     });
 
     if (invalidFields.length > 0) {
-      alert(`请检查以下测量值，确保在合理范围内：${invalidFields.join('、')}\n(例如围度在 ${MIN_CM}-${MAX_CM}cm，体重在 ${MIN_KG}-${MAX_KG}kg)`);
+      showAlert(`请检查以下测量值，确保在合理范围内：${invalidFields.join('、')}\n(例如围度在 ${MIN_CM}-${MAX_CM}cm，体重在 ${MIN_KG}-${MAX_KG}kg)`);
       return;
     }
 
     // 确保用户至少输入了一项有效数据
     if (shoulder === 0 && chest === 0 && arm === 0 && waist === 0 && weight === 0) {
-      alert('请至少填写一项有效的身体测量值');
+      showAlert('请至少填写一项有效的身体测量值');
       return;
     }
     
@@ -355,7 +365,7 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     } catch (error) {
         console.error("Error saving metric record:", error);
     }
-  }, [metricFormData, editingMetricId, fetchRecords, setMetrics]);
+  }, [metricFormData, editingMetricId, fetchRecords, setMetrics, showAlert]);
 
   const handleMetricEdit = useCallback((metric: MetricRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => {
     setEditingMetricId(metric._id);
@@ -401,7 +411,7 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
 };
 
 // --- useSettingsData Hook ---
-export const useSettingsData = () => {
+const useSettingsData = () => {
   const [heightCm, setHeightCm] = useState<number | ''>('');
   useEffect(() => {
     const saved = localStorage.getItem('heightCm');
@@ -420,7 +430,7 @@ export const useSettingsData = () => {
 };
 
 // --- useDerivedData Hook ---
-export const useDerivedData = (metrics: MetricRecord[], heightCm: number | '') => {
+const useDerivedData = (metrics: MetricRecord[], heightCm: number | '') => {
   const latestMetrics = metrics.length > 0 ? metrics[0] : null; 
   
   const shoulderWaistRatio = latestMetrics && latestMetrics.waistCm > 0
@@ -458,4 +468,97 @@ export const useDerivedData = (metrics: MetricRecord[], heightCm: number | '') =
     bmiDescription,
     shoulderWaistRatioDescription,
   };
+};
+
+// --- 定义 Context 中值的类型 ---
+interface AppContextType {
+  // Page state
+  currentPage: Page;
+  setCurrentPage: React.Dispatch<React.SetStateAction<Page>>;
+  
+  // Alert state
+  alertMessage: string | null;
+  setAlertMessage: React.Dispatch<React.SetStateAction<string | null>>;
+
+  // Data fetching
+  records: TrainingRecord[];
+  metrics: MetricRecord[];
+  
+  // Training data and handlers
+  formData: Partial<TrainingRecord>;
+  editingId: string | null;
+  selectedActivity: string;
+  setSelectedActivity: React.Dispatch<React.SetStateAction<string>>;
+  trendRange: '30' | '90' | 'all';
+  setTrendRange: React.Dispatch<React.SetStateAction<'30' | '90' | 'all'>>;
+  handleRecordChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  handleRecordSubmit: (e: React.FormEvent) => Promise<void>;
+  handleRecordEdit: (record: TrainingRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => void;
+  handleRecordDelete: (id: string, confirm: (message: string) => boolean) => Promise<void>;
+  handleCancelRecordEdit: () => void;
+  totalWeightliftingSessions: number;
+  totalSets: number;
+  maxWeightByActivity: { activity: string; maxW: number }[];
+  activityTrendData: { date: string; weightKg: number; reps: number }[];
+
+  // Metric data and handlers
+  metricFormData: Partial<MetricRecord>;
+  editingMetricId: string | null;
+  handleMetricChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleMetricSubmit: (e: React.FormEvent) => Promise<void>;
+  handleMetricEdit: (metric: MetricRecord, setCurrentPage: React.Dispatch<React.SetStateAction<Page>>) => void;
+  handleMetricDelete: (id: string, confirm: (message: string) => boolean) => Promise<void>;
+  handleCancelMetricEdit: () => void;
+
+  // Settings data
+  heightCm: number | '';
+  setHeightCm: React.Dispatch<React.SetStateAction<number | ''>>;
+
+  // Derived data
+  latestMetrics: MetricRecord | null;
+  shoulderWaistRatio: number | null;
+  bmi: number | null;
+  bmiDescription: { range: string; category: string };
+  shoulderWaistRatioDescription: { range: string; visualFeature: string; adjectives: string };
+}
+
+// --- 创建 Context ---
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
+// --- 创建 Provider 组件 ---
+export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [authReady, setAuthReady] = useState(true); // Simplified for context
+  const [currentPage, setCurrentPage] = useState<Page>('dashboard');
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const { records, setRecords, metrics, setMetrics, fetchRecords } = useDataFetching(authReady);
+  
+  const trainingData = useTrainingData(records, setRecords, fetchRecords, setAlertMessage);
+  const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage);
+  const settingsData = useSettingsData();
+  const derivedData = useDerivedData(metrics, settingsData.heightCm);
+
+  const value: AppContextType = {
+    currentPage,
+    setCurrentPage,
+    alertMessage,
+    setAlertMessage,
+    records,
+    metrics,
+    ...trainingData,
+    ...metricData,
+    ...settingsData,
+    ...derivedData,
+  };
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
+
+// --- 创建自定义 Hook ---
+export const useAppContext = (): AppContextType => {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
+  return context;
 };

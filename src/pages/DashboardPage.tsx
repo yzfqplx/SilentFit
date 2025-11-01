@@ -1,5 +1,5 @@
 import React from 'react';
-import type { TrainingRecord, MetricRecord, Page } from '../types/data';
+import { useAppContext } from '../contexts/AppContext';
 import KpiCard from '../components/KpiCard';
 import { DumbbellIcon, ListChecksIcon, TapeMeasureIcon, WeightIcon } from '../components/icons/Icons';
 import MaxWeightChart from '../components/charts/MaxWeightChart';
@@ -7,56 +7,28 @@ import ActivityTrendChart from '../components/charts/ActivityTrendChart';
 import TrainingForm from '../components/TrainingForm';
 import MetricPreviewCard from '../components/MetricPreviewCard';
 
-interface DashboardPageProps {
-    // KPI Data
-    totalWeightliftingSessions: number;
-    totalSets: number;
-    latestMetrics: MetricRecord | null;
-    shoulderWaistRatio: number | null;
-    bmi: number | null;
-    bmiDescription: { range: string; category: string } | null;
-    shoulderWaistRatioDescription: { range: string; visualFeature: string; adjectives: string } | null;
-    
-    // Chart Data
-    maxWeightByActivity: { activity: string; maxW: number }[];
-    selectedActivity: string;
-    setSelectedActivity: React.Dispatch<React.SetStateAction<string>>;
-    trendRange: '30' | '90' | 'all';
-    setTrendRange: React.Dispatch<React.SetStateAction<'30' | '90' | 'all'>>;
-    activityTrendData: { date: string; weightKg: number; reps: number }[];
-
-    // Form Data & Handlers (for Quick Add)
-    formData: Partial<TrainingRecord>;
-    editingId: string | null;
-    handleRecordChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
-    handleRecordSubmit: (e: React.FormEvent) => Promise<void>;
-    handleCancelEdit: () => void;
-    
-    // Navigation
-    setCurrentPage: React.Dispatch<React.SetStateAction<Page>>;
-}
-
-const DashboardPage: React.FC<DashboardPageProps> = ({
-    totalWeightliftingSessions,
-    totalSets,
-    latestMetrics,
-    shoulderWaistRatio,
-    bmi,
-    bmiDescription,
-    shoulderWaistRatioDescription,
-    maxWeightByActivity,
-    selectedActivity,
-    setSelectedActivity,
-    trendRange,
-    setTrendRange,
-    activityTrendData,
-    formData,
-    editingId,
-    handleRecordChange,
-    handleRecordSubmit,
-    handleCancelEdit,
-    setCurrentPage,
-}) => {
+const DashboardPage: React.FC = () => {
+    const {
+        totalWeightliftingSessions,
+        totalSets,
+        latestMetrics,
+        shoulderWaistRatio,
+        bmi,
+        bmiDescription,
+        shoulderWaistRatioDescription,
+        maxWeightByActivity,
+        selectedActivity,
+        setSelectedActivity,
+        trendRange,
+        setTrendRange,
+        activityTrendData,
+        formData,
+        editingId,
+        handleRecordChange,
+        handleRecordSubmit,
+        handleCancelRecordEdit,
+        setCurrentPage,
+    } = useAppContext();
     
     return (
         <div className="space-y-8">
@@ -122,7 +94,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({
                     editingId={editingId}
                     handleRecordChange={handleRecordChange}
                     handleRecordSubmit={handleRecordSubmit}
-                    handleCancelEdit={handleCancelEdit}
+                    handleCancelEdit={handleCancelRecordEdit}
                 />
                 <MetricPreviewCard 
                     latestMetrics={latestMetrics}
