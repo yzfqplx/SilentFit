@@ -114,15 +114,15 @@ function createWindow() {
         minHeight: 600,
         // Windows: 隐藏菜单栏（Alt 可暂时显示，或通过 setMenuBarVisibility(false) 完全隐藏）
         autoHideMenuBar: true,
-            webPreferences: {
-                nodeIntegration: false,
-                contextIsolation: true,
-                preload: path.join(__dirname, 'preload.js'), 
-                devTools: true,
-                
-                // 恢复默认 webSecurity，因为它现在应该能正常工作了
-                webSecurity: true,
-            },
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js'), 
+            devTools: true,
+            
+            // 恢复默认 webSecurity，因为它现在应该能正常工作了
+            webSecurity: true, 
+        },
     });
 
     // 【核心修复】: 使用 app.isPackaged 替代可能错误的环境变量
@@ -142,8 +142,6 @@ function createWindow() {
             console.error(`Failed to load index.html from URL: ${fileUrl}`, err);
         });
     }
-
-
 
     // 移除应用菜单（特别是 Windows 的 File/Edit/View 菜单）
     try {
