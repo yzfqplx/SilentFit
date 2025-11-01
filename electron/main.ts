@@ -114,15 +114,17 @@ function createWindow() {
         minHeight: 600,
         // Windows: 隐藏菜单栏（Alt 可暂时显示，或通过 setMenuBarVisibility(false) 完全隐藏）
         autoHideMenuBar: true,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'), 
-            devTools: true,
-            
-            // 恢复默认 webSecurity，因为它现在应该能正常工作了
-            webSecurity: true, 
-        },
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                preload: path.join(__dirname, 'preload.js'), 
+                devTools: true,
+                
+                // 恢复默认 webSecurity，因为它现在应该能正常工作了
+                webSecurity: true,
+                // 尝试禁用拼写检查，有时可以解决 Windows 上的输入焦点问题
+                spellcheck: false,
+            },
     });
 
     // 【核心修复】: 使用 app.isPackaged 替代可能错误的环境变量
