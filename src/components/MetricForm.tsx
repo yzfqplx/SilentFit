@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetricRecord } from '../types/data';
+import type { MetricRecord } from '../types/data';
 
 interface MetricFormProps {
     metricFormData: Partial<MetricRecord>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Page } from '../types/data';
+import type { Page } from '../types/data';
 import { DumbbellIcon, ListChecksIcon, TapeMeasureIcon, SettingsIcon } from './icons/Icons';
 
 interface SidebarProps {

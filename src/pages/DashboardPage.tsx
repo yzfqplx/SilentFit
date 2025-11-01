@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrainingRecord, MetricRecord, Page } from '../types/data';
+import type { TrainingRecord, MetricRecord, Page } from '../types/data';
 import KpiCard from '../components/KpiCard';
 import { DumbbellIcon, ListChecksIcon, TapeMeasureIcon, WeightIcon } from '../components/icons/Icons';
 import MaxWeightChart from '../components/charts/MaxWeightChart';

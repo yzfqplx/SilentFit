@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { TrainingRecord, MetricRecord, DataAPI, Page } from '../types/data';
+import type { TrainingRecord, MetricRecord, DataAPI, Page } from '../types/data';
 import { webStore } from './webStore';
 import { STRENGTH_ACTIVITIES } from '../constants/activities';
 import { normalizeActivity } from './data';

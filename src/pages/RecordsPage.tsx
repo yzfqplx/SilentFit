@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrainingRecord } from '../types/data';
+import type { TrainingRecord } from '../types/data';
 import TrainingForm from '../components/TrainingForm';
 import TrainingRecordCard from '../components/TrainingRecordCard';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrainingRecord, MetricRecord } from '../types/data';
+import type { TrainingRecord, MetricRecord } from '../types/data';
 
 interface SettingsPageProps {
     heightCm: number | '';

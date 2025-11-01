@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetricRecord } from '../types/data';
+import type { MetricRecord } from '../types/data';
 import MetricForm from '../components/MetricForm';
 import MetricHistoryChart from '../components/charts/MetricHistoryChart';
 import MetricRecordCard from '../components/MetricRecordCard';

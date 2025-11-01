@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrainingRecord } from '../types/data';
+import type { TrainingRecord } from '../types/data';
 import { STRENGTH_ACTIVITIES } from '../constants/activities';
 import { CalendarIcon, WeightIcon } from './icons/Icons';
 

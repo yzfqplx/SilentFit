@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetricRecord, Page } from '../types/data';
+import type { MetricRecord, Page } from '../types/data';
 import { TapeMeasureIcon } from './icons/Icons';
 import MetricDisplay from './MetricDisplay';
 

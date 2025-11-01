@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Page } from './types/data';
+import type { Page } from './types/data';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/RecordsPage';

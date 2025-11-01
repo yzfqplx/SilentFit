@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrainingRecord } from '../types/data';
+import type { TrainingRecord } from '../types/data';
 import { DumbbellIcon, Edit2Icon, Trash2Icon } from './icons/Icons';
 
 interface TrainingRecordCardProps {

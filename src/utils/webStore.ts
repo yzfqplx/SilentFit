@@ -1,4 +1,4 @@
-import { DataAPI } from '../types/data';
+import type { DataAPI } from '../types/data';
 
 /**
  * Web 存储后备方案（用于移动端/浏览器无 Electron API 时）

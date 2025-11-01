@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetricRecord } from '../types/data';
+import type { MetricRecord } from '../types/data';
 import { TapeMeasureIcon, Edit2Icon, Trash2Icon } from './icons/Icons';
 
 interface MetricRecordCardProps {
