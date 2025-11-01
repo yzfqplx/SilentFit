@@ -118,6 +118,7 @@ export const useTrainingData = (records: TrainingRecord[], setRecords: React.Dis
     const missing: string[] = [];
     if (!formData.activity) missing.push('训练项目');
     if (!formData.date) missing.push('日期');
+    // 注意：这里保留了原始的重量限制校验，您可以根据需要调整
     if (formData.weightKg === undefined || (formData.weightKg as number) < 0 || (formData.weightKg as number) > 300) missing.push('重量');
     if (formData.sets === undefined || (formData.sets as number) < 1) missing.push('组数');
     if (formData.reps === undefined || (formData.reps as number) < 1) missing.push('次数');
@@ -265,7 +266,8 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
     const { name, value, type } = e.target;
     setMetricFormData(prev => ({
       ...prev,
-      [name]: type === 'number' ? parseFloat(value) : value,
+      // 使用三元表达式来确保空字符串转为 0，防止 NaN 影响后续校验
+      [name]: type === 'number' ? (value === '' ? 0 : parseFloat(value)) : value,
     }));
   }, []);
 
@@ -275,26 +277,62 @@ export const useMetricData = (metrics: MetricRecord[], setMetrics: React.Dispatc
       alert('请选择日期');
       return;
     }
-    const nums = [metricFormData.shoulderCm, metricFormData.chestCm, metricFormData.armCm, metricFormData.waistCm, metricFormData.weightKg]
-      .map(v => (v === undefined || v === null ? 0 : Number(v<=300?v:0)));
-    if (nums.some(v => v < 0)) {
-      alert('测量值需为非负数');
+    
+    // 定义合理的上下限（单位：厘米/千克）
+    const MIN_CM = 10;
+    const MAX_CM = 300;
+    const MIN_KG = 1;
+    const MAX_KG = 300;
+
+    const shoulder = metricFormData.shoulderCm || 0;
+    const chest = metricFormData.chestCm || 0;
+    const arm = metricFormData.armCm || 0;
+    const waist = metricFormData.waistCm || 0;
+    const weight = metricFormData.weightKg || 0;
+
+    // 收集所有需要检查的数值
+    const measurements = [
+      { name: '肩围', value: shoulder, min: MIN_CM, max: MAX_CM },
+      { name: '胸围', value: chest, min: MIN_CM, max: MAX_CM },
+      { name: '臂围', value: arm, min: MIN_CM, max: MAX_CM },
+      { name: '腰围', value: waist, min: MIN_CM, max: MAX_CM },
+      { name: '体重', value: weight, min: MIN_KG, max: MAX_KG },
+    ];
+
+    const invalidFields: string[] = [];
+
+    // 执行范围检查
+    measurements.forEach(m => {
+      // 仅检查非零的输入值
+      if (m.value !== 0) {
+        // 检查负数和范围
+        if (m.value < 0 || m.value < m.min || m.value > m.max) {
+          invalidFields.push(`${m.name} (${m.value.toFixed(1)}${m.name.includes('重') ? 'kg' : 'cm'})`);
+        }
+      }
+    });
+
+    if (invalidFields.length > 0) {
+      alert(`请检查以下测量值，确保在合理范围内：${invalidFields.join('、')}\n(例如围度在 ${MIN_CM}-${MAX_CM}cm，体重在 ${MIN_KG}-${MAX_KG}kg)`);
       return;
     }
-    if (nums.every(v => v === 0)) {
-      alert('请重新填写正确的测量值');
+
+    // 确保用户至少输入了一项有效数据
+    if (shoulder === 0 && chest === 0 && arm === 0 && waist === 0 && weight === 0) {
+      alert('请至少填写一项有效的身体测量值');
       return;
     }
+    
     const store: DataAPI = getDataStore();
 
     try {
         const metricToSave = {
             ...metricFormData,
-            shoulderCm: metricFormData.shoulderCm || 0,
-            chestCm: metricFormData.chestCm || 0,
-            armCm: metricFormData.armCm || 0,
-            waistCm: metricFormData.waistCm || 0,
-            weightKg: metricFormData.weightKg || 0,
+            shoulderCm: shoulder,
+            chestCm: chest,
+            armCm: arm,
+            waistCm: waist,
+            weightKg: weight,
             notes: metricFormData.notes || '',
         } as MetricRecord;
 
