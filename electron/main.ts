@@ -128,6 +128,7 @@ function createWindow() {
     // 【核心修复】: 使用 app.isPackaged 替代可能错误的环境变量
     if (!app.isPackaged) {
         // 开发环境：加载 Vite 服务器地址
+        win.webContents.openDevTools();
         win.loadURL('http://localhost:5173/');
     } else {
         // 生产环境：加载构建后的 HTML 文件

@@ -156,6 +156,7 @@ function createWindow() {
     // 【核心修复】: 使用 app.isPackaged 替代可能错误的环境变量
     if (!electron_1.app.isPackaged) {
         // 开发环境：加载 Vite 服务器地址
+        win.webContents.openDevTools();
         win.loadURL('http://localhost:5173/');
     }
     else {
