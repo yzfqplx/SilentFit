@@ -114,6 +114,8 @@ function createWindow() {
         minHeight: 600,
         // Windows: 隐藏菜单栏（Alt 可暂时显示，或通过 setMenuBarVisibility(false) 完全隐藏）
         autoHideMenuBar: true,
+        // 显式设置窗口可聚焦，有时可解决 Windows 上的焦点问题
+        focusable: true,
             webPreferences: {
                 nodeIntegration: false,
                 contextIsolation: true,
@@ -148,6 +150,14 @@ function createWindow() {
     // 尝试在窗口加载完成后显式聚焦 webContents，解决 Windows 上的输入焦点问题
     win.webContents.on('did-finish-load', () => {
         win.webContents.focus();
+    });
+
+    // 针对 Windows 上的输入焦点问题，当 Electron 窗口重新获得焦点时，显式聚焦 webContents
+    win.on('focus', () => {
+        // 使用 setImmediate 延迟聚焦，有时可以解决 Windows 上的焦点丢失问题
+        setImmediate(() => {
+            win.webContents.focus();
+        });
     });
 
     // 移除应用菜单（特别是 Windows 的 File/Edit/View 菜单）
