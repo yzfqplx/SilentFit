@@ -56,9 +56,10 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
                             name="date"
                             value={editingId ? formData.date || '' : selectedDate || new Date().toISOString().substring(0, 10)}
                             onChange={handleRecordChange}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
+                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                             required
                         />
+                        <CalendarIcon className="absolute left-3 top-[34px] w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                 </div>
 

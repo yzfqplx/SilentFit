@@ -8,7 +8,7 @@ import SettingsPage from './pages/SettingsPage';
 import AlertDialog from './components/AlertDialog';
 import ConfirmDialog from './components/ConfirmDialog';
 import './App.css';
-import { Page } from './types/data';
+import type { Page } from './types/data';
 
 function AppContent() {
   const { currentPage, setCurrentPage, alertMessage, setAlertMessage, confirmDialog } = useAppContext();
