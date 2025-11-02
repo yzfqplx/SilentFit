@@ -12,3 +12,7 @@ electron_1.contextBridge.exposeInMainWorld('api', {
     update: (collection, query, update, options) => electron_1.ipcRenderer.invoke('nedb:update', collection, query, update, options),
     remove: (collection, query, options) => electron_1.ipcRenderer.invoke('nedb:remove', collection, query, options),
 });
+electron_1.contextBridge.exposeInMainWorld('theme', {
+    set: (theme) => electron_1.ipcRenderer.invoke('theme:set', theme),
+    get: () => electron_1.ipcRenderer.invoke('theme:get'),
+});

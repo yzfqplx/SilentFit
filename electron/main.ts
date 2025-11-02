@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeTheme } from 'electron';
 import * as path from 'path';
 import Datastore from 'nedb';
 import { pathToFileURL } from 'url';
+import { getTheme, setTheme } from './nedb/theme';
 
 // ----------------------------------------------------
 // 【路径定义】: DIST 路径定义
@@ -98,6 +99,16 @@ function registerIpcHandlers() {
     if (!dbs[collection]) return Promise.reject(new Error(`Collection ${collection} not found`));
     return nedbRemove(collection, query, options);
   });
+
+  ipcMain.handle('theme:set', async (event, theme: string) => {
+    await setTheme(theme);
+    nativeTheme.themeSource = theme as 'light' | 'dark';
+  });
+
+  ipcMain.handle('theme:get', async () => {
+    return await getTheme();
+  });
+
   ipcHandlersRegistered = true;
 }
 
@@ -105,7 +116,9 @@ function registerIpcHandlers() {
 // Electron 窗口创建
 // ----------------------------------------------------
 
-function createWindow() {
+async function createWindow() {
+    const savedTheme = await getTheme();
+    nativeTheme.themeSource = savedTheme as 'light' | 'dark' || 'light'; // 设置应用主题为浅色模式
     // 创建主窗口
     const win = new BrowserWindow({
         width: 1200,

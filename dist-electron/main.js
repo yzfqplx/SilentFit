@@ -40,6 +40,7 @@ const electron_1 = require("electron");
 const path = __importStar(require("path"));
 const nedb_1 = __importDefault(require("nedb"));
 const url_1 = require("url");
+const theme_1 = require("./nedb/theme");
 // ----------------------------------------------------
 // 【路径定义】: DIST 路径定义
 // ----------------------------------------------------
@@ -131,28 +132,21 @@ function registerIpcHandlers() {
             return Promise.reject(new Error(`Collection ${collection} not found`));
         return nedbRemove(collection, query, options);
     });
+    electron_1.ipcMain.handle('theme:set', async (event, theme) => {
+        await (0, theme_1.setTheme)(theme);
+        electron_1.nativeTheme.themeSource = theme;
+    });
+    electron_1.ipcMain.handle('theme:get', async () => {
+        return await (0, theme_1.getTheme)();
+    });
     ipcHandlersRegistered = true;
 }
 // ----------------------------------------------------
 // Electron 窗口创建
 // ----------------------------------------------------
-function createWindow() {
-    // 创建启动屏幕窗口
-    const splash = new electron_1.BrowserWindow({
-        width: 400,
-        height: 300,
-        transparent: true,
-        frame: false,
-        alwaysOnTop: true,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            devTools: false,
-        },
-    });
-    // 加载启动屏幕 HTML 文件
-    const splashPath = path.join(electron_1.app.getAppPath(), 'public', 'splash.html');
-    splash.loadURL((0, url_1.pathToFileURL)(splashPath).href);
+async function createWindow() {
+    const savedTheme = await (0, theme_1.getTheme)();
+    electron_1.nativeTheme.themeSource = savedTheme || 'light'; // 设置应用主题为浅色模式
     // 创建主窗口
     const win = new electron_1.BrowserWindow({
         width: 1200,
@@ -169,9 +163,8 @@ function createWindow() {
             webSecurity: true,
         },
     });
-    // 主窗口准备好显示时，显示主窗口并关闭启动屏幕
+    // 主窗口准备好显示时，显示主窗口
     win.once('ready-to-show', () => {
-        splash.destroy(); // 关闭启动屏幕
         win.show(); // 显示主窗口
     });
     if (!electron_1.app.isPackaged) {

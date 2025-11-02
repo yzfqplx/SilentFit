@@ -13,6 +13,11 @@ export type DataAPI = {
   remove: (collection: string, query: object, options: object) => Promise<number>;
 };
 
+export type ThemeAPI = {
+  set: (theme: string) => Promise<void>;
+  get: () => Promise<string | null>;
+};
+
 // ----------------------------------------------------
 // 暴露 API
 // ----------------------------------------------------
@@ -25,4 +30,9 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke('nedb:update', collection, query, update, options),
   remove: (collection: string, query: object, options: object) => 
     ipcRenderer.invoke('nedb:remove', collection, query, options),
+});
+
+contextBridge.exposeInMainWorld('theme', {
+  set: (theme: string) => ipcRenderer.invoke('theme:set', theme),
+  get: () => ipcRenderer.invoke('theme:get'),
 });

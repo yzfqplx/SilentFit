@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import KpiCard from '../components/KpiCard';
-import { DumbbellIcon, ListChecksIcon, TapeMeasureIcon, WeightIcon } from '../components/icons/Icons';
+import { ReactIcon, ListChecksIcon, TapeMeasureIcon, WeightIcon, TrendingUpIcon } from '../components/icons/Icons';
 import MaxWeightChart from '../components/charts/MaxWeightChart';
 import ActivityTrendChart from '../components/charts/ActivityTrendChart';
 import TrainingForm from '../components/TrainingForm';
@@ -22,22 +22,23 @@ const DashboardPage: React.FC = () => {
         trendRange,
         setTrendRange,
         activityTrendData,
+        oneRepMaxTrend,
         formData,
         editingId,
         handleRecordChange,
         handleRecordSubmit,
         handleCancelRecordEdit,
         setCurrentPage,
+        recommendation,
     } = useAppContext();
     
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">力量训练仪表板</h1>
             
             {/* KPI Cards Section - unified grid of 5 for consistent alignment */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <KpiCard 
-                icon={<DumbbellIcon size={24} />} 
+                icon={<ReactIcon size={24} />} 
                 title="总训练次数" 
                 value={totalWeightliftingSessions.toString()} 
                 unit="次" 
@@ -73,6 +74,14 @@ const DashboardPage: React.FC = () => {
                 color="emerald"
                 description={bmiDescription ? bmiDescription.category : '暂无数据'}
               />
+              <KpiCard
+                icon={<TrendingUpIcon/>}
+                title="1RM 预估趋势"
+                value={oneRepMaxTrend.latest1RM !== null ? `${oneRepMaxTrend.latest1RM.toFixed(1)}kg` : 'N/A'}
+                unit={oneRepMaxTrend.trend !== null && oneRepMaxTrend.trend !== undefined ? `${oneRepMaxTrend.trend.toFixed(1)}%` : ''}
+                color={oneRepMaxTrend.trend !== null && oneRepMaxTrend.trend > 0 ? 'green' : 'red'}
+                description={selectedActivity}
+              />
             </div>
 
             {/* Activity Visualization */}
@@ -95,6 +104,7 @@ const DashboardPage: React.FC = () => {
                     handleRecordChange={handleRecordChange}
                     handleRecordSubmit={handleRecordSubmit}
                     handleCancelEdit={handleCancelRecordEdit}
+                    recommendation={recommendation}
                 />
                 <MetricPreviewCard 
                     latestMetrics={latestMetrics}

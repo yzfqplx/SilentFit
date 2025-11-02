@@ -13,6 +13,7 @@ interface MetricRecordCardProps {
 const MetricRecordCard: React.FC<MetricRecordCardProps> = ({ metric, handleEdit, handleDelete }) => {
     
     const measurements = [
+        { label: '肩', value: metric.shoulderCm },
         { label: '胸', value: metric.chestCm },
         { label: '臂', value: metric.armCm },
         { label: '腰', value: metric.waistCm },

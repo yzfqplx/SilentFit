@@ -19,7 +19,8 @@ const MetricHistoryChart: React.FC<MetricHistoryChartProps> = ({ metrics }) => {
 
     if (data.length < 2) {
         return (
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700">
+            <div 
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700">
                 <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">围度趋势</h2>
                 <div className="text-center p-8 text-gray-500 dark:text-gray-400">
                     至少需要两条记录才能绘制趋势图。
@@ -29,7 +30,8 @@ const MetricHistoryChart: React.FC<MetricHistoryChartProps> = ({ metrics }) => {
     }
     
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
+        <div 
+            className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
             <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">围度趋势 (CM)</h2>
             <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>

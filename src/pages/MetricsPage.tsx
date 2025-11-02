@@ -3,7 +3,6 @@ import { useAppContext } from '../contexts/AppContext';
 import MetricForm from '../components/MetricForm';
 import MetricHistoryChart from '../components/charts/MetricHistoryChart';
 import MetricRecordCard from '../components/MetricRecordCard';
-
 const MetricsPage: React.FC = () => {
     const {
         metrics,
@@ -14,13 +13,11 @@ const MetricsPage: React.FC = () => {
         handleMetricEdit,
         handleMetricDelete,
         handleCancelMetricEdit,
-        setCurrentPage,
         showConfirm,
     } = useAppContext();
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">身体围度追踪</h1>
 
             {/* Metric Input Form */}
             <MetricForm 
@@ -35,14 +32,15 @@ const MetricsPage: React.FC = () => {
             <MetricHistoryChart metrics={metrics} />
 
             {/* Metric Records List */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
+            <div 
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
                 <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">围度历史记录 ({metrics.length})</h2>
-                <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+                <div className="space-y-3 max-h-96 overflow-y-scroll hide-scrollbar pr-2">
                     {metrics.map(metric => (
                         <MetricRecordCard 
                             key={metric._id} 
                             metric={metric} 
-                            handleEdit={(met) => handleMetricEdit(met, setCurrentPage)} 
+                            handleEdit={(met) => handleMetricEdit(met)} 
                             handleDelete={(id) => {
                                 showConfirm(
                                     '确认删除此围度记录吗?',

@@ -11,6 +11,7 @@ export interface TrainingRecord {
   weightKg: number; // 力量训练 - 重量
   distanceKm?: number;
   notes: string;
+  completed: boolean; // 标记是否完成
   createdAt: Date;
 }
 

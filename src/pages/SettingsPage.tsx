@@ -6,8 +6,8 @@ const SettingsPage: React.FC = () => {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">设置</h1>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 text-gray-600 dark:text-gray-400 space-y-4 transition-all duration-300 transform hover:scale-[1.01]">
+            <div 
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 text-gray-600 dark:text-gray-400 space-y-4 transition-all duration-300 transform hover:scale-[1.01]">
                 <div>
                     <label htmlFor="heightCm" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">身高 (CM)</label>
                     <input

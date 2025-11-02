@@ -4,14 +4,22 @@ import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/RecordsPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
+
 import AlertDialog from './components/AlertDialog';
 import ConfirmDialog from './components/ConfirmDialog';
 import './App.css';
+import { Page } from './types/data';
 
 function AppContent() {
   const { currentPage, setCurrentPage, alertMessage, setAlertMessage, confirmDialog } = useAppContext();
 
-  // --- 渲染内容 ---
+  const pageTitles: { [key in Page]: string } = {
+    dashboard: '力量训练仪表板',
+    records: '管理训练记录',
+    metrics: '身体围度追踪',
+    settings: '设置',
+  };
+
   const renderContent = () => {
     switch (currentPage) {
       case 'dashboard':
@@ -29,33 +37,37 @@ function AppContent() {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-dark-bg text-light-text dark:text-dark-text font-sans antialiased w-full">
-      
-      {/* 1. Sidebar Navigation */}
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
-      {/* 2. Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-6 md:p-10 min-w-[320px] max-w-full">
-        {renderContent()}
+      <main className="flex-1 overflow-y-auto hide-scrollbar">
+        {/* Sticky Header */}
+        <header className="sticky top-0 z-10 bg-gray-100/50 dark:bg-dark-bg/50 p-4 border-b border-gray-200 dark:border-gray-700 backdrop-blur-lg">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            {pageTitles[currentPage]}
+          </h1>
+        </header>
+
+        {/* Content */}
+        <div className="p-6 md:p-10">
+          {renderContent()}
+        </div>
       </main>
 
-      {/* Alert Dialog */}
       <AlertDialog 
         isOpen={!!alertMessage} 
         message={alertMessage} 
         onConfirm={() => setAlertMessage(null)} 
       />
 
-      {/* Confirm Dialog */}
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
         message={confirmDialog.message}
         onConfirm={confirmDialog.onConfirm}
         onCancel={confirmDialog.onCancel}
       />
-
     </div>
   );
-};
+}
 
 function App() {
   return (

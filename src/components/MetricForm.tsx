@@ -24,7 +24,7 @@ const MetricForm: React.FC<MetricFormProps> = ({
         <form onSubmit={handleMetricSubmit} className="space-y-4">
             
             {/* Row 1: Date / Shoulder / Chest / Arm / Waist / Weight */}
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="relative">
                     <label htmlFor="date" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">日期</label>
                     <input

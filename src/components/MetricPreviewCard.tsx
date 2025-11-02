@@ -10,7 +10,8 @@ interface MetricPreviewCardProps {
 
 // --- 围度预览卡片 ---
 const MetricPreviewCard: React.FC<MetricPreviewCardProps> = ({ latestMetrics, setCurrentPage }) => (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
+    <div 
+        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
         <h2 className="text-xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400 flex items-center">
             <TapeMeasureIcon size={20} className="mr-2"/> 最新身体围度 ({latestMetrics?.date || 'N/A'})
         </h2>

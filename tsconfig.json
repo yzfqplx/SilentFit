@@ -21,6 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts","src", "src/**/*.tsx", "src/global.d.ts"],
+  "include": ["src/**/*.ts","src", "src/**/*.tsx", "src/global.d.ts", "src/types/electron.d.ts"],
   "references": []
 }

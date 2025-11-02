@@ -23,8 +23,10 @@
     "@capacitor/android": "^7.4.4",
     "@capacitor/core": "^7.4.4",
     "@types/nedb": "^1.8.16",
+    "@types/react-calendar": "^3.9.0",
     "nedb": "^1.8.0",
     "react": "^19.2.0",
+    "react-calendar": "^6.0.0",
     "react-dom": "^19.2.0",
     "recharts": "^3.3.0"
   },
