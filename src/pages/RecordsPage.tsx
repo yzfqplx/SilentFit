@@ -24,6 +24,14 @@ const RecordsPage: React.FC = () => {
         handleRecordDeleteWithContext(id);
     };
 
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        if (name === 'date') {
+            setSelectedDate(value);
+        }
+        handleRecordChange(e);
+    };
+
     const filteredRecords = useMemo(() => {
         if (!selectedDate) {
             return records;
@@ -51,7 +59,7 @@ const RecordsPage: React.FC = () => {
             <TrainingForm 
                 formData={formData}
                 editingId={editingId}
-                handleRecordChange={handleRecordChange}
+                handleRecordChange={handleDateChange}
                 handleRecordSubmit={handleRecordSubmit}
                 handleCancelEdit={handleCancelRecordEdit}
                 selectedDate={selectedDate}
