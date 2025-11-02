@@ -10,8 +10,8 @@ interface MetricPreviewCardProps {
 
 // --- 围度预览卡片 ---
 const MetricPreviewCard: React.FC<MetricPreviewCardProps> = ({ latestMetrics, setCurrentPage }) => (
-    <div className="bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
-        <h2 className="text-xl font-semibold mb-4 text-indigo-400 flex items-center">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
+        <h2 className="text-xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400 flex items-center">
             <TapeMeasureIcon size={20} className="mr-2"/> 最新身体围度 ({latestMetrics?.date || 'N/A'})
         </h2>
         
@@ -24,12 +24,12 @@ const MetricPreviewCard: React.FC<MetricPreviewCardProps> = ({ latestMetrics, se
                 <MetricDisplay label="体重" value={latestMetrics.weightKg} unit="kg" />
             </div>
         ) : (
-            <div className="text-gray-500 text-center py-4">暂无围度数据。</div>
+            <div className="text-gray-500 dark:text-gray-400 text-center py-4">暂无围度数据。</div>
         )}
 
         <button
             onClick={() => setCurrentPage('metrics')}
-            className="mt-6 w-full py-2 text-sm rounded-lg font-semibold bg-indigo-700 hover:bg-indigo-600 text-white transition duration-150"
+            className="mt-6 w-full py-2 text-sm rounded-lg font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition duration-150"
         >
             前往追踪围度历史
         </button>

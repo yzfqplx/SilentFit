@@ -20,7 +20,7 @@ const MetricsPage: React.FC = () => {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-extrabold text-white">身体围度追踪</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">身体围度追踪</h1>
 
             {/* Metric Input Form */}
             <MetricForm 
@@ -35,8 +35,8 @@ const MetricsPage: React.FC = () => {
             <MetricHistoryChart metrics={metrics} />
 
             {/* Metric Records List */}
-            <div className="bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
-                <h2 className="text-xl font-semibold mb-4 text-white">围度历史记录 ({metrics.length})</h2>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">围度历史记录 ({metrics.length})</h2>
                 <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
                     {metrics.map(metric => (
                         <MetricRecordCard 

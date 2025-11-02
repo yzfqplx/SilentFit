@@ -29,9 +29,9 @@ const Tooltip: React.FC<TooltipProps> = ({ children, content, delay = 400 }) => 
     >
       {children}
       {active && (
-        <div className="absolute z-50 px-3 py-2 text-sm font-medium text-white bg-gray-700 rounded-lg shadow-sm opacity-90 whitespace-nowrap -translate-x-1/2 left-1/2 top-full mt-2">
+        <div className="absolute z-50 px-3 py-2 text-sm font-medium text-white dark:text-gray-900 bg-gray-700 dark:bg-gray-200 rounded-lg shadow-sm opacity-90 whitespace-nowrap -translate-x-1/2 left-1/2 top-full mt-2">
           {content}
-          <div className="absolute text-gray-700 text-sm -top-1 left-1/2 -translate-x-1/2">
+          <div className="absolute text-gray-700 dark:text-gray-200 text-sm -top-1 left-1/2 -translate-x-1/2">
             &#9650;
           </div>
         </div>

@@ -32,7 +32,7 @@ const DashboardPage: React.FC = () => {
     
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-extrabold text-white">力量训练仪表板</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">力量训练仪表板</h1>
             
             {/* KPI Cards Section - unified grid of 5 for consistent alignment */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">

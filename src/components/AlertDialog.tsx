@@ -11,9 +11,9 @@ const AlertDialog: React.FC<AlertDialogProps> = ({ message, onConfirm, isOpen })
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-xl border border-gray-700 max-w-sm w-full text-white">
-        <h3 className="text-lg font-semibold mb-4 text-blue-400">提示</h3>
-        <p className="mb-6 text-gray-300">{message}</p>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl border dark:border-gray-700 max-w-sm w-full text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400">提示</h3>
+        <p className="mb-6 text-gray-700 dark:text-gray-300">{message}</p>
         <div className="flex justify-end">
           <button
             onClick={onConfirm}

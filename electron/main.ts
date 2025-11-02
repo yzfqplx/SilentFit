@@ -106,24 +106,6 @@ function registerIpcHandlers() {
 // ----------------------------------------------------
 
 function createWindow() {
-    // 创建启动屏幕窗口
-    const splash = new BrowserWindow({
-        width: 400,
-        height: 300,
-        transparent: true,
-        frame: false,
-        alwaysOnTop: true,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            devTools: false,
-        },
-    });
-
-    // 加载启动屏幕 HTML 文件
-    const splashPath = path.join(app.getAppPath(), 'public', 'splash.html');
-    splash.loadURL(pathToFileURL(splashPath).href);
-
     // 创建主窗口
     const win = new BrowserWindow({
         width: 1200,
@@ -141,9 +123,8 @@ function createWindow() {
         },
     });
 
-    // 主窗口准备好显示时，显示主窗口并关闭启动屏幕
+    // 主窗口准备好显示时，显示主窗口
     win.once('ready-to-show', () => {
-        splash.destroy(); // 关闭启动屏幕
         win.show(); // 显示主窗口
     });
 

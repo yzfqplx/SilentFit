@@ -1,4 +1,4 @@
-import { useAppContext } from './contexts/AppContext';
+import { useAppContext, AppProvider } from './contexts/AppContext';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/RecordsPage';
@@ -8,7 +8,7 @@ import AlertDialog from './components/AlertDialog';
 import ConfirmDialog from './components/ConfirmDialog';
 import './App.css';
 
-function App() {
+function AppContent() {
   const { currentPage, setCurrentPage, alertMessage, setAlertMessage, confirmDialog } = useAppContext();
 
   // --- 渲染内容 ---
@@ -28,13 +28,13 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900 text-white font-sans antialiased">
+    <div className="flex h-screen bg-gray-100 dark:bg-dark-bg text-light-text dark:text-dark-text font-sans antialiased w-full">
       
       {/* 1. Sidebar Navigation */}
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
       {/* 2. Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-6 md:p-10 min-w-[320px]">
+      <main className="flex-1 overflow-y-auto p-6 md:p-10 min-w-[320px] max-w-full">
         {renderContent()}
       </main>
 
@@ -56,5 +56,13 @@ function App() {
     </div>
   );
 };
+
+function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
+  );
+}
 
 export default App;

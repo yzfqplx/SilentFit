@@ -34,6 +34,10 @@ html, body, #root {
   width: 100%;
   margin: 0;
   padding: 0;
+  /* 添加响应式设计支持 */
+  min-width: 320px;
+  /* 添加最大宽度以支持大屏幕 */
+  max-width: 100%;
 }
 a {
   font-weight: 500;
@@ -46,7 +50,7 @@ a:hover {
 
 body {
   margin: 0;
-  min-width: 0;
+  min-width: 320px;
   min-height: 100vh;
 }
 
@@ -91,4 +95,25 @@ button:focus-visible {
   outline: none !important;
   /* 移除移动端点击时的半透明灰色高亮 */
   -webkit-tap-highlight-color: transparent; 
+}
+
+/* 添加响应式设计的媒体查询 */
+@media screen and (max-width: 480px) {
+  :root {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 2.5em;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  :root {
+    font-size: 12px;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
 }
