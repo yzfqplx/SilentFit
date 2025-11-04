@@ -31,7 +31,9 @@ interface AppContextType {
   showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void; 
   // Data fetching
   records: TrainingRecord[];
+  setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>;
   metrics: MetricRecord[]; 
+  setMetrics: React.Dispatch<React.SetStateAction<MetricRecord[]>>;
   // Training data and handlers
   formData: Partial<TrainingRecord>;
   editingId: string | null;
@@ -124,7 +126,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setConfirmDialog,
     showConfirm,
     records,
+    setRecords,
     metrics,
+    setMetrics,
     ...trainingData,
     ...metricData,
     ...settingsData,
