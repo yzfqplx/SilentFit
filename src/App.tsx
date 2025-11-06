@@ -4,14 +4,25 @@ import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/RecordsPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
-
 import AlertDialog from './components/AlertDialog';
 import ConfirmDialog from './components/ConfirmDialog';
 import './App.css';
 import type { Page } from './types/data';
+import { Capacitor } from '@capacitor/core';
+import { useEffect, useState } from 'react';
+import BottomNavBar from './components/BottomNavBar';
 
 function AppContent() {
   const { currentPage, setCurrentPage, alertMessage, setAlertMessage, confirmDialog } = useAppContext();
+  const [platform, setPlatform] = useState('web');
+
+  useEffect(() => {
+    const checkPlatform = async () => {
+      const platform = await Capacitor.getPlatform();
+      setPlatform(platform);
+    };
+    checkPlatform();
+  }, []);
 
   const pageTitles: { [key in Page]: string } = {
     dashboard: '力量训练仪表板',
@@ -36,8 +47,8 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-dark-bg text-light-text dark:text-dark-text font-sans antialiased w-full">
-      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+    <div className={`flex h-screen bg-gray-100 dark:bg-dark-bg text-light-text dark:text-dark-text font-sans antialiased w-full ${platform === 'android' ? 'pb-16' : ''}`}>
+      {platform !== 'android' && <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
 
       <main className="flex-1 overflow-y-auto hide-scrollbar">
         {/* Sticky Header */}
@@ -52,6 +63,8 @@ function AppContent() {
           {renderContent()}
         </div>
       </main>
+
+      {platform === 'android' && <BottomNavBar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
 
       <AlertDialog 
         isOpen={!!alertMessage} 

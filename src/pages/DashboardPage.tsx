@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import KpiCard from '../components/KpiCard';
 import { ReactIcon, ListChecksIcon, TapeMeasureIcon, WeightIcon, TrendingUpIcon } from '../components/icons/Icons';
@@ -31,12 +31,22 @@ const DashboardPage: React.FC = () => {
         setCurrentPage,
         recommendation,
     } = useAppContext();
+
+    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().substring(0, 10));
+
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        if (name === 'date') {
+            setSelectedDate(value);
+        }
+        handleRecordChange(e);
+    };
     
     return (
         <div className="space-y-8">
             
             {/* KPI Cards Section - unified grid of 5 for consistent alignment */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               <KpiCard 
                 icon={<ReactIcon size={24} />} 
                 title="总训练次数" 
@@ -101,10 +111,11 @@ const DashboardPage: React.FC = () => {
                 <TrainingForm 
                     formData={formData}
                     editingId={editingId}
-                    handleRecordChange={handleRecordChange}
+                    handleRecordChange={handleDateChange}
                     handleRecordSubmit={handleRecordSubmit}
                     handleCancelEdit={handleCancelRecordEdit}
                     recommendation={recommendation}
+                    selectedDate={selectedDate}
                 />
                 <MetricPreviewCard 
                     latestMetrics={latestMetrics}
