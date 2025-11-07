@@ -1,6 +1,6 @@
 const config = {
-  appId: 'com.yourcompany.fitnesstracker',
-  appName: 'Fitness Tracker',
+  appId: 'com.silent.fit',
+  appName: 'SilentFit',
   webDir: 'dist',
   bundledWebRuntime: false,
 };

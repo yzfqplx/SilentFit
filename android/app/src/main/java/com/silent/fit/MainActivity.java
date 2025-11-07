@@ -1,4 +1,4 @@
-package com.yourcompany.fitnesstracker;
+package com.silent.fit;
 
 import com.getcapacitor.BridgeActivity;
 

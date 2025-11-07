@@ -15,21 +15,20 @@ const RecordsPage: React.FC = () => {
         handleCancelRecordEdit,
         handleMarkAsComplete, // 新增
         recommendation,
+        setFormData
     } = useAppContext();
 
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().substring(0, 10));
+    const [selectedDate, setSelectedDate] = useState<string>(formData.date || new Date().toISOString().substring(0, 10));
 
     // 创建包装函数以匹配 TrainingRecordCard 期望的签名
     const handleRecordDelete = (id: string) => {
         handleRecordDeleteWithContext(id);
     };
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        if (name === 'date') {
-            setSelectedDate(value);
-        }
-        handleRecordChange(e);
+    const handleFilterDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newDate = e.target.value;
+        setSelectedDate(newDate);
+        setFormData(prev => ({ ...prev, date: newDate }));
     };
 
     const filteredRecords = useMemo(() => {
@@ -59,10 +58,9 @@ const RecordsPage: React.FC = () => {
             <TrainingForm 
                 formData={formData}
                 editingId={editingId}
-                handleRecordChange={handleDateChange}
+                handleRecordChange={handleRecordChange}
                 handleRecordSubmit={handleRecordSubmit}
                 handleCancelEdit={handleCancelRecordEdit}
-                selectedDate={selectedDate}
                 recommendation={recommendation}
             />
 
@@ -76,7 +74,7 @@ const RecordsPage: React.FC = () => {
                         type="date"
                         id="recordDate"
                         value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        onChange={handleFilterDateChange}
                         className="mt-1 block p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white ml-auto"
                     />
                 </div>

@@ -15,6 +15,8 @@ interface ActivityTrendChartProps {
     trendRange: '30' | '90' | 'all';
     setTrendRange: React.Dispatch<React.SetStateAction<'30' | '90' | 'all'>>;
     activityTrendData: ActivityTrendData[];
+    trendView: 'daily' | 'monthly';
+    setTrendView: React.Dispatch<React.SetStateAction<'daily' | 'monthly'>>;
 }
 
 // --- 训练项目趋势图表 ---
@@ -24,11 +26,21 @@ const ActivityTrendChart: React.FC<ActivityTrendChartProps> = ({
     trendRange,
     setTrendRange,
     activityTrendData,
+    trendView,
+    setTrendView,
 }) => {
     const { theme } = useTheme();
     const tickColor = theme === 'light' ? '#374151' : '#9CA3AF';
     const gridColor = theme === 'light' ? '#E5E7EB' : '#374151';
     const tooltipBg = theme === 'light' ? '#FFFFFF' : '#1F2937';
+
+    const formatDateTick = (tick: string) => {
+        if (trendView === 'monthly') {
+            return tick;
+        }
+        const date = new Date(tick);
+        return `${date.getMonth() + 1}-${date.getDate()}`;
+    };
 
     return (
         <div 
@@ -54,15 +66,31 @@ const ActivityTrendChart: React.FC<ActivityTrendChartProps> = ({
                         <option value="90">近90天</option>
                         <option value="all">全部</option>
                     </select>
+                    <select
+                        className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+                        value={trendView}
+                        onChange={(e) => setTrendView(e.target.value as 'daily' | 'monthly')}
+                    >
+                        <option value="daily">日视图</option>
+                        <option value="monthly">月视图</option>
+                    </select>
                 </div>
             </div>
             {activityTrendData.length < 2 ? (
                 <div className="text-center p-8 text-gray-500 dark:text-gray-400">该项目至少需要两条记录以显示趋势。</div>
             ) : (
                 <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={activityTrendData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <LineChart data={activityTrendData} margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-                        <XAxis dataKey="date" stroke={tickColor} />
+                        <XAxis 
+                            dataKey="date" 
+                            stroke={tickColor} 
+                            angle={-45} 
+                            textAnchor="end" 
+                            dy={5} 
+                            interval={0}
+                            tickFormatter={formatDateTick}
+                        />
                         <YAxis stroke={tickColor} />
                         <Tooltip contentStyle={{ backgroundColor: tooltipBg, border: 'none', borderRadius: '8px' }} labelStyle={{ color: tickColor }} />
                         <Line type="monotone" dataKey="weightKg" name="重量 (KG)" stroke="#34D399" strokeWidth={2} dot={false} />

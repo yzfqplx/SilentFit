@@ -34,6 +34,7 @@ export const useTrainingData = (
   const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<string>(STRENGTH_ACTIVITIES[0]);
   const [trendRange, setTrendRange] = useState<'30' | '90' | 'all'>('all');
+  const [trendView, setTrendView] = useState<'daily' | 'monthly'>('daily');
 
   const handleRecordChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -79,15 +80,15 @@ export const useTrainingData = (
         console.log("Training Record added successfully!");
       }
 
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         type: 'Weightlifting',
         activity: STRENGTH_ACTIVITIES[0],
-        date: new Date().toISOString().substring(0, 10),
         sets: 4,
         reps: 12,
         weightKg: 0,
         notes: '',
-      });
+      }));
       fetchRecords('training', setRecords);
 
     } catch (error) {
@@ -173,16 +174,36 @@ export const useTrainingData = (
     let data = records
       .filter(r => normalizeActivity(r.activity) === target)
       .slice()
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .map(r => ({ date: r.date, weightKg: r.weightKg || 0, reps: r.reps || 0 }));
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
     if (trendRange !== 'all') {
       const days = trendRange === '30' ? 30 : 90;
       const cutoff = new Date();
       cutoff.setDate(cutoff.getDate() - days);
       data = data.filter(d => new Date(d.date) >= cutoff);
     }
-    return data;
-  }, [records, selectedActivity, trendRange]);
+
+    if (trendView === 'monthly') {
+      const monthlyData: { [key: string]: { totalWeight: number; totalReps: number; count: number } } = {};
+      data.forEach(r => {
+        const month = r.date.substring(0, 7); // YYYY-MM
+        if (!monthlyData[month]) {
+          monthlyData[month] = { totalWeight: 0, totalReps: 0, count: 0 };
+        }
+        monthlyData[month].totalWeight += r.weightKg || 0;
+        monthlyData[month].totalReps += r.reps || 0;
+        monthlyData[month].count++;
+      });
+
+      return Object.keys(monthlyData).map(month => ({
+        date: month,
+        weightKg: monthlyData[month].totalWeight / monthlyData[month].count,
+        reps: monthlyData[month].totalReps / monthlyData[month].count,
+      }));
+    }
+
+    return data.map(r => ({ date: r.date, weightKg: r.weightKg || 0, reps: r.reps || 0 }));
+  }, [records, selectedActivity, trendRange, trendView]);
 
   const oneRepMaxData = useMemo(() => {
     const target = selectedActivity;
@@ -219,6 +240,8 @@ export const useTrainingData = (
     setSelectedActivity,
     trendRange,
     setTrendRange,
+    trendView,
+    setTrendView,
     handleRecordChange,
     handleRecordSubmit,
     handleRecordEdit,

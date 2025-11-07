@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import KpiCard from '../components/KpiCard';
 import { ReactIcon, ListChecksIcon, TapeMeasureIcon, WeightIcon, TrendingUpIcon } from '../components/icons/Icons';
@@ -30,18 +30,10 @@ const DashboardPage: React.FC = () => {
         handleCancelRecordEdit,
         setCurrentPage,
         recommendation,
+        trendView,
+        setTrendView,
     } = useAppContext();
 
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().substring(0, 10));
-
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        if (name === 'date') {
-            setSelectedDate(value);
-        }
-        handleRecordChange(e);
-    };
-    
     return (
         <div className="space-y-8">
             
@@ -104,6 +96,8 @@ const DashboardPage: React.FC = () => {
                 trendRange={trendRange}
                 setTrendRange={setTrendRange}
                 activityTrendData={activityTrendData}
+                trendView={trendView}
+                setTrendView={setTrendView}
             />
 
             {/* Quick Add Form and Metric Preview */}
@@ -111,11 +105,10 @@ const DashboardPage: React.FC = () => {
                 <TrainingForm 
                     formData={formData}
                     editingId={editingId}
-                    handleRecordChange={handleDateChange}
+                    handleRecordChange={handleRecordChange}
                     handleRecordSubmit={handleRecordSubmit}
                     handleCancelEdit={handleCancelRecordEdit}
                     recommendation={recommendation}
-                    selectedDate={selectedDate}
                 />
                 <MetricPreviewCard 
                     latestMetrics={latestMetrics}

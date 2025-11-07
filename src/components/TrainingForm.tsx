@@ -10,7 +10,6 @@ interface TrainingFormProps {
     handleRecordSubmit: (e: React.FormEvent) => Promise<void>;
     handleCancelEdit: () => void;
     recommendation: Partial<TrainingRecord> | null;
-    selectedDate?: string; // Add selectedDate prop
 }
 
 // --- 训练记录表单卡片 ---
@@ -21,7 +20,6 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
     handleRecordSubmit,
     handleCancelEdit,
     recommendation,
-    selectedDate,
 }) => {
 
     return (
@@ -54,7 +52,7 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
                             type="date"
                             id="date"
                             name="date"
-                            value={editingId ? formData.date || '' : selectedDate || new Date().toISOString().substring(0, 10)}
+                            value={formData.date || ''}
                             onChange={handleRecordChange}
                             className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                             required
