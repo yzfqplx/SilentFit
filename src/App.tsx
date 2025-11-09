@@ -1,7 +1,7 @@
 import { useAppContext, AppProvider } from './contexts/AppContext';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
-import RecordsPage from './pages/RecordsPage';
+import RecordsPage from './pages/TrainingRecordPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
 import AlertDialog from './components/AlertDialog';
@@ -47,13 +47,13 @@ function AppContent() {
   };
 
   return (
-    <div className={`flex h-screen bg-gray-100 dark:bg-dark-bg text-light-text dark:text-dark-text font-sans antialiased w-full ${platform === 'android' ? 'pb-16' : ''}`}>
+    <div className={`flex h-screen font-sans antialiased w-full ${platform === 'android' ? 'pb-16' : ''}`}>
       {platform !== 'android' && <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
 
       <main className="flex-1 overflow-y-auto hide-scrollbar">
         {/* Sticky Header */}
-        <header className="sticky top-0 z-10 bg-gray-100/50 dark:bg-dark-bg/50 p-4 border-b border-gray-200 dark:border-gray-700 backdrop-blur-lg">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <header className="sticky top-0 z-10 bg-background/50 p-4 border-b backdrop-blur-lg">
+          <h1 className="text-xl font-bold">
             {pageTitles[currentPage]}
           </h1>
         </header>

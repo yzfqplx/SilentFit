@@ -1,43 +1,22 @@
-import React, { useState, type ReactNode } from 'react';
+import React from 'react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface TooltipProps {
-  children: ReactNode;
+  children: React.ReactNode;
   content: string;
-  delay?: number; // Delay in ms before tooltip appears
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ children, content, delay = 400 }) => {
-  const [active, setActive] = useState(false);
-  let timeout: NodeJS.Timeout;
-
-  const showTip = () => {
-    timeout = setTimeout(() => {
-      setActive(true);
-    }, delay);
-  };
-
-  const hideTip = () => {
-    clearInterval(timeout);
-    setActive(false);
-  };
-
+const CustomTooltip: React.FC<TooltipProps> = ({ children, content }) => {
   return (
-    <div
-      className="relative inline-block"
-      onMouseEnter={showTip}
-      onMouseLeave={hideTip}
-    >
-      {children}
-      {active && (
-        <div className="absolute z-50 px-3 py-2 text-sm font-medium text-white dark:text-gray-900 bg-gray-700 dark:bg-gray-200 rounded-lg shadow-sm opacity-90 whitespace-nowrap -translate-x-1/2 left-1/2 top-full mt-2">
-          {content}
-          <div className="absolute text-gray-700 dark:text-gray-200 text-sm -top-1 left-1/2 -translate-x-1/2">
-            &#9650;
-          </div>
-        </div>
-      )}
-    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent>
+          <p>{content}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
-export default Tooltip;
+export default CustomTooltip;

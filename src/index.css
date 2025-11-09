@@ -34,6 +34,7 @@ html, body, #root {
   width: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
   /* 添加响应式设计支持 */
   min-width: 320px;
   /* 添加最大宽度以支持大屏幕 */
@@ -48,36 +49,6 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -85,9 +56,6 @@ button:focus-visible {
   }
   a:hover {
     color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
   }
 }
 /* 强制移除 Recharts 图表内部 SVG 元素的焦点轮廓 (Outline) */
@@ -102,51 +70,38 @@ button:focus-visible {
   :root {
     font-size: 14px;
   }
-  
-  h1 {
-    font-size: 2.5em;
-  }
 }
 
 @media screen and (max-width: 320px) {
   :root {
     font-size: 12px;
   }
-  
-  h1 {
-    font-size: 2em;
-  }
+}
+
+.sidebar-button {
+  position: relative;
+  overflow: hidden;
 }
 
 .sidebar-button::after {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: hsl(var(--primary));
   transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 0;
-  border-radius: 0.75rem; /* 12px, to match rounded-xl */
+}
+
+.sidebar-button.active {
+  color: hsl(var(--primary-foreground));
 }
 
 .sidebar-button.active::after {
   transform: translateX(0);
-}
-
-.sidebar-button.active {
-    color: white;
-}
-
-/* Light mode */
-.sidebar-button.active::after {
-  background-color: #4f46e5; /* bg-indigo-600 */
-}
-
-/* Dark mode */
-.dark .sidebar-button.active::after {
-  background-color: #4338ca; /* bg-indigo-700 */
 }
 
 .sidebar-button > * {
@@ -165,7 +120,7 @@ button:focus-visible {
   top: var(--mouse-y, 0);
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle at center, rgba(120, 120, 255, 0.3) 0%, rgba(120, 120, 255, 0) 50%);
+  background: radial-gradient(circle at center, hsla(var(--primary), 0.3) 0%, hsla(var(--primary), 0) 50%);
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.3s;
@@ -179,7 +134,7 @@ button:focus-visible {
 }
 
 .dark .card-glow::before {
-    background: radial-gradient(circle at center, rgba(150, 150, 255, 0.15) 0%, rgba(150, 150, 255, 0) 50%);
+    background: radial-gradient(circle at center, hsla(var(--primary), 0.15) 0%, hsla(var(--primary), 0) 50%);
 }
 
 .card-glow-edge {
@@ -194,7 +149,7 @@ button:focus-visible {
   top: var(--mouse-y, 0);
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle at center, rgba(120, 120, 255, 0.3) 0%, rgba(120, 120, 255, 0) 50%);
+  background: radial-gradient(circle at center, hsla(var(--primary), 0.3) 0%, hsla(var(--primary), 0) 50%);
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.3s;
@@ -208,5 +163,81 @@ button:focus-visible {
 }
 
 .dark .card-glow-edge::before {
-    background: radial-gradient(circle at center, rgba(150, 150, 255, 0.15) 0%, rgba(150, 150, 255, 0) 50%);
+    background: radial-gradient(circle at center, hsla(var(--primary), 0.15) 0%, hsla(var(--primary), 0) 50%);
+}
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --primary: 221.2 83.2% 53.3%; /* Tailwind blue-600 */
+    --primary-foreground: 210 20% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%; /* Tailwind blue-600 */
+    --chart-1: 221.2 83.2% 53.3%; /* Tailwind blue-600 */
+    --chart-2: 217.2 91.2% 59.8%; /* Tailwind blue-500 */
+    --chart-3: 210 80% 60%;
+    --chart-4: 200 70% 50%;
+    --chart-5: 230 60% 40%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 217.2 32.4% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 217.2 32.4% 10%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 217.2 32.4% 15%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.4% 15%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+    --accent: 217.2 32.4% 15%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 40.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 217.2 32.4% 20%;
+    --input: 217.2 32.4% 20%;
+    --ring: 221.2 83.2% 53.3%;
+    --chart-1: 221.2 83.2% 53.3%;
+    --chart-2: 217.2 91.2% 59.8%;
+    --chart-3: 210 80% 60%;
+    --chart-4: 200 70% 50%;
+    --chart-5: 230 60% 40%;
+    --sidebar: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 221.2 83.2% 53.3%;
+    --sidebar-primary-foreground: 210 20% 98%;
+    --sidebar-accent: 217.2 32.4% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217.2 32.4% 20%;
+    --sidebar-ring: 221.2 83.2% 53.3%;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

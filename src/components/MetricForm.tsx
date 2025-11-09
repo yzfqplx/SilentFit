@@ -1,5 +1,15 @@
 import React from 'react';
 import type { MetricRecord } from '../types/data';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { format } from "date-fns"; // Added import
+import { Calendar as CalendarIcon } from "lucide-react"; // Added import
+import { cn } from "@/lib/utils"; // Added import
+import { Calendar } from "@/components/ui/calendar"; // Added import
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Added import
 
 interface MetricFormProps {
     metricFormData: Partial<MetricRecord>;
@@ -16,124 +26,140 @@ const MetricForm: React.FC<MetricFormProps> = ({
     handleMetricChange,
     handleMetricSubmit,
     handleCancelEdit,
-}) => (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01] mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
-            {editingMetricId ? '编辑围度记录' : '记录身体围度'}
-        </h2>
-        <form onSubmit={handleMetricSubmit} className="space-y-4">
-            
-            {/* Row 1: Date / Shoulder / Chest / Arm / Waist / Weight */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="relative">
-                    <label htmlFor="date" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">日期</label>
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={metricFormData.date || new Date().toISOString().substring(0, 10)}
-                        onChange={handleMetricChange}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                        required
-                    />
-                </div>
-                <div className="relative">
-                    <label htmlFor="shoulderCm" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">肩围 (CM)</label>
-                    <input
-                        type="number"
-                        id="shoulderCm"
-                        name="shoulderCm"
-                        value={metricFormData.shoulderCm === 0 ? '' : metricFormData.shoulderCm || ''}
-                        onChange={handleMetricChange}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                        min="0" step="0.1" required
-                    />
-                </div>
-                <div className="relative">
-                    <label htmlFor="chestCm" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">胸围 (CM)</label>
-                    <input
-                        type="number"
-                        id="chestCm"
-                        name="chestCm"
-                        value={metricFormData.chestCm === 0 ? '' : metricFormData.chestCm || ''}
-                        onChange={handleMetricChange}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                        min="0" step="0.1" required
-                    />
-                </div>
-                <div className="relative">
-                    <label htmlFor="armCm" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">臂围 (CM)</label>
-                    <input
-                        type="number"
-                        id="armCm"
-                        name="armCm"
-                        value={metricFormData.armCm === 0 ? '' : metricFormData.armCm || ''}
-                        onChange={handleMetricChange}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                        min="0" step="0.1"
-                    />
-                </div>
-                <div className="relative">
-                    <label htmlFor="waistCm" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">腰围 (CM)</label>
-                    <input
-                        type="number"
-                        id="waistCm"
-                        name="waistCm"
-                        value={metricFormData.waistCm === 0 ? '' : metricFormData.waistCm || ''}
-                        onChange={handleMetricChange}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                        min="0" step="0.1"
-                    />
-                </div>
-                <div className="relative">
-                    <label htmlFor="weightKg" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">体重 (KG)</label>
-                    <input
-                        type="number"
-                        id="weightKg"
-                        name="weightKg"
-                        value={metricFormData.weightKg === 0 ? '' : metricFormData.weightKg || ''}
-                        onChange={handleMetricChange}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                        min="0" step="0.1"
-                    />
-                </div>
-            </div>
+}) => {
+    const selectedDate = metricFormData.date ? new Date(metricFormData.date) : undefined;
 
-            {/* Row 2: Notes */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="relative col-span-2 md:col-span-4">
-                    <label htmlFor="metricNotes" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">备注</label>
-                    <textarea
-                        id="metricNotes"
-                        name="notes"
-                        rows={1}
-                        value={metricFormData.notes || ''}
-                        onChange={handleMetricChange as any}
-                        className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                    />
-                </div>
-            </div>
-            
-            {/* Submit Button */}
-            <button
-                type="submit"
-                className="w-full py-2 px-4 rounded-lg text-lg font-semibold 
-                           bg-indigo-600 hover:bg-indigo-500 text-white 
-                           dark:shadow-xl dark:shadow-indigo-900/50 focus:outline-none
-                           transition-all duration-300 transform hover:scale-[1.01]"
-            >
-                {editingMetricId ? '保存围度更改' : '记录围度数据'}
-            </button>
-        </form>
-        {editingMetricId && (
-            <button
-                onClick={handleCancelEdit}
-                className="mt-2 w-full text-center py-1 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition duration-150 focus:outline-none"
-            >
-                取消编辑
-            </button>
-        )}
-    </div>
-);
+    const handleDateSelect = (date: Date | undefined) => {
+        const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
+        // Create a synthetic event to pass to handleMetricChange
+        const syntheticEvent = {
+            target: {
+                name: "date",
+                value: formattedDate,
+            },
+        } as React.ChangeEvent<HTMLInputElement>;
+        handleMetricChange(syntheticEvent);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-xl font-semibold text-primary">
+                    {editingMetricId ? '编辑围度记录' : '记录身体围度'}
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleMetricSubmit} className="space-y-4">
+                    
+                    {/* Row 1: Date / Shoulder / Chest / Arm / Waist / Weight */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="date">Date</Label> {/* Changed label to English */}
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                            "w-full justify-start text-left font-normal min-w-0",
+                                            !selectedDate && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {selectedDate ? <span className="truncate">{format(selectedDate, "yyyy年MM月dd日")}</span> : <span className="truncate">Pick a date</span>}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={selectedDate}
+                                        onSelect={handleDateSelect}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="shoulderCm">肩围 (CM)</Label>
+                            <Input
+                                type="number"
+                                id="shoulderCm"
+                                name="shoulderCm"
+                                value={metricFormData.shoulderCm === 0 ? '' : metricFormData.shoulderCm || ''}
+                                onChange={handleMetricChange}
+                                min="0" step="0.1" required
+                            />
+                        </div>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="chestCm">胸围 (CM)</Label>
+                            <Input
+                                type="number"
+                                id="chestCm"
+                                name="chestCm"
+                                value={metricFormData.chestCm === 0 ? '' : metricFormData.chestCm || ''}
+                                onChange={handleMetricChange}
+                                min="0" step="0.1" required
+                            />
+                        </div>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="armCm">臂围 (CM)</Label>
+                            <Input
+                                type="number"
+                                id="armCm"
+                                name="armCm"
+                                value={metricFormData.armCm === 0 ? '' : metricFormData.armCm || ''}
+                                onChange={handleMetricChange}
+                                min="0" step="0.1"
+                            />
+                        </div>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="waistCm">腰围 (CM)</Label>
+                            <Input
+                                type="number"
+                                id="waistCm"
+                                name="waistCm"
+                                value={metricFormData.waistCm === 0 ? '' : metricFormData.waistCm || ''}
+                                onChange={handleMetricChange}
+                                min="0" step="0.1"
+                            />
+                        </div>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="weightKg">体重 (KG)</Label>
+                            <Input
+                                type="number"
+                                id="weightKg"
+                                name="weightKg"
+                                value={metricFormData.weightKg === 0 ? '' : metricFormData.weightKg || ''}
+                                onChange={handleMetricChange}
+                                min="0" step="0.1"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Row 2: Notes */}
+                    <div className="grid w-full gap-1.5">
+                        <Label htmlFor="metricNotes">备注</Label>
+                        <Textarea
+                            id="metricNotes"
+                            name="notes"
+                            rows={1}
+                            value={metricFormData.notes || ''}
+                            onChange={handleMetricChange as any}
+                        />
+                    </div>
+                    
+                    {/* Submit Button */}
+                    <Button type="submit" className="w-full">
+                        {editingMetricId ? '保存围度更改' : '记录围度数据'}
+                    </Button>
+                </form>
+                {editingMetricId && (
+                    <Button variant="link" onClick={handleCancelEdit} className="mt-2 w-full">
+                        取消编辑
+                    </Button>
+                )}
+                </CardContent>
+            </Card>
+        );
+};
 
 export default MetricForm;

@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { useTheme } from '@/components/ui/theme-provider'; // Import useTheme
 
 const SettingsPage: React.FC = () => {
     const { heightCm, setHeightCm, records, setRecords, metrics, setMetrics, setAlertMessage } = useAppContext();
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+    const { theme, setTheme } = useTheme(); // Use the useTheme hook
 
     const handleExportData = () => {
         const data = {
@@ -57,59 +63,76 @@ const SettingsPage: React.FC = () => {
     };
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto"> {/* Increased max-width for horizontal layout */}
-
-            <div className="flex flex-col lg:flex-row gap-8">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 space-y-6 mb-8 lg:mb-0 lg:w-1/2"> {/* Added lg:w-1/2 for horizontal layout */}
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">个人信息</h2>
-                    <div>
-                        <label htmlFor="heightCm" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">身高 (CM)</label>
-                        <input
-                            id="heightCm"
-                            type="number"
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 focus:outline-none"
-                            value={heightCm === '' ? '' : heightCm}
-                            onChange={(e) => setHeightCm(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                            min="0" step="0.5"
-                        />
-                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">用于计算 BMI（基于最新体重）</p>
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                        <p>训练记录数: {records.length}</p>
-                        <p>围度记录数: {metrics.length}</p>
-                    </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 space-y-6 lg:w-1/2"> {/* Added lg:w-1/2 for horizontal layout */}
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">数据管理</h2>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                        您可以导出所有训练和围度数据，以便备份或迁移。
-                        也可以导入之前导出的数据。
-                    </p>
-                    <button
-                        onClick={handleExportData}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
-                    >
-                        导出数据
-                    </button>
-                    <div>
-                        <label htmlFor="importData" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">导入数据</label>
-                        <div className="relative">
-                            <input
-                                id="importData"
-                                type="file"
-                                accept=".json"
-                                onChange={handleImportData}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>个人信息与偏好</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <div>
+                            <Label htmlFor="heightCm">身高 (CM)</Label>
+                            <Input
+                                id="heightCm"
+                                type="number"
+                                value={heightCm === '' ? '' : heightCm}
+                                onChange={(e) => setHeightCm(e.target.value === '' ? '' : parseFloat(e.target.value))}
+                                min="0" step="0.5"
+                                className="w-full"
                             />
-                            <div className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 flex items-center justify-between cursor-pointer transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
-                                <span className="truncate">{selectedFileName || '选择 JSON 文件'}</span>
-                                <span className="bg-indigo-500 text-white text-sm py-1 px-3 rounded-md hover:bg-indigo-600">浏览</span>
+                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">用于计算 BMI（基于最新体重）</p>
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                            <p>训练记录数: {records.length}</p>
+                            <p>围度记录数: {metrics.length}</p>
+                        </div>
+                        <div>
+                            <Label>主题设置</Label>
+                            <div className="mt-2 flex space-x-2"> {/* Use flex and space-x for button layout */}
+                                <Button onClick={() => setTheme("light")} variant={theme === "light" ? "default" : "outline"}>浅色</Button>
+                                <Button onClick={() => setTheme("dark")} variant={theme === "dark" ? "default" : "outline"}>深色</Button>
+                                <Button onClick={() => setTheme("system")} variant={theme === "system" ? "default" : "outline"}>系统</Button>
                             </div>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">导入之前导出的 JSON 文件</p>
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>数据管理</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                            您可以导出所有训练和围度数据，以便备份或迁移。
+                            也可以导入之前导出的数据。
+                        </p>
+                        <Button onClick={handleExportData} className="w-full">导出数据</Button>
+                        <div>
+                            <Label htmlFor="importData">导入数据</Label>
+                            <div className="flex w-full items-center space-x-2">
+                                <Input
+                                    id="importDataDisplay"
+                                    type="text"
+                                    readOnly
+                                    value={selectedFileName || '选择 JSON 文件'}
+                                    className="flex-grow"
+                                    placeholder="选择 JSON 文件"
+                                />
+                                <input
+                                    id="importData"
+                                    type="file"
+                                    accept=".json"
+                                    onChange={handleImportData}
+                                    className="hidden"
+                                />
+                                <Button onClick={() => document.getElementById('importData')?.click()}>
+                                    浏览
+                                </Button>
+                            </div>
+                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">导入之前导出的 JSON 文件</p>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

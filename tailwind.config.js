@@ -1,26 +1,78 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
+  darkMode: ['class', 'class'],
   // 扫描 src 文件夹下所有 .html, .js, .jsx, .ts, .tsx 文件中的 Tailwind 类名
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
-      // 在这里可以定义您的主色调、字体等
-      colors: {
-        'primary-blue': '#1e40af', // 强调色
-        'card-bg': '#ffffff', // 卡片背景色
-        'dark-card-bg': '#1f2937', // 深色模式的卡片背景
-        'dark-bg': '#111827',
-        'dark-text': '#f9fafb',
-        'light-text': '#1f2937',
-      },
-      boxShadow: {
-        'modern': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)',
-      }
-    },
+  	extend: {
+  		colors: {
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
+  			card: {
+  				DEFAULT: 'hsl(var(--card))',
+  				foreground: 'hsl(var(--card-foreground))'
+  			},
+  			popover: {
+  				DEFAULT: 'hsl(var(--popover))',
+  				foreground: 'hsl(var(--popover-foreground))'
+  			},
+  			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			secondary: {
+  				DEFAULT: 'hsl(var(--secondary))',
+  				foreground: 'hsl(var(--secondary-foreground))'
+  			},
+  			muted: {
+  				DEFAULT: 'hsl(var(--muted))',
+  				foreground: 'hsl(var(--muted-foreground))'
+  			},
+  			accent: {
+  				DEFAULT: 'hsl(var(--accent))',
+  				foreground: 'hsl(var(--accent-foreground))'
+  			},
+  			destructive: {
+  				DEFAULT: 'hsl(var(--destructive))',
+  				foreground: 'hsl(var(--destructive-foreground))'
+  			},
+  			border: 'hsl(var(--border))',
+  			input: 'hsl(var(--input))',
+  			ring: 'hsl(var(--ring))',
+  			chart: {
+  				'1': 'hsl(var(--chart-1))',
+  				'2': 'hsl(var(--chart-2))',
+  				'3': 'hsl(var(--chart-3))',
+  				'4': 'hsl(var(--chart-4))',
+  				'5': 'hsl(var(--chart-5))'
+  			},
+            sidebar: {
+                DEFAULT: 'oklch(var(--sidebar))',
+                foreground: 'oklch(var(--sidebar-foreground))',
+                primary: {
+                    DEFAULT: 'oklch(var(--sidebar-primary))',
+                    foreground: 'oklch(var(--sidebar-primary-foreground))',
+                },
+                accent: {
+                    DEFAULT: 'oklch(var(--sidebar-accent))',
+                    foreground: 'oklch(var(--sidebar-accent-foreground))',
+                },
+                border: 'oklch(var(--sidebar-border))',
+                ring: 'oklch(var(--sidebar-ring))',
+            }
+  		},
+  		boxShadow: {
+  			modern: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)'
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		}
+  	}
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 }

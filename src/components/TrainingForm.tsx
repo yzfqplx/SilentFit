@@ -1,7 +1,17 @@
 import React from 'react';
 import type { TrainingRecord } from '../types/data';
 import { STRENGTH_ACTIVITIES } from '../constants/activities';
-import { CalendarIcon, WeightIcon } from './icons/Icons';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { format } from "date-fns"; // Added import
+import { Calendar as CalendarIcon } from "lucide-react"; // Added import
+import { cn } from "@/lib/utils"; // Added import
+import { Calendar } from "@/components/ui/calendar"; // Added import
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Added import
 
 interface TrainingFormProps {
     formData: Partial<TrainingRecord>;
@@ -21,88 +31,110 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
     handleCancelEdit,
     recommendation,
 }) => {
+    const selectedDate = formData.date ? new Date(formData.date) : undefined;
+
+    const handleDateSelect = (date: Date | undefined) => {
+        const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
+        // Create a synthetic event to pass to handleRecordChange
+        const syntheticEvent = {
+            target: {
+                name: "date",
+                value: formattedDate,
+            },
+        } as React.ChangeEvent<HTMLInputElement>;
+        handleRecordChange(syntheticEvent);
+    };
 
     return (
-        <div 
-            className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 transition-all duration-300 transform hover:scale-[1.01]">
-            <h2 className="text-xl font-semibold mb-4 text-emerald-600 dark:text-emerald-400">
-                {editingId ? '编辑训练记录' : '添加力量训练记录'}
-            </h2>
-            <form onSubmit={handleRecordSubmit} className="space-y-4">
-                
-                {/* Row 1: Activity and Date */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="relative">
-                        <label htmlFor="activity" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">训练项目</label>
-                        <select
-                            id="activity"
-                            name="activity"
-                            value={formData.activity || ''}
-                            onChange={handleRecordChange}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 appearance-none focus:outline-none"
-                        >
-                            {STRENGTH_ACTIVITIES.map(activity => (
-                                <option key={activity} value={activity}>{activity}</option>
-                            ))}
-                        </select>
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-xl font-semibold text-primary">
+                    {editingId ? '编辑训练记录' : '添加力量训练记录'}
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleRecordSubmit} className="space-y-4">
+                    
+                    {/* Row 1: Activity and Date */}
+                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="activity">训练项目</Label>
+                        <Select onValueChange={(value) => handleRecordChange({ target: { name: 'activity', value } } as any)} value={formData.activity || ''}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="选择训练项目" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {STRENGTH_ACTIVITIES.map(activity => (
+                                    <SelectItem key={activity} value={activity}>{activity}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
-                    <div className="relative">
-                        <label htmlFor="date" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">日期</label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="date"
-                            value={formData.date || ''}
-                            onChange={handleRecordChange}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
-                            required
-                        />
-                        <CalendarIcon className="absolute left-3 top-[34px] w-4 h-4 text-gray-400 pointer-events-none" />
+                    <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="date">Date</Label> {/* Changed label to English */}
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                        "w-full justify-start text-left font-normal min-w-0", // Added min-w-0
+                                        !selectedDate && "text-muted-foreground"
+                                    )}
+                                >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {selectedDate ? <span className="truncate">{format(selectedDate, "yyyy年MM月dd日")}</span> : <span className="truncate">Pick a date</span>}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                                <Calendar
+                                    mode="single"
+                                    selected={selectedDate}
+                                    onSelect={handleDateSelect}
+                                    initialFocus
+                                />
+                            </PopoverContent>
+                        </Popover>
                     </div>
                 </div>
 
                 {/* Row 2: Weight, Sets, Reps */}
                 <div className="grid grid-cols-3 gap-4">
-                    <div className="relative">
-                        <label htmlFor="weightKg" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">重量 (KG)</label>
-                        <input
+                    <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="weightKg">重量 (KG)</Label>
+                        <Input
                             type="number"
                             id="weightKg"
                             name="weightKg"
                             value={formData.weightKg === 0 ? '' : formData.weightKg || ''}
                             placeholder={recommendation?.weightKg?.toString() ?? ''}
                             onChange={handleRecordChange}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                             required
                             min="0"
                             step="0.5"
                         />
-                        <WeightIcon className="absolute left-3 top-[34px] w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
-                    <div className="relative">
-                        <label htmlFor="sets" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">组数</label>
-                        <input
+                    <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="sets">组数</Label>
+                        <Input
                             type="number"
                             id="sets"
                             name="sets"
                             value={formData.sets === 0 ? '' : formData.sets === undefined || formData.sets === null ? '' : formData.sets}
                             placeholder={recommendation?.sets?.toString() ?? ''}
                             onChange={handleRecordChange}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                             required
                             min="1"
                         />
                     </div>
-                    <div className="relative">
-                        <label htmlFor="reps" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">次数</label>
-                        <input
+                    <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="reps">次数</Label>
+                        <Input
                             type="number"
                             id="reps"
                             name="reps"
                             value={formData.reps === 0 ? '' : formData.reps === undefined || formData.reps === null ? '' : formData.reps}
                             placeholder={recommendation?.reps?.toString() ?? ''}
                             onChange={handleRecordChange}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
                             required
                             min="1"
                         />
@@ -110,41 +142,30 @@ const TrainingForm: React.FC<TrainingFormProps> = ({
                 </div>
                 
                 {/* Notes */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="col-span-2">
-                        <label htmlFor="notes" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">备注</label>
-                        <textarea
-                            id="notes"
-                            name="notes"
-                            rows={2}
-                            value={formData.notes || ''}
-                            onChange={handleRecordChange as any}
-                            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150 focus:outline-none"
-                        />
-                    </div>
+                <div className="grid w-full gap-1.5">
+                    <Label htmlFor="notes">备注</Label>
+                    <Textarea
+                        id="notes"
+                        name="notes"
+                        rows={2}
+                        value={formData.notes || ''}
+                        onChange={handleRecordChange as any}
+                    />
                 </div>
 
 
                 {/* Submit Button */}
-                <button
-                    type="submit"
-                    className="w-full py-2 px-4 rounded-lg text-lg font-semibold 
-                               bg-emerald-600 hover:bg-emerald-500 text-white 
-                               dark:shadow-xl dark:shadow-emerald-900/50 focus:outline-none
-                               transition-all duration-300 transform hover:scale-[1.01]"
-                >
+                <Button type="submit" className="w-full">
                     {editingId ? '保存更改' : '添加训练记录'}
-                </button>
+                </Button>
             </form>
             {editingId && (
-                <button
-                    onClick={handleCancelEdit}
-                    className="mt-2 w-full text-center py-1 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition duration-150 focus:outline-none"
-                >
+                <Button variant="link" onClick={handleCancelEdit} className="mt-2 w-full">
                     取消编辑
-                </button>
+                </Button>
             )}
-        </div>
+            </CardContent>
+        </Card>
     );
 }
 

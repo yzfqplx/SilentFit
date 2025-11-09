@@ -130,22 +130,17 @@ export const useMetricData = (
     setCurrentPage('metrics');
   }, [setCurrentPage]);
   
-  const handleMetricDelete = useCallback((id: string) => {
-    showConfirm(
-      '确认删除此围度记录吗?',
-      async () => {
-        const store: DataAPI = getDataStore();
-        if (!store) return;
-        try {
-          await store.remove('metrics', { _id: id }, {});
-          console.log("Metric Record deleted successfully!");
-          fetchRecords('metrics', setMetrics);
-        } catch (error) {
-          console.error("Error deleting metric record:", error);
-        }
-      }
-    );
-  }, [fetchRecords, setMetrics, showConfirm]);
+  const handleMetricDelete = useCallback(async (id: string) => {
+    const store: DataAPI = getDataStore();
+    if (!store) return;
+    try {
+      await store.remove('metrics', { _id: id }, {});
+      console.log("Metric Record deleted successfully!");
+      fetchRecords('metrics', setMetrics);
+    } catch (error) {
+      console.error("Error deleting metric record:", error);
+    }
+  }, [fetchRecords, setMetrics]);
 
   const handleCancelMetricEdit = useCallback(() => {
     setEditingMetricId(null); 

@@ -39,8 +39,8 @@ interface AppContextType {
   editingId: string | null;
   selectedActivity: string;
   setSelectedActivity: React.Dispatch<React.SetStateAction<string>>; 
-  trendRange: '30' | '90' | 'all';
-  setTrendRange: React.Dispatch<React.SetStateAction<'30' | '90' | 'all'>>; 
+  trendRange: '7' | '30' | '90' | 'all';
+  setTrendRange: React.Dispatch<React.SetStateAction<'7' | '30' | '90' | 'all'>>;
   handleRecordChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   handleRecordSubmit: (e: React.FormEvent) => Promise<void>;
   handleRecordEdit: (record: TrainingRecord) => void;
@@ -54,6 +54,7 @@ interface AppContextType {
   oneRepMaxData: { date: string; estimated1RM: number }[];
   recommendation: Partial<TrainingRecord> | null;
   oneRepMaxTrend: { latest1RM: number | null; trend: number | null; };
+  setFormData: React.Dispatch<React.SetStateAction<Partial<TrainingRecord>>>;
 
   // Metric data and handlers
   metricFormData: Partial<MetricRecord>;
@@ -74,6 +75,32 @@ interface AppContextType {
   bmiDescription: { range: string; category: string };
   shoulderWaistRatioDescription: { range: string; visualFeature: string; adjectives: string };
 }
+
+// Define the type for the object returned by useTrainingData
+interface TrainingDataContextType {
+  formData: Partial<TrainingRecord>;
+  setFormData: React.Dispatch<React.SetStateAction<Partial<TrainingRecord>>>;
+  editingId: string | null;
+  setEditingId: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedActivity: string;
+  setSelectedActivity: React.Dispatch<React.SetStateAction<string>>;
+  trendRange: '7' | '30' | '90' | 'all';
+  setTrendRange: React.Dispatch<React.SetStateAction<'7' | '30' | '90' | 'all'>>;
+  handleRecordChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  handleRecordSubmit: (e: React.FormEvent) => Promise<void>;
+  handleRecordEdit: (record: TrainingRecord) => void;
+  handleRecordDelete: (id: string) => void;
+  handleCancelRecordEdit: () => void;
+  handleMarkAsComplete: (id: string) => Promise<void>;
+  totalWeightliftingSessions: number;
+  totalSets: number;
+  maxWeightByActivity: { activity: string; maxW: number }[];
+  activityTrendData: { date: string; weightKg: number; reps: number }[];
+  oneRepMaxData: { date: string; estimated1RM: number }[];
+  recommendation: Partial<TrainingRecord> | null;
+  oneRepMaxTrend: { latest1RM: number | null; trend: number | null; };
+}
+
 
 // --- 创建 Context ---
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -112,7 +139,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const { records, setRecords, metrics, setMetrics, fetchRecords } = useDataFetching(authReady);
   
-  const trainingData = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, showConfirm, setCurrentPage);
+  const trainingData: TrainingDataContextType = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, showConfirm, setCurrentPage);
   const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage, showConfirm, setCurrentPage);
   const settingsData = useSettingsData();
   const derivedData = useDerivedData(metrics, settingsData.heightCm);
