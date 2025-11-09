@@ -78,6 +78,21 @@ a:hover {
   }
 }
 
+@keyframes fade-in-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter-animation {
+  animation: fade-in-slide-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 .sidebar-button {
   position: relative;
   overflow: hidden;
@@ -106,64 +121,6 @@ a:hover {
 
 .sidebar-button > * {
     z-index: 1;
-}
-
-.card-glow {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-glow::before {
-  content: '';
-  position: absolute;
-  left: var(--mouse-x, 0);
-  top: var(--mouse-y, 0);
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle at center, hsla(var(--primary), 0.3) 0%, hsla(var(--primary), 0) 50%);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  filter: blur(30px);
-  border-radius: inherit;
-}
-
-.card-glow:hover::before {
-  opacity: 1;
-}
-
-.dark .card-glow::before {
-    background: radial-gradient(circle at center, hsla(var(--primary), 0.15) 0%, hsla(var(--primary), 0) 50%);
-}
-
-.card-glow-edge {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-glow-edge::before {
-  content: '';
-  position: absolute;
-  left: var(--mouse-x, 0);
-  top: var(--mouse-y, 0);
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle at center, hsla(var(--primary), 0.3) 0%, hsla(var(--primary), 0) 50%);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  filter: blur(30px);
-  border-radius: inherit;
-}
-
-.card-glow-edge:hover::before {
-  opacity: 1;
-}
-
-.dark .card-glow-edge::before {
-    background: radial-gradient(circle at center, hsla(var(--primary), 0.15) 0%, hsla(var(--primary), 0) 50%);
 }
 
 

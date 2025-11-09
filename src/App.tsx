@@ -60,7 +60,9 @@ function AppContent() {
 
         {/* Content */}
         <div className="p-6 md:p-10">
-          {renderContent()}
+          <div key={currentPage} className="page-enter-animation">
+            {renderContent()}
+          </div>
         </div>
       </main>
 

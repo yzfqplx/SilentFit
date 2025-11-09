@@ -1,5 +1,4 @@
 import React from 'react';
-import { useMouseGlow } from '../hooks/useMouseGlow';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // --- 组件: KPI 概览卡片 ---
@@ -13,8 +12,6 @@ interface KpiCardProps {
 }
 
 const KpiCard: React.FC<KpiCardProps> = ({ icon, title, value, unit, color, description }) => {
-  const glowRef = useMouseGlow<HTMLDivElement>();
-
   const colorClasses: { [key: string]: string } = {
     emerald: 'text-emerald-500 dark:text-emerald-400',
     blue: 'text-blue-500 dark:text-blue-400',
@@ -27,7 +24,7 @@ const KpiCard: React.FC<KpiCardProps> = ({ icon, title, value, unit, color, desc
   const iconColorClass = colorClasses[color] || 'text-gray-500 dark:text-gray-400';
 
   return (
-    <Card ref={glowRef}>
+    <Card className="cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
       <CardHeader>
         <div className={`${iconColorClass} mb-2`}>{icon}</div>
         <CardTitle className="text-xs md:text-sm font-semibold text-muted-foreground">{title}</CardTitle>
