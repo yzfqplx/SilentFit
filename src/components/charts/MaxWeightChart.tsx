@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from '@/components/ui/chart';
 
 interface MaxWeightChartProps {
@@ -18,18 +18,27 @@ const MaxWeightChart: React.FC<MaxWeightChartProps> = ({ data }) => {
 
     return (
         <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-            <BarChart accessibilityLayer data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                    dataKey="activity"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    minTickGap={32}
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="maxW" fill="var(--color-maxW)" radius={4} />
-            </BarChart>
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart accessibilityLayer data={data} layout="vertical" margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <CartesianGrid horizontal={false} />
+                    <YAxis
+                        dataKey="activity"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={7}
+                        type="category"
+                    />
+                    <XAxis
+                        type="number"
+                        dataKey="maxW"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Bar dataKey="maxW" fill="var(--color-maxW)" radius={4} />
+                </BarChart>
+            </ResponsiveContainer>
         </ChartContainer>
     );
 }
