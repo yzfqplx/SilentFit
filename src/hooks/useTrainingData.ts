@@ -10,7 +10,7 @@ import type { DataAPI, Page } from '../types/data';
 
 // Helper to get the data store (Electron API or webStore)
 const getDataStore = (): DataAPI => {
-  return (window as any).api ? window.api : webStore;
+  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
 };
 
 // --- useTrainingData Hook ---
@@ -19,7 +19,6 @@ export const useTrainingData = (
   setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>,
   fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
   showAlert: (message: string) => void,
-  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void,
   setCurrentPage: React.Dispatch<React.SetStateAction<Page>>
 ) => {
   const [formData, setFormData] = useState<Partial<TrainingRecord>>({

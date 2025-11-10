@@ -1,7 +1,8 @@
 import React from 'react';
 import { Line, LineChart, CartesianGrid, XAxis } from "recharts"
 import type { MetricRecord } from '../../types/data';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartConfig } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend } from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart';
 
 interface MetricHistoryChartProps {
     metrics: MetricRecord[];

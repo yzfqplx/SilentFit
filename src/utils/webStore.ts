@@ -59,4 +59,18 @@ export const webStore: DataAPI = {
     save(next);
     return removed;
   },
+
+  clearCollection: async (collection: string) => {
+    const key = collection === 'training' ? 'training' : 'metrics';
+    localStorage.removeItem(key);
+    return 1; // Indicate that something was "removed"
+  },
+
+  bulkInsert: async (collection: string, docs: any[]) => {
+    const key = collection === 'training' ? 'training' : 'metrics';
+    const ensureId = (d: any) => ({ _id: d._id || Math.random().toString(36).slice(2), ...d });
+    const docsWithIds = docs.map(doc => ensureId({ ...doc, createdAt: doc.createdAt || new Date() }));
+    localStorage.setItem(key, JSON.stringify(docsWithIds));
+    return docsWithIds;
+  },
 };

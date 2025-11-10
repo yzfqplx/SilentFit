@@ -5,7 +5,7 @@ import { webStore } from '../utils/webStore';
 
 // Helper to get the data store (Electron API or webStore)
 const getDataStore = (): DataAPI => {
-  return (window as any).api ? window.api : webStore;
+  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
 };
 
 // --- useMetricData Hook ---
@@ -14,7 +14,6 @@ export const useMetricData = (
   setMetrics: React.Dispatch<React.SetStateAction<MetricRecord[]>>,
   fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
   showAlert: (message: string) => void,
-  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void,
   setCurrentPage: React.Dispatch<React.SetStateAction<Page>>
 ) => {
   const [metricFormData, setMetricFormData] = useState<Partial<MetricRecord>>({

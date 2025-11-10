@@ -1,8 +1,9 @@
-import { DataAPI, ThemeAPI } from '../../electron/preload';
+import { ElectronAPI } from './data';
+import { ThemeAPI } from '../../electron/preload';
 
 declare global {
   interface Window {
-    api: DataAPI;
+    api: ElectronAPI;
     theme: ThemeAPI;
   }
 }

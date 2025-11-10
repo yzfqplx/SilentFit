@@ -1,6 +1,6 @@
 {
   "name": "sielntfit",
-  "version": "1.0.3-Alpha",
+  "version": "1.1.0-Alpha",
   "description": "A fitness data tracker application.",
   "author": "yzfqplx",
   "main": "dist-electron/main.js",

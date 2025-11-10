@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart';
 
 interface MaxWeightChartProps {
     data: { activity: string; maxW: number }[];

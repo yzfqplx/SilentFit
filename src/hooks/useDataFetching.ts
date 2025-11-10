@@ -5,7 +5,7 @@ import { webStore } from '../utils/webStore';
 
 // Helper to get the data store (Electron API or webStore)
 const getDataStore = (): DataAPI => {
-  return (window as any).api ? window.api : webStore;
+  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
 };
 
 // --- useDataFetching Hook ---

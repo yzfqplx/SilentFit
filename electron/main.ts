@@ -73,6 +73,26 @@ function nedbRemove(collection: string, query: object, options: object = {}): Pr
     });
 }
 
+function nedbClearCollection(collection: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    dbs[collection].remove({}, { multi: true }, (err, numRemoved) => {
+      if (err) return reject(err);
+      resolve(numRemoved);
+    });
+  });
+}
+
+function nedbBulkInsert(collection: string, docs: any[]): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    // 为每个文档添加 createdAt 字段，如果它不存在的话
+    const docsWithTimestamps = docs.map(doc => ({ ...doc, createdAt: doc.createdAt || new Date() }));
+    dbs[collection].insert(docsWithTimestamps, (err, newDocs) => {
+      if (err) return reject(err);
+      resolve(newDocs);
+    });
+  });
+}
+
 // ----------------------------------------------------
 // IPC 通道处理器 (保持不变)
 // ----------------------------------------------------
@@ -98,6 +118,16 @@ function registerIpcHandlers() {
   ipcMain.handle('nedb:remove', (event, collection: string, query: object, options: object) => {
     if (!dbs[collection]) return Promise.reject(new Error(`Collection ${collection} not found`));
     return nedbRemove(collection, query, options);
+  });
+
+  ipcMain.handle('nedb:clearCollection', (event, collection: string) => {
+    if (!dbs[collection]) return Promise.reject(new Error(`Collection ${collection} not found`));
+    return nedbClearCollection(collection);
+  });
+
+  ipcMain.handle('nedb:bulkInsert', (event, collection: string, docs: any[]) => {
+    if (!dbs[collection]) return Promise.reject(new Error(`Collection ${collection} not found`));
+    return nedbBulkInsert(collection, docs);
   });
 
   ipcMain.handle('theme:set', async (event, theme: string) => {

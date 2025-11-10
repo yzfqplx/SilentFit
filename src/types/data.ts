@@ -36,6 +36,8 @@ export interface DataAPI {
   insert: (collection: string, doc: object) => Promise<any>;
   update: (collection: string, query: object, update: object, options: object) => Promise<number>;
   remove: (collection: string, query: object, options: object) => Promise<number>;
+  clearCollection: (collection: string) => Promise<number>;
+  bulkInsert: (collection: string, docs: any[]) => Promise<any[]>;
 }
 
 // Electron API 接口定义，包含 DataAPI 和 IPC receive 方法

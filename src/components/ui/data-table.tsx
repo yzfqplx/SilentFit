@@ -2,12 +2,14 @@
 
 import * as React from "react"
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
+} from "@tanstack/react-table"
+import type {
+  ColumnDef,
+  SortingState,
   VisibilityState,
 } from "@tanstack/react-table"
 

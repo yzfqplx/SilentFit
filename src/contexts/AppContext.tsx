@@ -15,20 +15,6 @@ interface AppContextType {
   // Alert state
   alertMessage: string | null;
   setAlertMessage: React.Dispatch<React.SetStateAction<string | null>>; 
-  // Confirm Dialog state
-  confirmDialog: {
-    isOpen: boolean;
-    message: string | null;
-    onConfirm: () => void;
-    onCancel: () => void;
-  };
-  setConfirmDialog: React.Dispatch<React.SetStateAction<{
-    isOpen: boolean;
-    message: string | null;
-    onConfirm: () => void;
-    onCancel: () => void;
-  }>>; 
-  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void; 
   // Data fetching
   records: TrainingRecord[];
   setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>;
@@ -110,37 +96,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [authReady] = useState(true); // Simplified for context
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [confirmDialog, setConfirmDialog] = useState<{
-    isOpen: boolean;
-    message: string | null;
-    onConfirm: () => void;
-    onCancel: () => void;
-  }>({
-    isOpen: false,
-    message: null,
-    onConfirm: () => {},
-    onCancel: () => {},
-  });
-
-  const showConfirm = (message: string, onConfirm: () => void, onCancel?: () => void) => {
-    setConfirmDialog({
-      isOpen: true,
-      message,
-      onConfirm: () => {
-        setConfirmDialog({ isOpen: false, message: null, onConfirm: () => {}, onCancel: () => {} });
-        onConfirm();
-      },
-      onCancel: () => {
-        setConfirmDialog({ isOpen: false, message: null, onConfirm: () => {}, onCancel: () => {} });
-        if (onCancel) onCancel();
-      },
-    });
-  };
 
   const { records, setRecords, metrics, setMetrics, fetchRecords } = useDataFetching(authReady);
   
-  const trainingData: TrainingDataContextType = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, showConfirm, setCurrentPage);
-  const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage, showConfirm, setCurrentPage);
+  const trainingData: TrainingDataContextType = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, setCurrentPage);
+  const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage, setCurrentPage);
   const settingsData = useSettingsData();
   const derivedData = useDerivedData(metrics, settingsData.heightCm);
 
@@ -149,9 +109,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCurrentPage,
     alertMessage,
     setAlertMessage,
-    confirmDialog,
-    setConfirmDialog,
-    showConfirm,
     records,
     setRecords,
     metrics,

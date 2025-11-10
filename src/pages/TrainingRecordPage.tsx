@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { DataTable } from "@/components/ui/data-table";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,6 +19,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Added DropdownMenu imports
+import ConfirmDialog from '@/components/ConfirmDialog'; // Import ConfirmDialog
 
 const RecordsPage: React.FC = () => {
     const {
@@ -33,7 +34,6 @@ const RecordsPage: React.FC = () => {
         handleMarkAsComplete,
         recommendation,
         setFormData,
-        showConfirm,
     } = useAppContext();
 
     const [selectedDate, setSelectedDate] = useState<string>(formData.date || new Date().toISOString().substring(0, 10));
@@ -103,14 +103,15 @@ const RecordsPage: React.FC = () => {
                                 编辑
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => {
-                                showConfirm(
-                                    '确认删除此训练记录吗?',
-                                    () => handleRecordDelete(record._id)
-                                );
-                            }}>
-                                删除
-                            </DropdownMenuItem>
+                            <ConfirmDialog
+                                title="确认删除"
+                                description="您确定要删除此训练记录吗？"
+                                onConfirm={() => handleRecordDelete(record._id)}
+                            >
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                    删除
+                                </DropdownMenuItem>
+                            </ConfirmDialog>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

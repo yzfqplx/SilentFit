@@ -4,8 +4,8 @@ import MetricForm from '../components/MetricForm';
 import MetricHistoryChart from '../components/charts/MetricHistoryChart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTable } from "@/components/ui/data-table";
-import { ColumnDef } from "@tanstack/react-table";
-import { MetricRecord } from "@/types/data";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { MetricRecord } from "@/types/data";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import {
@@ -16,6 +16,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ConfirmDialog from '@/components/ConfirmDialog'; // Import ConfirmDialog
 
 const MetricsPage: React.FC = () => {
     const {
@@ -27,7 +28,6 @@ const MetricsPage: React.FC = () => {
         handleMetricEdit,
         handleMetricDelete,
         handleCancelMetricEdit,
-        showConfirm,
     } = useAppContext();
 
     const columns: ColumnDef<MetricRecord>[] = [
@@ -73,14 +73,15 @@ const MetricsPage: React.FC = () => {
                                 编辑
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => {
-                                showConfirm(
-                                    '确认删除此围度记录吗?',
-                                    () => handleMetricDelete(metric._id)
-                                );
-                            }}>
-                                删除
-                            </DropdownMenuItem>
+                            <ConfirmDialog
+                                title="确认删除"
+                                description="您确定要删除此围度记录吗？"
+                                onConfirm={() => handleMetricDelete(metric._id)}
+                            >
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                    删除
+                                </DropdownMenuItem>
+                            </ConfirmDialog>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

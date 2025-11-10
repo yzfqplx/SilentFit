@@ -5,7 +5,6 @@ import RecordsPage from './pages/TrainingRecordPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
 import AlertDialog from './components/AlertDialog';
-import ConfirmDialog from './components/ConfirmDialog';
 import './App.css';
 import type { Page } from './types/data';
 import { Capacitor } from '@capacitor/core';
@@ -13,7 +12,7 @@ import { useEffect, useState } from 'react';
 import BottomNavBar from './components/BottomNavBar';
 
 function AppContent() {
-  const { currentPage, setCurrentPage, alertMessage, setAlertMessage, confirmDialog } = useAppContext();
+  const { currentPage, setCurrentPage, alertMessage, setAlertMessage } = useAppContext();
   const [platform, setPlatform] = useState('web');
 
   useEffect(() => {
@@ -72,13 +71,6 @@ function AppContent() {
         isOpen={!!alertMessage} 
         message={alertMessage} 
         onConfirm={() => setAlertMessage(null)} 
-      />
-
-      <ConfirmDialog
-        isOpen={confirmDialog.isOpen}
-        message={confirmDialog.message}
-        onConfirm={confirmDialog.onConfirm}
-        onCancel={confirmDialog.onCancel}
       />
     </div>
   );

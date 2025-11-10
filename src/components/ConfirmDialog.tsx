@@ -8,29 +8,29 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger, // Import AlertDialogTrigger
 } from "@/components/ui/alert-dialog"
 
 interface ConfirmDialogProps {
-  message: string | null;
+  children: React.ReactNode; // Add children prop
+  title: string;
+  description: string;
   onConfirm: () => void;
-  onCancel: () => void;
-  isOpen: boolean;
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ message, onConfirm, onCancel, isOpen }) => {
-  if (!isOpen || !message) return null;
-
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ children, title, description, onConfirm }) => {
   return (
-    <AlertDialog open={isOpen} onOpenChange={onCancel}>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>确认</AlertDialogTitle>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>
-            {message}
+            {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>取消</AlertDialogCancel>
+          <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>确定</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

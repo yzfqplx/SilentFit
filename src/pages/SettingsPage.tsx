@@ -5,6 +5,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useTheme } from '@/components/ui/theme-provider'; // Import useTheme
+import { webStore } from '../utils/webStore'; // Import webStore
+import type { DataAPI } from '../types/data'; // Import DataAPI
+import ConfirmDialog from '@/components/ConfirmDialog'; // Import ConfirmDialog
+
+// Helper to get the data store (Electron API or webStore)
+const getDataStore = (): DataAPI => {
+  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
+};
 
 const SettingsPage: React.FC = () => {
     const { heightCm, setHeightCm, records, setRecords, metrics, setMetrics, setAlertMessage } = useAppContext();
@@ -29,7 +37,21 @@ const SettingsPage: React.FC = () => {
         URL.revokeObjectURL(url);
     };
 
-    const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleClearAllData = async () => {
+        const store = getDataStore();
+        try {
+            await store.clearCollection('training');
+            await store.clearCollection('metrics');
+            setRecords([]);
+            setMetrics([]);
+            setAlertMessage('所有数据已清除！');
+        } catch (error) {
+            console.error('清除数据失败:', error);
+            setAlertMessage('清除数据失败。');
+        }
+    };
+
+    const handleImportData = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) {
             setAlertMessage('未选择文件。');
@@ -39,10 +61,12 @@ const SettingsPage: React.FC = () => {
 
         setSelectedFileName(file.name);
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => { // Make the onload handler async
             try {
                 const content = e.target?.result as string;
                 const importedData = JSON.parse(content);
+
+                console.log('Imported Data:', importedData); // Add this line for debugging
 
                 if (importedData.heightCm !== undefined) {
                     setHeightCm(importedData.heightCm);
@@ -53,6 +77,22 @@ const SettingsPage: React.FC = () => {
                 if (importedData.metrics) {
                     setMetrics(importedData.metrics);
                 }
+
+                // 持久化导入的数据
+                const store = getDataStore();
+                if (importedData.records) {
+                    await store.clearCollection('training');
+                    await store.bulkInsert('training', importedData.records);
+                }
+                if (importedData.metrics) {
+                    await store.clearCollection('metrics');
+                    await store.bulkInsert('metrics', importedData.metrics);
+                }
+                // heightCm 是一个单独的值，直接设置即可，不需要通过 store
+                // setHeightCm 已经在上面调用，这里不需要再次调用
+                // if (importedData.heightCm !== undefined) {
+                // }
+
                 setAlertMessage('数据已成功导入！');
             } catch (error) {
                 console.error('导入数据失败:', error);
@@ -76,7 +116,7 @@ const SettingsPage: React.FC = () => {
                                 id="heightCm"
                                 type="number"
                                 value={heightCm === '' ? '' : heightCm}
-                                onChange={(e) => setHeightCm(e.target.value === '' ? '' : parseFloat(e.target.value))}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHeightCm(e.target.value === '' ? '' : parseFloat(e.target.value))}
                                 min="0" step="0.5"
                                 className="w-full"
                                 placeholder="用于计算 BMI（基于最新体重）"
@@ -111,15 +151,16 @@ const SettingsPage: React.FC = () => {
                         <div>
                             <Label htmlFor="importData">导入数据</Label>
                             <div className="flex w-full items-center space-x-2">
-                                                                 <Input
-                                                                    id="importDataDisplay"
-                                                                    type="text"
-                                                                    readOnly
-                                                                    value={selectedFileName || '选择 JSON 文件'}
-                                                                    className="flex-grow"
-                                                                    placeholder="选择 JSON 文件"
-                                                                    onClick={() => document.getElementById('importData')?.click()}
-                                                                />                                <input
+                                <Input
+                                    id="importDataDisplay"
+                                    type="text"
+                                    readOnly
+                                    value={selectedFileName || '选择 JSON 文件'}
+                                    className="flex-grow"
+                                    placeholder="选择 JSON 文件"
+                                    onClick={() => document.getElementById('importData')?.click()}
+                                />
+                                <input
                                     id="importData"
                                     type="file"
                                     accept=".json"
@@ -131,6 +172,13 @@ const SettingsPage: React.FC = () => {
                                 </Button>
                             </div>
                         </div>
+                        <ConfirmDialog
+                            title="确认清除所有数据"
+                            description="此操作将永久删除所有训练和围度数据。您确定要继续吗？"
+                            onConfirm={handleClearAllData}
+                        >
+                            <Button variant="destructive" className="w-full">清除所有数据</Button>
+                        </ConfirmDialog>
                     </CardContent>
                 </Card>
             </div>

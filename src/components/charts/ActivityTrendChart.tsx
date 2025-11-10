@@ -1,7 +1,8 @@
 import React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartConfig } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend } from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart';
 import { STRENGTH_ACTIVITIES } from '../../constants/activities';
 
 interface ActivityTrendData {
@@ -66,7 +67,7 @@ const ActivityTrendChart: React.FC<ActivityTrendChartProps> = ({
                     <p className="text-sm text-muted-foreground">{selectedActivity} - {getTrendRangeText(trendRange)}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                    <Select onValueChange={(value) => setSelectedActivity(value)} value={selectedActivity}>
+                    <Select onValueChange={(value: string) => setSelectedActivity(value)} value={selectedActivity}>
                         <SelectTrigger className="w-[120px]">
                             <SelectValue placeholder="选择项目" />
                         </SelectTrigger>
