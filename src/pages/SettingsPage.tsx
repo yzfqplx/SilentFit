@@ -8,7 +8,9 @@ import { useTheme } from '@/components/ui/theme-provider'; // Import useTheme
 import { webStore } from '../utils/webStore'; // Import webStore
 import type { DataAPI } from '../types/data'; // Import DataAPI
 import ConfirmDialog from '@/components/ConfirmDialog'; // Import ConfirmDialog
-
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'; // Re-import Filesystem
+import { Capacitor } from '@capacitor/core';
+import { Share } from '@capacitor/share';
 // Helper to get the data store (Electron API or webStore)
 const getDataStore = (): DataAPI => {
   return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
@@ -19,24 +21,67 @@ const SettingsPage: React.FC = () => {
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
     const { theme, setTheme } = useTheme(); // Use the useTheme hook
 
-    const handleExportData = () => {
+    const handleExportData = async () => {
         const data = {
             heightCm,
             records,
             metrics,
         };
         const jsonString = JSON.stringify(data, null, 2);
-        const blob = new Blob([jsonString], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'fitness_tracker_data.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
+        const fileName = 'fitness_tracker_data.json';
 
+        if (Capacitor.isNativePlatform()) {
+            let tempFilePath: string | undefined;
+            try {
+                // 1. 将数据写入临时文件
+                const result = await Filesystem.writeFile({
+                    path: fileName,
+                    data: jsonString,
+                    directory: Directory.Cache, // 保存到缓存目录
+                    encoding: Encoding.UTF8,
+                    recursive: true,
+                });
+                tempFilePath = result.uri; // 获取临时文件的 URI
+
+                // 2. 使用 Capacitor Share 插件分享临时文件
+                await Share.share({
+                    title: '健身追踪器数据',
+                    text: '这是您的健身追踪器数据备份。',
+                    url: tempFilePath, // 分享临时文件的 URI
+                    dialogTitle: '分享数据',
+                });
+                setAlertMessage('数据已通过分享功能导出！');
+            } catch (error) {
+                console.error('Capacitor 文件导出失败:', error);
+                setAlertMessage('数据导出失败。');
+            } finally {
+                // 3. 删除临时文件
+                if (tempFilePath) {
+                    try {
+                        await Filesystem.deleteFile({
+                            path: fileName,
+                            directory: Directory.Cache,
+                        });
+                        console.log('临时文件已删除。');
+                    } catch (deleteError) {
+                        console.error('删除临时文件失败:', deleteError);
+                    }
+                }
+            }
+        } else {
+            // 在 Web 浏览器上使用传统下载方式
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            setAlertMessage('数据已成功导出！');
+        }
+    };
     const handleClearAllData = async () => {
         const store = getDataStore();
         try {
@@ -130,9 +175,18 @@ const SettingsPage: React.FC = () => {
                         <div>
                             <Label>主题设置</Label>
                             <div className="mt-2 flex space-x-2"> {/* Use flex and space-x for button layout */}
-                                <Button onClick={() => setTheme("light")} variant={theme === "light" ? "default" : "outline"}>浅色</Button>
-                                <Button onClick={() => setTheme("dark")} variant={theme === "dark" ? "default" : "outline"}>深色</Button>
-                                <Button onClick={() => setTheme("system")} variant={theme === "system" ? "default" : "outline"}>系统</Button>
+                                <Button onClick={() => {
+                                    setTheme("light");
+                                    setTimeout(() => window.location.reload(), 100);
+                                }} variant={theme === "light" ? "default" : "outline"}>浅色</Button>
+                                <Button onClick={() => {
+                                    setTheme("dark");
+                                    setTimeout(() => window.location.reload(), 100);
+                                }} variant={theme === "dark" ? "default" : "outline"}>深色</Button>
+                                <Button onClick={() => {
+                                    setTheme("system");
+                                    setTimeout(() => window.location.reload(), 100);
+                                }} variant={theme === "system" ? "default" : "outline"}>系统</Button>
                             </div>
                         </div>
                     </CardContent>

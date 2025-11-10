@@ -17,8 +17,8 @@ function AppContent() {
 
   useEffect(() => {
     const checkPlatform = async () => {
-      const platform = await Capacitor.getPlatform();
-      setPlatform(platform);
+      const currentPlatform = Capacitor.getPlatform();
+      setPlatform(currentPlatform);
     };
     checkPlatform();
   }, []);
@@ -51,7 +51,10 @@ function AppContent() {
 
       <main className="flex-1 overflow-y-auto hide-scrollbar">
         {/* Sticky Header */}
-        <header className="sticky top-0 z-10 bg-background/50 p-4 border-b backdrop-blur-lg">
+        <header 
+          className="sticky top-0 z-10 bg-background/50 p-4 border-b backdrop-blur-lg"
+          style={platform === 'android' ? { paddingTop: 'env(safe-area-inset-top)' } : {}}
+        >
           <h1 className="text-xl font-bold">
             {pageTitles[currentPage]}
           </h1>

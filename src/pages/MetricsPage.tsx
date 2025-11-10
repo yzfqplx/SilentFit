@@ -37,23 +37,23 @@ const MetricsPage: React.FC = () => {
         },
         {
             accessorKey: "shoulderCm",
-            header: "肩围 (cm)",
+            header: "肩围",
         },
         {
             accessorKey: "chestCm",
-            header: "胸围 (cm)",
+            header: "胸围",
         },
         {
             accessorKey: "armCm",
-            header: "臂围 (cm)",
+            header: "臂围",
         },
         {
             accessorKey: "waistCm",
-            header: "腰围 (cm)",
+            header: "腰围",
         },
         {
             accessorKey: "weightKg",
-            header: "体重 (kg)",
+            header: "体重",
         },
         {
             id: "actions",

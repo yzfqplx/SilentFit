@@ -70,7 +70,7 @@ const RecordsPage: React.FC = () => {
         },
         {
             accessorKey: "weightKg",
-            header: "重量 (kg)",
+            header: "重量",
         },
         {
             accessorKey: "completed",
