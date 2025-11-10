@@ -79,8 +79,9 @@ const SettingsPage: React.FC = () => {
                                 onChange={(e) => setHeightCm(e.target.value === '' ? '' : parseFloat(e.target.value))}
                                 min="0" step="0.5"
                                 className="w-full"
+                                placeholder="用于计算 BMI（基于最新体重）"
                             />
-                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">用于计算 BMI（基于最新体重）</p>
+
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
                             <p>训练记录数: {records.length}</p>
@@ -110,15 +111,15 @@ const SettingsPage: React.FC = () => {
                         <div>
                             <Label htmlFor="importData">导入数据</Label>
                             <div className="flex w-full items-center space-x-2">
-                                <Input
-                                    id="importDataDisplay"
-                                    type="text"
-                                    readOnly
-                                    value={selectedFileName || '选择 JSON 文件'}
-                                    className="flex-grow"
-                                    placeholder="选择 JSON 文件"
-                                />
-                                <input
+                                                                 <Input
+                                                                    id="importDataDisplay"
+                                                                    type="text"
+                                                                    readOnly
+                                                                    value={selectedFileName || '选择 JSON 文件'}
+                                                                    className="flex-grow"
+                                                                    placeholder="选择 JSON 文件"
+                                                                    onClick={() => document.getElementById('importData')?.click()}
+                                                                />                                <input
                                     id="importData"
                                     type="file"
                                     accept=".json"
@@ -129,7 +130,6 @@ const SettingsPage: React.FC = () => {
                                     浏览
                                 </Button>
                             </div>
-                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">导入之前导出的 JSON 文件</p>
                         </div>
                     </CardContent>
                 </Card>
