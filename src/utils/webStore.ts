@@ -6,15 +6,36 @@ import type { DataAPI } from '../types/data';
  */
 export const webStore: DataAPI = {
   find: async (collection: string, _query: object) => {
-    const key = collection === 'training' ? 'training' : 'metrics';
+    let key = '';
+    if (collection === 'training') {
+      key = 'training';
+    } else if (collection === 'metrics') {
+      key = 'metrics';
+    } else if (collection === 'trainingPlan') {
+      key = 'trainingPlan';
+    } else {
+      return []; // Unknown collection
+    }
     try {
-      return JSON.parse(localStorage.getItem(key) || '[]');
-    } catch {
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      console.log(`webStore.find: Collection: ${collection}, Found:`, list);
+      return list;
+    } catch (e) {
+      console.error(`webStore.find: Error parsing localStorage for ${collection}:`, e);
       return [];
     }
   },
   insert: async (collection: string, doc: any) => {
-    const key = collection === 'training' ? 'training' : 'metrics';
+    let key = '';
+    if (collection === 'training') {
+      key = 'training';
+    } else if (collection === 'metrics') {
+      key = 'metrics';
+    } else if (collection === 'trainingPlan') {
+      key = 'trainingPlan';
+    } else {
+      throw new Error('Unknown collection');
+    }
     const load = () => {
       try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
     };
@@ -23,12 +44,22 @@ export const webStore: DataAPI = {
 
     const list = load();
     const withId = ensureId({ ...doc, createdAt: doc.createdAt || new Date() });
+    console.log(`webStore.insert: Collection: ${collection}, Item with ID:`, withId);
     list.push(withId);
     save(list);
     return withId;
   },
   update: async (collection: string, query: any, update: any) => {
-    const key = collection === 'training' ? 'training' : 'metrics';
+    let key = '';
+    if (collection === 'training') {
+      key = 'training';
+    } else if (collection === 'metrics') {
+      key = 'metrics';
+    } else if (collection === 'trainingPlan') {
+      key = 'trainingPlan';
+    } else {
+      throw new Error('Unknown collection');
+    }
     const load = () => {
       try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
     };
@@ -47,7 +78,16 @@ export const webStore: DataAPI = {
     return count;
   },
   remove: async (collection: string, query: any) => {
-    const key = collection === 'training' ? 'training' : 'metrics';
+    let key = '';
+    if (collection === 'training') {
+      key = 'training';
+    } else if (collection === 'metrics') {
+      key = 'metrics';
+    } else if (collection === 'trainingPlan') {
+      key = 'trainingPlan';
+    } else {
+      throw new Error('Unknown collection');
+    }
     const load = () => {
       try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
     };
@@ -61,13 +101,31 @@ export const webStore: DataAPI = {
   },
 
   clearCollection: async (collection: string) => {
-    const key = collection === 'training' ? 'training' : 'metrics';
+    let key = '';
+    if (collection === 'training') {
+      key = 'training';
+    } else if (collection === 'metrics') {
+      key = 'metrics';
+    } else if (collection === 'trainingPlan') {
+      key = 'trainingPlan';
+    } else {
+      throw new Error('Unknown collection');
+    }
     localStorage.removeItem(key);
     return 1; // Indicate that something was "removed"
   },
 
   bulkInsert: async (collection: string, docs: any[]) => {
-    const key = collection === 'training' ? 'training' : 'metrics';
+    let key = '';
+    if (collection === 'training') {
+      key = 'training';
+    } else if (collection === 'metrics') {
+      key = 'metrics';
+    } else if (collection === 'trainingPlan') {
+      key = 'trainingPlan';
+    } else {
+      throw new Error('Unknown collection');
+    }
     const ensureId = (d: any) => ({ _id: d._id || Math.random().toString(36).slice(2), ...d });
     const docsWithIds = docs.map(doc => ensureId({ ...doc, createdAt: doc.createdAt || new Date() }));
     localStorage.setItem(key, JSON.stringify(docsWithIds));

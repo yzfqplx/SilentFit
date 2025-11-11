@@ -1,0 +1,1 @@
+echo 'export GOOGLE_CLOUD_PROJECT="977905572797"' >> ~/.bashrc

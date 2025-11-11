@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { Page } from '../types/data';
-import { ReactIcon, ListChecksIcon, TapeMeasureIcon, SettingsIcon } from './icons/Icons';
+import { ReactIcon, ListChecksIcon, TapeMeasureIcon, SettingsIcon, ClipboardListIcon } from './icons/Icons';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ currentPage, setCurrentPage
     const navItems = [
         { id: 'dashboard', icon: ReactIcon, label: '仪表板' },
         { id: 'records', icon: ListChecksIcon, label: '训练记录' },
+        { id: 'trainingPlan', icon: ClipboardListIcon, label: '训练计划' },
         { id: 'metrics', icon: TapeMeasureIcon, label: '身体围度' },
         { id: 'settings', icon: SettingsIcon, label: '设置' },
     ];

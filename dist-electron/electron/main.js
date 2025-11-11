@@ -64,6 +64,11 @@ const dbs = {
         filename: path.join(userDataPath, 'metrics.db'),
         autoload: true
     }),
+    // 训练计划集合
+    trainingPlan: new nedb_1.default({
+        filename: path.join(userDataPath, 'trainingPlan.db'),
+        autoload: true
+    }),
 };
 // ----------------------------------------------------
 // NeDB Promise 封装 (保持不变)

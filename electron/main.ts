@@ -30,6 +30,11 @@ const dbs: { [key: string]: Datastore } = {
     filename: path.join(userDataPath, 'metrics.db'),
     autoload: true
   }),
+  // 训练计划集合
+  trainingPlan: new Datastore({
+    filename: path.join(userDataPath, 'trainingPlan.db'),
+    autoload: true
+  }),
 };
 
 // ----------------------------------------------------

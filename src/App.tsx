@@ -4,6 +4,7 @@ import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/TrainingRecordPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
+import TrainingPlanPage from './pages/TrainingPlanPage'; // 导入新页面
 import AlertDialog from './components/AlertDialog';
 import './App.css';
 import type { Page } from './types/data';
@@ -12,7 +13,7 @@ import { useEffect, useState } from 'react';
 import BottomNavBar from './components/BottomNavBar';
 
 function AppContent() {
-  const { currentPage, setCurrentPage, alertMessage, setAlertMessage } = useAppContext();
+  const { currentPage, setCurrentPage, alertMessage, setAlertMessage, selectedTask } = useAppContext();
   const [platform, setPlatform] = useState('web');
 
   useEffect(() => {
@@ -28,6 +29,7 @@ function AppContent() {
     records: '管理训练记录',
     metrics: '身体围度追踪',
     settings: '设置',
+    trainingPlan: '训练计划', // 添加新页面的标题
   };
 
   const renderContent = () => {
@@ -40,6 +42,8 @@ function AppContent() {
         return <MetricsPage />;
       case 'settings':
         return <SettingsPage />;
+      case 'trainingPlan':
+        return <TrainingPlanPage />; // 添加新页面的渲染逻辑
       default:
         return null;
     }
@@ -67,6 +71,7 @@ function AppContent() {
           </div>
         </div>
       </main>
+
 
       {platform === 'android' && <BottomNavBar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
 

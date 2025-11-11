@@ -6,6 +6,8 @@ import { useTrainingData } from '../hooks/useTrainingData';
 import { useMetricData } from '../hooks/useMetricData';
 import { useSettingsData } from '../hooks/useSettingsData';
 import { useDerivedData } from '../hooks/useDerivedData';
+import { useTrainingPlanData } from '../hooks/useTrainingPlanData';
+import { TrainingPlanItem } from '../types/Training';
 
 // --- 定义 Context 中值的类型 ---
 interface AppContextType {
@@ -60,6 +62,14 @@ interface AppContextType {
   bmi: number | null;
   bmiDescription: { range: string; category: string };
   shoulderWaistRatioDescription: { range: string; visualFeature: string; adjectives: string };
+
+  // Training plan data
+  trainingPlanItems: TrainingPlanItem[];
+  addTrainingPlanItem: (title: string, dueDate?: Date, repeat?: string, reminder?: Date) => Promise<void>;
+  toggleTrainingPlanItem: (id: string, completed: boolean) => Promise<void>;
+  deleteTrainingPlanItem: (id: string) => Promise<void>;
+  selectedTask: TrainingPlanItem | null;
+  setSelectedTask: React.Dispatch<React.SetStateAction<TrainingPlanItem | null>>;
 }
 
 // Define the type for the object returned by useTrainingData
@@ -96,13 +106,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [authReady] = useState(true); // Simplified for context
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<TrainingPlanItem | null>(null);
 
-  const { records, setRecords, metrics, setMetrics, fetchRecords } = useDataFetching(authReady);
+  const { records, setRecords, metrics, setMetrics, trainingPlanItems, setTrainingPlanItems, fetchRecords } = useDataFetching(authReady);
   
   const trainingData: TrainingDataContextType = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, setCurrentPage);
   const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage, setCurrentPage);
   const settingsData = useSettingsData();
   const derivedData = useDerivedData(metrics, settingsData.heightCm);
+  const trainingPlanData = useTrainingPlanData(trainingPlanItems, setTrainingPlanItems, fetchRecords);
 
   const value: AppContextType = {
     currentPage,
@@ -117,6 +129,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     ...metricData,
     ...settingsData,
     ...derivedData,
+    ...trainingPlanData,
+    selectedTask,
+    setSelectedTask,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

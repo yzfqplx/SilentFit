@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { TrainingRecord, MetricRecord, DataAPI } from '../types/data';
+import { TrainingPlanItem } from '../types/Training';
 import { webStore } from '../utils/webStore';
 
 // Helper to get the data store (Electron API or webStore)
@@ -12,12 +13,14 @@ const getDataStore = (): DataAPI => {
 export const useDataFetching = (authReady: boolean) => {
   const [records, setRecords] = useState<TrainingRecord[]>([]);
   const [metrics, setMetrics] = useState<MetricRecord[]>([]);
+  const [trainingPlanItems, setTrainingPlanItems] = useState<TrainingPlanItem[]>([]);
 
-  const fetchRecords = useCallback(async (collection: 'training' | 'metrics', setter: Function) => {
+  const fetchRecords = useCallback(async (collection: 'training' | 'metrics' | 'trainingPlan', setter: Function) => {
     const store: DataAPI = getDataStore();
     if (!authReady || !store) return;
     try {
       const foundRecords: any[] = await store.find(collection, {});
+      console.log(`useDataFetching: Fetched records for ${collection}:`, foundRecords);
       const normalized = foundRecords.map(r => {
         if (collection === 'metrics') {
           return {
@@ -39,7 +42,13 @@ export const useDataFetching = (authReady: boolean) => {
         }
         return r;
       });
-      setter(normalized.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+      console.log(`useDataFetching: Normalized records for ${collection}:`, normalized);
+      if (collection === 'trainingPlan') {
+        setter(normalized.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+      } else {
+        setter(normalized.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+      }
+      console.log(`useDataFetching: Called setter for ${collection}`);
     } catch (e) {
       console.error(`Failed to fetch ${collection} records:`, e);
     }
@@ -48,13 +57,15 @@ export const useDataFetching = (authReady: boolean) => {
   useEffect(() => {
     fetchRecords('training', setRecords);
     fetchRecords('metrics', setMetrics);
+    fetchRecords('trainingPlan', setTrainingPlanItems);
     
     const interval = setInterval(() => {
       fetchRecords('training', setRecords);
       fetchRecords('metrics', setMetrics);
+      fetchRecords('trainingPlan', setTrainingPlanItems);
     }, 5000); 
     return () => clearInterval(interval);
   }, [fetchRecords]);
 
-  return { records, setRecords, metrics, setMetrics, fetchRecords };
+  return { records, setRecords, metrics, setMetrics, trainingPlanItems, setTrainingPlanItems, fetchRecords };
 };

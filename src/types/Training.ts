@@ -16,6 +16,17 @@ export interface TrainingRecord {
   
   createdAt?: Date; 
 }
+
+export interface TrainingPlanItem {
+  _id?: string;
+  title: string;
+  completed: boolean;
+  createdAt?: Date;
+  dueDate?: Date;
+  repeat?: string;
+  reminder?: Date;
+}
+
 // src/types/Training.d.ts (添加以下内容)
 
 // ----------------------------------------------------

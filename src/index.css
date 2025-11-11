@@ -198,3 +198,13 @@ a:hover {
     @apply bg-background text-foreground;
   }
 }
+
+/* 隐藏滚动条 */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera*/
+}
