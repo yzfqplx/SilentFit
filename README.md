@@ -12,7 +12,7 @@
 
 ## ✨ 主要功能
 
-*   **力量训练数据追踪：** 记录力量训练、有氧运动、身体指标等多种数据。
+*   **力量训练数据追踪：** 记录力量训练、身体指标等多种数据。
 *   **训练计划管理：** 创建、编辑和跟踪个性化训练计划。
 *   **数据可视化：** 通过图表展示力量训练趋势、最大力量记录和活动强度。
 *   **力量训练理论知识图谱：** 互动式地探索力量训练概念、原则和目标之间的关系。
@@ -117,9 +117,9 @@ npx cap open android # 或 npx cap open ios
 我们欢迎并感谢任何形式的贡献！如果您有兴趣改进 SilentFit，请遵循以下步骤：
 
 1.  **Fork** 本仓库。
-2.  创建您的功能分支 (`git checkout -b feature/AmazingFeature`)。
-3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
-4.  推送到分支 (`git push origin feature/AmazingFeature`)。
+2.  创建您的功能分支 (`git checkout -b feature/master`)。
+3.  提交您的更改 (`git commit -m master`)。
+4.  推送到分支 (`git push origin feature/master`)。
 5.  打开一个 **Pull Request**。
 
 请确保您的代码符合项目现有的编码规范，并包含适当的测试。
