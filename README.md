@@ -107,6 +107,3 @@ npx cap open android # 或 npx cap open ios
 本项目根据 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 发布。
 有关更多信息，请参阅 [`LICENSE`](LICENSE) 文件。
 
-## 📞 联系方式
-
-项目维护者：[yzfqplx]
