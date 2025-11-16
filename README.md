@@ -1,77 +1,112 @@
-# Fitness Tracker - Your Personal Training Companion
+# 项目名称：SilentFit
 
-Fitness Tracker is a modern, cross-platform application designed to help you log, track, and visualize your fitness journey. Whether you're into weightlifting, running, or simply want to monitor your body metrics, this app provides the tools you need to stay on top of your goals.
+## 📝 描述
 
-Built with a focus on simplicity and a clean user interface, it runs on your desktop (Windows, macOS) and can be deployed to mobile devices (Android, iOS).
+**SilentFit** 是一个全面的健身追踪与理论学习平台，旨在帮助用户科学地管理健身数据，理解健身理论，并制定个性化的训练计划。它结合了数据可视化、智能推荐和知识图谱等功能，让健身过程更透明、更高效。
 
-## ✨ Key Features
+**核心目标：**
+*   **数据驱动的健身管理：** 记录并分析用户的训练数据，提供直观的健身进度概览。
+*   **理论与实践结合：** 通过互动式知识图谱，帮助用户理解健身背后的科学原理。
+*   **个性化训练计划：** 根据用户数据和健身目标，提供智能化的训练建议。
+*   **多平台支持：** 提供跨平台体验，无论是在桌面还是移动设备上都能轻松使用。
 
-- **Comprehensive Training Log**: Record various types of workouts, including:
-  - **Weightlifting**: Log sets, reps, and weight for each exercise.
-  - **Cardio**: Track distance and duration for activities like running and cycling.
-- **Body Metrics Tracking**: Monitor key body measurements to see your progress over time:
-  - Body Weight (kg)
-  - Shoulder, Chest, Arm, and Waist Circumference (cm)
-- **Data Visualization**: Interactive charts and dashboards to help you understand your progress at a glance:
-  - **Training Volume Analysis**: See how your workout volume changes over time.
-  - **Body Metric Trends**: Visualize changes in your weight and measurements.
-  - **Workout Duration Charts**: Track how much time you dedicate to your training sessions.
-- **Cross-Platform**:
-  - **Desktop**: Native desktop experience powered by **Electron**.
-  - **Mobile**: Ready for mobile deployment with **Capacitor**.
-- **Local-First Data Storage**: Your data is stored locally on your device, ensuring privacy and offline access.
+## ✨ 主要功能
 
-## 🛠️ Tech Stack
+*   **健身数据追踪：** 记录力量训练、有氧运动、身体指标等多种数据。
+*   **训练计划管理：** 创建、编辑和跟踪个性化训练计划。
+*   **数据可视化：** 通过图表展示健身趋势、最大力量记录和活动强度。
+*   **健身理论知识图谱：** 互动式地探索健身概念、原则和目标之间的关系。
+*   **智能推荐系统：** 基于用户数据和理论知识提供训练和营养建议。
+*   **用户友好的界面：** 直观、简洁的设计，提供流畅的用户体验。
+*   **跨平台兼容：** 支持桌面应用 (Electron) 和移动应用 (Capacitor)。
+*   **主题切换：** 提供浅色和深色主题模式。
 
-- **Frontend**: [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **UI Framework**: [Tailwind CSS](https://tailwindcss.com/) for a utility-first styling approach.
-- **Charting**: [Recharts](https://recharts.org/) for beautiful and interactive charts.
-- **Desktop App**: [Electron](https://www.electronjs.org/)
-- **Mobile App**: [Capacitor](https://capacitorjs.com/)
-- **Build Tool**: [Vite](https://vitejs.dev/) for a fast and modern development experience.
-- **Database**: [NeDB](https://github.com/louischatriot/nedb), a lightweight, file-based embedded database.
+## 🚀 快速开始
 
-## 🚀 Getting Started
+### 安装
 
-To get a local copy up and running, follow these simple steps.
+#### 1. 克隆仓库
 
-### Prerequisites
+```bash
+git clone https://github.com/[您的GitHub用户名]/SilentFit.git
+cd SilentFit
+```
 
-- [Node.js](https://nodejs.org/) (v18 or later recommended)
-- [npm](https://www.npmjs.com/)
+#### 2. 安装依赖
 
-### Installation & Development
+```bash
+npm install
+```
 
-1.  **Clone the repository:**
-    ```sh
-    git clone https://github.com/your-username/fitness-tracker-app.git
-    cd fitness-tracker-app
-    ```
+#### 3. 运行开发服务器 (Web)
 
-2.  **Install dependencies:**
-    ```sh
-    npm install
-    ```
+```bash
+npm run dev
+```
 
-3.  **Run the development server (for web/desktop):**
-    This command starts the Vite dev server for the React app and launches the Electron window.
-    ```sh
-    npm run electron:dev
-    ```
+#### 4. 运行 Electron 桌面应用
 
-## 📦 Available Scripts
+```bash
+npm run electron:dev
+```
 
-This project comes with a set of useful scripts defined in `package.json`:
+#### 5. 构建移动应用 (Capacitor)
 
-| Script               | Description                                                                                              |
-| -------------------- | -------------------------------------------------------------------------------------------------------- |
-| `dev`                | Starts the Vite development server for the web app.                                                      |
-| `build`              | Compiles the TypeScript code and builds the web app for production.                                      |
-| `lint`               | Lints the codebase using ESLint to find and fix problems.                                                |
-| `preview`            | Serves the production build locally for previewing.                                                      |
-| `electron:dev`       | Runs the app in development mode with Electron.                                                          |
-| `dist`               | Builds the app for production and creates distributable packages (e.g., `.dmg`, `.exe`).                 |
-| `cap:sync`           | Syncs the web build with the native mobile platforms (Android/iOS).                                      |
-| `cap:open:android`   | Opens the project in Android Studio.                                                                     |
+**a. 添加平台 (如果尚未添加)**
 
+```bash
+npx cap add android # 或 npx cap add ios
+```
 
+**b. 构建 Web 资产**
+
+```bash
+npm run build
+```
+
+**c. 同步到原生项目**
+
+```bash
+npx cap sync
+```
+
+**d. 打开原生项目**
+
+```bash
+npx cap open android # 或 npx cap open ios
+```
+
+### 使用示例
+
+#### 1. 记录训练
+
+在应用中导航到“训练记录”页面，点击“添加训练”按钮。填写您的训练项目、组数、次数和重量，然后保存。应用将自动计算您的训练量并更新进度。
+
+#### 2. 探索健身理论
+
+访问“健身理论”页面，通过交互式知识图谱探索不同的健身概念。点击节点查看详细解释，理解它们之间的关联。
+
+#### 3. 查看数据仪表盘
+
+在“仪表盘”页面，您可以概览您的关键绩效指标 (KPIs)、训练趋势图和最大力量记录。这些图表将帮助您直观地了解自己的健身进展。
+
+## 🤝 贡献
+
+我们欢迎并感谢任何形式的贡献！如果您有兴趣改进 SilentFit，请遵循以下步骤：
+
+1.  **Fork** 本仓库。
+2.  创建您的功能分支 (`git checkout -b feature/AmazingFeature`)。
+3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
+4.  推送到分支 (`git push origin feature/AmazingFeature`)。
+5.  打开一个 **Pull Request**。
+
+请确保您的代码符合项目现有的编码规范，并包含适当的测试。
+
+## 📄 许可证
+
+本项目根据 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 发布。
+有关更多信息，请参阅 [`LICENSE`](LICENSE) 文件。
+
+## 📞 联系方式
+
+项目维护者：[yzfqplx]
