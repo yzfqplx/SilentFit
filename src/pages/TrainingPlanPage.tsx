@@ -53,7 +53,6 @@ const TrainingPlanPage: React.FC = () => {
         }
     }, [trainingPlanItems]);
 
-    console.log("TrainingPlanPage: trainingPlanItems from context:", trainingPlanItems);
 
     const incompleteItems = trainingPlanItems.filter(item => !item.completed);
     const completedItems = trainingPlanItems.filter(item => item.completed);

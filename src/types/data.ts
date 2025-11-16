@@ -1,4 +1,4 @@
-export type Page = 'dashboard' | 'records' | 'metrics' | 'settings' | 'trainingPlan';
+export type Page = 'dashboard' | 'records' | 'metrics' | 'settings' | 'trainingPlan' | 'fitnessTheory';
 
 // 训练记录类型
 export interface TrainingRecord {

@@ -5,6 +5,7 @@ import RecordsPage from './pages/TrainingRecordPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
 import TrainingPlanPage from './pages/TrainingPlanPage'; // 导入新页面
+import FitnessTheoryPage from './pages/FitnessTheoryPage'; // 导入健身理论页面
 import AlertDialog from './components/AlertDialog';
 import './App.css';
 import type { Page } from './types/data';
@@ -30,6 +31,7 @@ function AppContent() {
     metrics: '身体围度追踪',
     settings: '设置',
     trainingPlan: '训练计划', // 添加新页面的标题
+    fitnessTheory: '健身理论图谱', // 添加健身理论页面的标题
   };
 
   const renderContent = () => {
@@ -44,6 +46,8 @@ function AppContent() {
         return <SettingsPage />;
       case 'trainingPlan':
         return <TrainingPlanPage />; // 添加新页面的渲染逻辑
+      case 'fitnessTheory':
+        return <FitnessTheoryPage />; // 添加健身理论页面的渲染逻辑
       default:
         return null;
     }
@@ -55,7 +59,7 @@ function AppContent() {
 
       <main className="flex-1 overflow-y-auto hide-scrollbar">
         {/* Sticky Header */}
-        <header 
+        <header
           className="sticky top-0 z-10 bg-background/50 p-4 border-b backdrop-blur-lg"
           style={platform === 'android' ? { paddingTop: 'env(safe-area-inset-top)' } : {}}
         >
@@ -65,8 +69,8 @@ function AppContent() {
         </header>
 
         {/* Content */}
-        <div className="p-6 md:p-10">
-          <div key={currentPage} className="page-enter-animation">
+        <div className={`${currentPage === 'fitnessTheory' ? '' : 'p-6 md:p-10'} ${currentPage === 'fitnessTheory' ? 'h-full' : ''}`}>
+          <div key={currentPage} className={`page-enter-animation ${currentPage === 'fitnessTheory' ? 'h-full' : ''}`}>
             {renderContent()}
           </div>
         </div>

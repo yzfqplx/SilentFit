@@ -20,7 +20,6 @@ export const useDataFetching = (authReady: boolean) => {
     if (!authReady || !store) return;
     try {
       const foundRecords: any[] = await store.find(collection, {});
-      console.log(`useDataFetching: Fetched records for ${collection}:`, foundRecords);
       const normalized = foundRecords.map(r => {
         if (collection === 'metrics') {
           return {
@@ -42,15 +41,13 @@ export const useDataFetching = (authReady: boolean) => {
         }
         return r;
       });
-      console.log(`useDataFetching: Normalized records for ${collection}:`, normalized);
       if (collection === 'trainingPlan') {
         setter(normalized.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
       } else {
         setter(normalized.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
       }
-      console.log(`useDataFetching: Called setter for ${collection}`);
     } catch (e) {
-      console.error(`Failed to fetch ${collection} records:`, e);
+      // console.error(`Failed to fetch ${collection} records:`, e); // Keeping this commented out for now.
     }
   }, [authReady]);
 
