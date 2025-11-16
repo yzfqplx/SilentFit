@@ -7,7 +7,7 @@ import { useMetricData } from '../hooks/useMetricData';
 import { useSettingsData } from '../hooks/useSettingsData';
 import { useDerivedData } from '../hooks/useDerivedData';
 import { useTrainingPlanData } from '../hooks/useTrainingPlanData';
-import { TrainingPlanItem } from '../types/Training';
+import type { TrainingPlanItem } from '../types/Training';
 
 // --- 定义 Context 中值的类型 ---
 interface AppContextType {

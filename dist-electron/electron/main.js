@@ -44,7 +44,7 @@ const theme_1 = require("./nedb/theme");
 // ----------------------------------------------------
 // 【路径定义】: DIST 路径定义
 // ----------------------------------------------------
-const DIST_ROOT = path.join(__dirname, '..', 'dist');
+const DIST_ROOT = path.join(__dirname, '..', '..', 'dist');
 // 获取应用数据路径，确保数据库文件存储在安全位置
 const userDataPath = electron_1.app.getPath('userData');
 // 数据库集合的映射
@@ -194,7 +194,7 @@ async function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js'),
-            devTools: !electron_1.app.isPackaged,
+            devTools: true,
             webSecurity: true,
         },
     });
@@ -231,7 +231,8 @@ electron_1.app.on('window-all-closed', () => {
     }
 });
 electron_1.app.on('activate', () => {
-    if (electron_1.BrowserWindow.getAllWindows().length === 0) {
+    // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
+    if (electron_1.BrowserWindow.getAllWindows().length === 0 && electron_1.app.isPackaged) {
         createWindow();
     }
 });

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { EdgeProps, getBezierPath, BaseEdge, MarkerType } from 'reactflow';
-import { CustomEdgeData } from '../../../types/fitnessTheory';
+import { getBezierPath, BaseEdge } from 'reactflow';
+import type { EdgeProps } from 'reactflow';
+import type { CustomEdgeData } from '../../../types/fitnessTheory';
 
 const CustomEdge: React.FC<EdgeProps<CustomEdgeData>> = ({
-  id,
   sourceX,
   sourceY,
   targetX,

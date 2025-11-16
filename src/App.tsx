@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import BottomNavBar from './components/BottomNavBar';
 
 function AppContent() {
-  const { currentPage, setCurrentPage, alertMessage, setAlertMessage, selectedTask } = useAppContext();
+  const { currentPage, setCurrentPage, alertMessage, setAlertMessage } = useAppContext();
   const [platform, setPlatform] = useState('web');
 
   useEffect(() => {

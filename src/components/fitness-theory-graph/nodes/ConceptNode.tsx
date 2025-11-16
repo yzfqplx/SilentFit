@@ -1,6 +1,7 @@
 import React from 'react';
-import { NodeProps, Handle, Position } from 'reactflow';
-import { TheoryNodeData } from '../../../types/fitnessTheory';
+import { Handle, Position } from 'reactflow';
+import type { NodeProps } from 'reactflow';
+import type { TheoryNodeData } from '../../../types/fitnessTheory';
 
 const ConceptNode: React.FC<NodeProps<TheoryNodeData>> = ({ data }) => {
   return (

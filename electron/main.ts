@@ -7,7 +7,7 @@ import { getTheme, setTheme } from './nedb/theme';
 // ----------------------------------------------------
 // 【路径定义】: DIST 路径定义
 // ----------------------------------------------------
-const DIST_ROOT = path.join(__dirname, '..', 'dist');
+const DIST_ROOT = path.join(__dirname, '..', '..', 'dist');
 
 
 // 获取应用数据路径，确保数据库文件存储在安全位置
@@ -166,8 +166,8 @@ async function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js'), 
-            devTools: !app.isPackaged,
-            webSecurity: true, 
+            devTools: true,
+            webSecurity: true,
         },
     });
 
@@ -207,7 +207,8 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
+  // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
+  if (BrowserWindow.getAllWindows().length === 0 && app.isPackaged) {
     createWindow();
   }
 });

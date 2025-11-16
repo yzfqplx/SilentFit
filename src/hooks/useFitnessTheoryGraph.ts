@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useNodesState, useEdgesState, addEdge, Node, Edge, Connection } from 'reactflow';
+import { useNodesState, useEdgesState, addEdge } from 'reactflow';
+import type { Node, Connection } from 'reactflow';
 import { initialNodes, initialEdges } from '../data/fitnessTheoryGraphData';
-import { TheoryNodeData } from '../types/fitnessTheory';
 
 export const useFitnessTheoryGraph = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes.map(node => ({
+  const [nodes, , onNodesChange] = useNodesState(initialNodes.map(node => ({
     ...node,
     data: {
       ...node.data,

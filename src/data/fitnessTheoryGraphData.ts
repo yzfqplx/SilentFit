@@ -1,5 +1,5 @@
-import { Node, Edge } from 'reactflow';
-import { TheoryNodeData } from '../types/fitnessTheory';
+import type { Node, Edge } from 'reactflow';
+import type { TheoryNodeData } from '../types/fitnessTheory';
 
 export const initialNodes: Node<TheoryNodeData>[] = [
   // 主要理论

@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { TrainingRecord, MetricRecord, DataAPI } from '../types/data';
-import { TrainingPlanItem } from '../types/Training';
+import type { TrainingPlanItem } from '../types/Training';
 import { webStore } from '../utils/webStore';
 
 // Helper to get the data store (Electron API or webStore)

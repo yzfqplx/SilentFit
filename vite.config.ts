@@ -29,5 +29,6 @@ export default defineConfig({
       // 防止在打包前端代码时尝试打包 Node 模块
       external: [...builtinModules],
     },
+    chunkSizeWarningLimit: 1000, // 增加 chunk 大小警告的限制为 1000 KB
   },
 });

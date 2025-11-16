@@ -34,7 +34,7 @@ const TrainingPlanPage: React.FC = () => {
     };
 
     useEffect(() => {
-        audioRef.current = new Audio('/Microsoft To Do.wav');
+        audioRef.current = new Audio('Microsoft To Do.wav');
     }, []);
 
     const handleToggleTrainingPlanItem = (id: string, completed: boolean) => {
