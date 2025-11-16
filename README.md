@@ -94,20 +94,20 @@ npx cap open android # 或 npx cap open ios
 
 以下是 SilentFit 应用程序的一些界面截图：
 
+### 仪表盘
+![仪表盘](https://github.com/user-attachments/assets/9f552b8f-e836-4dbd-af39-6b2ef489238f)
+
 ### 训练记录
-![训练记录](https://github.com/user-attachments/assets/9f552b8f-e836-4dbd-af39-6b2ef489238f)
+![训练记录](https://github.com/user-attachments/assets/46e134d6-57e1-407b-b82d-026c22460e95)
 
 ### 训练计划
-![训练计划](https://github.com/user-attachments/assets/46e134d6-57e1-407b-b82d-026c22460e95)
+![训练计划](https://github.com/user-attachments/assets/0765f4db-2a53-4f86-979f-07a10d291370)
 
-### 身体维度追踪
-![身体维度追踪](https://github.com/user-attachments/assets/0765f4db-2a53-4f86-979f-07a10d291370)
+### 身体围度
+![身体围度](https://github.com/user-attachments/assets/ffe8ee04-979c-4e96-aae3-810d059ecd13)
 
-### 健身理论图谱
-![健身理论图谱](https://github.com/user-attachments/assets/ffe8ee04-979c-4e96-aae3-810d059ecd13)
-
-### 力量训练仪表板
-![力量训练仪表板](https://github.com/user-attachments/assets/3f560b38-e17f-441f-8885-ed861ca0ba8c)
+### 健身理论
+![健身理论](https://github.com/user-attachments/assets/3f560b38-e17f-441f-8885-ed861ca0ba8c)
 
 ### 设置
 ![设置](https://github.com/user-attachments/assets/8e3b4f25-da7e-454a-b7c8-2fe204d73337)
