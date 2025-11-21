@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import type { ChartConfig } from '@/components/ui/chart';
 
@@ -19,8 +19,7 @@ const MaxWeightChart: React.FC<MaxWeightChartProps> = ({ data }) => {
 
     return (
         <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-                <BarChart accessibilityLayer data={data} layout="vertical" margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <BarChart width={798} height={452} accessibilityLayer data={data} layout="vertical" margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <CartesianGrid horizontal={false} />
                     <YAxis
                         dataKey="activity"
@@ -39,7 +38,6 @@ const MaxWeightChart: React.FC<MaxWeightChartProps> = ({ data }) => {
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="maxW" fill="var(--color-maxW)" radius={4} />
                 </BarChart>
-            </ResponsiveContainer>
         </ChartContainer>
     );
 }

@@ -21,7 +21,7 @@ const FitnessTheoryGraph: React.FC = () => {
   } = useFitnessTheoryGraph();
 
   return (
-    <div style={{ width: '100%', height: '100%', border: '1px solid #ccc', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
         <Input
           type="text"

@@ -60,7 +60,7 @@ function AppContent() {
       <main className="flex-1 overflow-y-auto hide-scrollbar">
         {/* Sticky Header */}
         <header
-          className="sticky top-0 z-10 bg-background/50 p-4 border-b backdrop-blur-lg"
+          className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg"
           style={platform === 'android' ? { paddingTop: 'env(safe-area-inset-top)' } : {}}
         >
           <h1 className="text-xl font-bold">

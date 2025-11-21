@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { themeApi } from "../../lib/tauri"; // Import themeApi
 
 type Theme = "dark" | "light" | "system"
 
@@ -20,31 +21,30 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "vite-ui-theme", // 这个 storageKey 在 Electron 环境下会被 window.theme 忽略
+  storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    // 初始加载时从 Electron 主进程获取主题
     const savedTheme = localStorage.getItem(storageKey) as Theme || defaultTheme;
     return savedTheme;
   });
 
   useEffect(() => {
     const fetchAndSetInitialTheme = async () => {
-      const savedTheme = await window.theme.get();
+      const savedTheme = await themeApi.get();
       if (savedTheme) {
         setThemeState(savedTheme as Theme);
       } else {
-        // 如果主进程没有保存主题，则使用默认主题并保存
-        await window.theme.set(defaultTheme);
+        await themeApi.set(defaultTheme);
         setThemeState(defaultTheme);
       }
     };
     fetchAndSetInitialTheme();
-  }, [defaultTheme]);
+  }, [defaultTheme]); // themeApi is not a dependency of this effect
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -64,8 +64,8 @@ export function ThemeProvider({
   }, [theme])
 
   const setTheme = async (theme: Theme) => {
-    localStorage.setItem(storageKey, theme); // 仍然更新 localStorage 以保持与 shadcn/ui 行为一致
-    await window.theme.set(theme); // 同时更新 Electron 主进程
+    localStorage.setItem(storageKey, theme);
+    await themeApi.set(theme);
     setThemeState(theme);
   }
 

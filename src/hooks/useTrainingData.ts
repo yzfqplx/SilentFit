@@ -5,12 +5,12 @@ import { STRENGTH_ACTIVITIES } from '../constants/activities';
 import { normalizeActivity } from '../utils/data';
 import { calculate1RM } from '../utils/calculations';
 import { generateRecommendation } from '../utils/recommendations';
-import { webStore } from '../utils/webStore';
-import type { DataAPI, Page } from '../types/data';
+import type { Page } from '../types/data';
+import { dataApi } from '../lib/tauri'; // Import dataApi
 
-// Helper to get the data store (Electron API or webStore)
-const getDataStore = (): DataAPI => {
-  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
+// Helper to get the data store (Tauri API)
+const getDataStore = () => {
+  return dataApi;
 };
 
 // --- useTrainingData Hook ---
@@ -56,7 +56,7 @@ export const useTrainingData = (
       showAlert(`请检查以下字段：${missing.join('、')}`);
       return;
     }
-    const store: DataAPI = getDataStore();
+    const store = getDataStore();
 
     try {
       const recordToSave = { 
@@ -102,7 +102,7 @@ export const useTrainingData = (
   }, [setCurrentPage]);
 
   const handleRecordDelete = useCallback(async (id: string) => {
-    const store: DataAPI = getDataStore();
+    const store = getDataStore();
     if (!store) return;
     try {
       await store.remove('training', { _id: id }, {});
@@ -127,7 +127,7 @@ export const useTrainingData = (
   }, []);
 
   const handleMarkAsComplete = useCallback(async (id: string) => {
-    const store: DataAPI = getDataStore();
+    const store = getDataStore();
     if (!store) return;
     try {
       await store.update('training', { _id: id }, { $set: { completed: true, updatedAt: new Date() } }, {});

@@ -1,12 +1,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import type { TrainingRecord, MetricRecord, DataAPI } from '../types/data';
+import type { TrainingRecord, MetricRecord } from '../types/data';
 import type { TrainingPlanItem } from '../types/Training';
-import { webStore } from '../utils/webStore';
+import { dataApi } from '../lib/tauri'; // Import dataApi
 
-// Helper to get the data store (Electron API or webStore)
-const getDataStore = (): DataAPI => {
-  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
+// Helper to get the data store (Tauri API)
+const getDataStore = () => {
+  return dataApi;
 };
 
 // --- useDataFetching Hook ---
@@ -16,10 +16,10 @@ export const useDataFetching = (authReady: boolean) => {
   const [trainingPlanItems, setTrainingPlanItems] = useState<TrainingPlanItem[]>([]);
 
   const fetchRecords = useCallback(async (collection: 'training' | 'metrics' | 'trainingPlan', setter: Function) => {
-    const store: DataAPI = getDataStore();
+    const store = getDataStore();
     if (!authReady || !store) return;
     try {
-      const foundRecords: any[] = await store.find(collection, {});
+      const foundRecords = (await store.find(collection, {})) as any[];
       const normalized = foundRecords.map(r => {
         if (collection === 'metrics') {
           return {

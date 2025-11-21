@@ -1,11 +1,10 @@
 
 import { useCallback } from 'react';
 import type { TrainingPlanItem } from '../types/Training';
-import { webStore } from '../utils/webStore';
-import type { DataAPI } from '../types/data';
+import { dataApi } from '../lib/tauri'; // Import dataApi
 
-const getDataStore = (): DataAPI => {
-  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
+const getDataStore = () => {
+  return dataApi;
 };
 
 export const useTrainingPlanData = (

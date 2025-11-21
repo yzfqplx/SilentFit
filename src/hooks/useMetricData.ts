@@ -1,11 +1,11 @@
 
 import React, { useState, useCallback } from 'react';
-import type { MetricRecord, DataAPI, Page } from '../types/data';
-import { webStore } from '../utils/webStore';
+import type { MetricRecord, Page } from '../types/data';
+import { dataApi } from '../lib/tauri'; // Import dataApi
 
-// Helper to get the data store (Electron API or webStore)
-const getDataStore = (): DataAPI => {
-  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
+// Helper to get the data store (Tauri API)
+const getDataStore = () => {
+  return dataApi;
 };
 
 // --- useMetricData Hook ---
@@ -88,7 +88,7 @@ export const useMetricData = (
       return;
     }
     
-    const store: DataAPI = getDataStore();
+    const store = getDataStore();
 
     try {
         const metricToSave = {
@@ -130,7 +130,7 @@ export const useMetricData = (
   }, [setCurrentPage]);
   
   const handleMetricDelete = useCallback(async (id: string) => {
-    const store: DataAPI = getDataStore();
+    const store = getDataStore();
     if (!store) return;
     try {
       await store.remove('metrics', { _id: id }, {});

@@ -5,15 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useTheme } from '@/components/ui/theme-provider'; // Import useTheme
-import { webStore } from '../utils/webStore'; // Import webStore
-import type { DataAPI } from '../types/data'; // Import DataAPI
 import ConfirmDialog from '@/components/ConfirmDialog'; // Import ConfirmDialog
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'; // Re-import Filesystem
 import { Capacitor } from '@capacitor/core';
 import { Share } from '@capacitor/share';
-// Helper to get the data store (Electron API or webStore)
-const getDataStore = (): DataAPI => {
-  return (window.api as unknown as DataAPI) ? (window.api as unknown as DataAPI) : webStore;
+import { dataApi } from '../lib/tauri'; // Import dataApi
+
+// Helper to get the data store (Tauri API)
+const getDataStore = () => {
+  return dataApi;
 };
 
 const SettingsPage: React.FC = () => {
