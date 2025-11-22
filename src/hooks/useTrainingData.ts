@@ -45,17 +45,13 @@ export const useTrainingData = (
   const handleRecordSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("[handleRecordSubmit] called.");
-    console.log("[handleRecordSubmit] Current editingId:", editingId);
-    console.log("[handleRecordSubmit] Current formData (before validation):", formData);
-
     const missing: string[] = [];
     if (!formData.activity) missing.push('训练项目');
     if (!formData.date) missing.push('日期');
     // 注意：这里保留了原始的重量限制校验，您可以根据需要调整
     if (formData.weightKg === undefined || (formData.weightKg as number) < 0 || (formData.weightKg as number) > 300) missing.push('重量');
     if (formData.sets === undefined || (formData.sets as number) < 1) missing.push('组数');
-    if (formData.reps === undefined || (formData.reps as number) < 1) missing.push('次数');
+    if (formData.reps === undefined || (formData.reps as number) < 1) missing('次数');
     if (missing.length) {
       showAlert(`请检查以下字段：${missing.join('、')}`);
       return;
@@ -73,17 +69,16 @@ export const useTrainingData = (
       } as TrainingRecord;
 
       if (editingId) {
-        console.log("Performing update for record:", editingId, "with data:", recordToSave);
         const { createdAt, ...updateData } = recordToSave;
         await store.update('training', { _id: editingId }, { ...updateData, updatedAt: new Date() }, {});
         setEditingId(null);
-        console.log("Training Record updated successfully! editingId reset to null.");
+        // console.log("Training Record updated successfully! editingId reset to null."); // Removed log
       } else {
-        console.log("Performing insert for new record with data:", recordToSave);
+        // console.log("Performing insert for new record with data:", recordToSave); // Removed log
         // Explicitly remove _id for new inserts, as backend generates it
         const { _id, ...newRecordData } = recordToSave;
         await store.insert('training', { ...newRecordData, createdAt: new Date() });
-        console.log("Training Record added successfully!");
+        // console.log("Training Record added successfully!"); // Removed log
       }
 
       setFormData(prev => ({
@@ -115,7 +110,7 @@ export const useTrainingData = (
     if (!store) return;
     try {
       await store.remove('training', { _id: id }, {});
-      console.log("Training Record deleted successfully!");
+      // console.log("Training Record deleted successfully!"); // Removed log
       fetchRecords('training', setRecords);
     } catch (error) {
       console.error("Error deleting record:", error);
@@ -140,7 +135,7 @@ export const useTrainingData = (
     if (!store) return;
     try {
       await store.update('training', { _id: id }, { completed: true, updatedAt: new Date() }, {});
-      console.log("Training Record marked as complete!");
+      // console.log("Training Record marked as complete!"); // Removed log
       fetchRecords('training', setRecords);
     } catch (error) {
       console.error("Error marking record as complete:", error);

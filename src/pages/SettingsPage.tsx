@@ -177,15 +177,12 @@ const SettingsPage: React.FC = () => {
                             <div className="mt-2 flex space-x-2"> {/* Use flex and space-x for button layout */}
                                 <Button onClick={() => {
                                     setTheme("light");
-                                    setTimeout(() => window.location.reload(), 100);
                                 }} variant={theme === "light" ? "default" : "outline"}>浅色</Button>
                                 <Button onClick={() => {
                                     setTheme("dark");
-                                    setTimeout(() => window.location.reload(), 100);
                                 }} variant={theme === "dark" ? "default" : "outline"}>深色</Button>
                                 <Button onClick={() => {
                                     setTheme("system");
-                                    setTimeout(() => window.location.reload(), 100);
                                 }} variant={theme === "system" ? "default" : "outline"}>系统</Button>
                             </div>
                         </div>
