@@ -15,7 +15,7 @@ const getDataStore = () => {
 
 // --- useTrainingData Hook ---
 export const useTrainingData = (
-  records: TrainingRecord[], 
+  records: TrainingRecord[],
   setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>,
   fetchRecords: (collection: 'training' | 'metrics', setter: Function) => Promise<void>,
   showAlert: (message: string) => void,
@@ -45,6 +45,10 @@ export const useTrainingData = (
   const handleRecordSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log("[handleRecordSubmit] called.");
+    console.log("[handleRecordSubmit] Current editingId:", editingId);
+    console.log("[handleRecordSubmit] Current formData (before validation):", formData);
+
     const missing: string[] = [];
     if (!formData.activity) missing.push('训练项目');
     if (!formData.date) missing.push('日期');
@@ -59,8 +63,8 @@ export const useTrainingData = (
     const store = getDataStore();
 
     try {
-      const recordToSave = { 
-        ...formData, 
+      const recordToSave = {
+        ...formData,
         type: 'Weightlifting',
         sets: formData.sets ?? 4,
         reps: formData.reps ?? 12,
@@ -69,12 +73,16 @@ export const useTrainingData = (
       } as TrainingRecord;
 
       if (editingId) {
+        console.log("Performing update for record:", editingId, "with data:", recordToSave);
         const { createdAt, ...updateData } = recordToSave;
-        await store.update('training', { _id: editingId }, { $set: { ...updateData, updatedAt: new Date() } }, {});
+        await store.update('training', { _id: editingId }, { ...updateData, updatedAt: new Date() }, {});
         setEditingId(null);
-        console.log("Training Record updated successfully!");
+        console.log("Training Record updated successfully! editingId reset to null.");
       } else {
-        await store.insert('training', { ...recordToSave, createdAt: new Date() });
+        console.log("Performing insert for new record with data:", recordToSave);
+        // Explicitly remove _id for new inserts, as backend generates it
+        const { _id, ...newRecordData } = recordToSave;
+        await store.insert('training', { ...newRecordData, createdAt: new Date() });
         console.log("Training Record added successfully!");
       }
 
@@ -82,6 +90,7 @@ export const useTrainingData = (
         ...prev,
         type: 'Weightlifting',
         activity: STRENGTH_ACTIVITIES[0],
+        date: new Date().toISOString().substring(0, 10),
         sets: 4,
         reps: 12,
         weightKg: 0,
@@ -97,7 +106,7 @@ export const useTrainingData = (
   const handleRecordEdit = useCallback((record: TrainingRecord) => {
     setEditingId(record._id);
     const { createdAt, ...formRecord } = record;
-    setFormData(formRecord); 
+    setFormData(formRecord);
     setCurrentPage('records');
   }, [setCurrentPage]);
 
@@ -114,15 +123,15 @@ export const useTrainingData = (
   }, [fetchRecords, setRecords]);
 
   const handleCancelRecordEdit = useCallback(() => {
-    setEditingId(null); 
-    setFormData({ 
-        type: 'Weightlifting', 
+    setEditingId(null);
+    setFormData({
+        type: 'Weightlifting',
         activity: STRENGTH_ACTIVITIES[0],
-        date: new Date().toISOString().substring(0, 10), 
-        sets: 4, 
-        reps: 12, 
-        weightKg: 0, 
-        notes: '' 
+        date: new Date().toISOString().substring(0, 10),
+        sets: 4,
+        reps: 12,
+        weightKg: 0,
+        notes: ''
     });
   }, []);
 
@@ -130,7 +139,7 @@ export const useTrainingData = (
     const store = getDataStore();
     if (!store) return;
     try {
-      await store.update('training', { _id: id }, { $set: { completed: true, updatedAt: new Date() } }, {});
+      await store.update('training', { _id: id }, { completed: true, updatedAt: new Date() }, {});
       console.log("Training Record marked as complete!");
       fetchRecords('training', setRecords);
     } catch (error) {

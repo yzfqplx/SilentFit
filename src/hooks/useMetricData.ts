@@ -103,7 +103,7 @@ export const useMetricData = (
 
         if (editingMetricId) {
             const { createdAt, ...updateData } = metricToSave;
-            await store.update('metrics', { _id: editingMetricId }, { $set: { ...updateData, updatedAt: new Date() } }, {});
+            await store.update('metrics', { _id: editingMetricId }, { ...updateData, updatedAt: new Date() }, {});
             setEditingMetricId(null);
             console.log("Metric Record updated successfully!");
         } else {
