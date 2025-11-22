@@ -121,14 +121,14 @@ pub fn nedb_insert(app_handle: AppHandle, collection: String, mut doc: Value) ->
 #[tauri::command]
 pub fn nedb_update(app_handle: AppHandle, collection: String, query: Value, update: Value, _options: Value) -> Result<u64, String> {
     let conn = init_db(&app_handle, &collection).map_err(|e| e.to_string())?;
-    
+
     // For simplicity, we'll only support updating by _id for now.
     // A more robust solution would involve parsing the query and update objects more thoroughly.
     let query_id = query["_id"].as_str().ok_or("Update query must contain an _id field")?;
 
     let mut stmt = conn.prepare("SELECT data FROM documents WHERE _id = ?1")
         .map_err(|e| e.to_string())?;
-    
+
     let existing_doc_str: String = stmt.query_row(params![query_id], |row| row.get(0))
         .map_err(|e| format!("Document not found or database error: {}", e.to_string()))?;
 

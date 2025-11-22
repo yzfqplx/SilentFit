@@ -39,7 +39,7 @@ const TrainingPlanPage: React.FC = () => {
 
     const handleToggleTrainingPlanItem = (id: string, completed: boolean) => {
         toggleTrainingPlanItem(id, completed);
-        if (!completed) { // If task is being marked as completed
+        if (completed) { // If task is being marked as completed
             if (audioRef.current) {
                 audioRef.current.currentTime = 0; // Reset audio to the beginning
                 audioRef.current.play();
@@ -134,7 +134,7 @@ const TrainingPlanPage: React.FC = () => {
                             >
                                 <Checkbox
                                     checked={item.completed}
-                                    onCheckedChange={() => handleToggleTrainingPlanItem(item._id!, item.completed)}
+                                    onCheckedChange={() => handleToggleTrainingPlanItem(item._id!, !item.completed)}
                                 />
                                 <span
                                     className={`flex-1 ${item.completed ? 'line-through text-gray-500' : ''}`}
@@ -167,7 +167,7 @@ const TrainingPlanPage: React.FC = () => {
                                         >
                                             <Checkbox
                                                 checked={item.completed}
-                                                onCheckedChange={() => handleToggleTrainingPlanItem(item._id!, item.completed)}
+                                                onCheckedChange={() => handleToggleTrainingPlanItem(item._id!, !item.completed)}
                                             />
                                             <span
                                                 className="flex-1 line-through text-gray-500"

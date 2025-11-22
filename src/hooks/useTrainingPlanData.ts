@@ -35,7 +35,7 @@ export const useTrainingPlanData = (
   const toggleTrainingPlanItem = useCallback(async (id: string, completed: boolean) => {
     const store = getDataStore();
     try {
-      await store.update('trainingPlan', { _id: id }, { $set: { completed: !completed } }, {});
+      await store.update('trainingPlan', { _id: id }, { completed: completed }, {});
       fetchRecords('trainingPlan', setItems);
     } catch (error) {
       console.error("Error updating training plan item:", error);
