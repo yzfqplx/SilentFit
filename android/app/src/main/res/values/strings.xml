@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">SilentFit</string>
-    <string name="title_activity_main">SilentFit</string>
-    <string name="package_name">com.silent.fit</string>
-    <string name="custom_url_scheme">com.silent.fit</string>
-</resources>
