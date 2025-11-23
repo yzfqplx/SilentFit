@@ -26,7 +26,7 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
                 <KpiCard 
                     icon={<ReactIcon size={24} />} 
                     title="总训练次数" 
