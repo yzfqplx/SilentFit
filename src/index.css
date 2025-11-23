@@ -151,6 +151,14 @@ a:hover {
     --chart-4: 200 70% 50%;
     --chart-5: 230 60% 40%;
     --radius: 0.5rem;
+    --sidebar: 0 0% 100%; /* White background for light mode */
+    --sidebar-foreground: 222.2 47.4% 11.2%;
+    --sidebar-primary: 221.2 83.2% 53.3%;
+    --sidebar-primary-foreground: 210 20% 98%;
+    --sidebar-accent: 210 40% 96.1%;
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 221.2 83.2% 53.3%;
   }
   .dark {
     --background: 222.2 84% 4.9%;

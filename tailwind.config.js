@@ -50,18 +50,18 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			},
             sidebar: {
-                DEFAULT: 'oklch(var(--sidebar))',
-                foreground: 'oklch(var(--sidebar-foreground))',
+                DEFAULT: 'hsl(var(--sidebar))',
+                foreground: 'hsl(var(--sidebar-foreground))',
                 primary: {
-                    DEFAULT: 'oklch(var(--sidebar-primary))',
-                    foreground: 'oklch(var(--sidebar-primary-foreground))',
+                    DEFAULT: 'hsl(var(--sidebar-primary))',
+                    foreground: 'hsl(var(--sidebar-primary-foreground))',
                 },
                 accent: {
-                    DEFAULT: 'oklch(var(--sidebar-accent))',
-                    foreground: 'oklch(var(--sidebar-accent-foreground))',
+                    DEFAULT: 'hsl(var(--sidebar-accent))',
+                    foreground: 'hsl(var(--sidebar-accent-foreground))',
                 },
-                border: 'oklch(var(--sidebar-border))',
-                ring: 'oklch(var(--sidebar-ring))',
+                border: 'hsl(var(--sidebar-border))',
+                ring: 'hsl(var(--sidebar-ring))',
             }
   		},
   		boxShadow: {

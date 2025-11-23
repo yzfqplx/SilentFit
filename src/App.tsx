@@ -10,12 +10,15 @@ import AlertDialog from './components/AlertDialog';
 import './App.css';
 import type { Page } from './types/data';
 import { Capacitor } from '@capacitor/core';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { PanelLeftIcon } from "lucide-react";
+import { Button } from '@/components/ui/button';
 import BottomNavBar from './components/BottomNavBar';
 
 function AppContent() {
   const { currentPage, setCurrentPage, alertMessage, setAlertMessage } = useAppContext();
   const [platform, setPlatform] = useState('web');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkPlatform = async () => {
@@ -55,14 +58,37 @@ function AppContent() {
 
   return (
     <div className={`flex h-screen font-sans antialiased w-full ${platform === 'android' ? 'pb-16' : ''}`}>
-      {platform !== 'android' && <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+      {platform !== 'android' && (
+        <Sidebar
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      )}
+      {isSidebarOpen && platform !== 'android' && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
 
       <main className="flex-1 overflow-y-auto hide-scrollbar">
         {/* Sticky Header */}
         <header
-          className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg"
+          className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg flex items-center"
           style={platform === 'android' ? { paddingTop: 'env(safe-area-inset-top)' } : {}}
         >
+          {platform !== 'android' && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="mr-2"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <PanelLeftIcon className="h-6 w-6" />
+            </Button>
+          )}
           <h1 className="text-xl font-bold">
             {pageTitles[currentPage]}
           </h1>
