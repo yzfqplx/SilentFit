@@ -4,12 +4,11 @@ import DashboardPage from './pages/DashboardPage';
 import RecordsPage from './pages/TrainingRecordPage';
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
-import TrainingPlanPage from './pages/TrainingPlanPage'; // 导入新页面
-import FitnessTheoryPage from './pages/FitnessTheoryPage'; // 导入健身理论页面
+import TrainingPlanPage from './pages/TrainingPlanPage';
+import FitnessTheoryPage from './pages/FitnessTheoryPage';
 import AlertDialog from './components/AlertDialog';
 import './App.css';
 import type { Page } from './types/data';
-import { Capacitor } from '@capacitor/core';
 import { useState, useEffect } from 'react';
 import { PanelLeftIcon } from "lucide-react";
 import { Button } from '@/components/ui/button';
@@ -22,8 +21,26 @@ function AppContent() {
 
   useEffect(() => {
     const checkPlatform = async () => {
-      const currentPlatform = Capacitor.getPlatform();
-      setPlatform(currentPlatform);
+      // 检查是否在 Tauri 环境中
+      const isTauri = '__TAURI__' in window;
+
+      console.log('🔍 Platform Detection:', {
+        isTauri,
+        userAgent: navigator.userAgent,
+      });
+
+      // 在 Tauri 中，检查 user agent 来判断平台
+      const userAgent = navigator.userAgent.toLowerCase();
+      if (userAgent.includes('android')) {
+        console.log('✅ Detected platform: android');
+        setPlatform('android');
+      } else if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
+        console.log('✅ Detected platform: ios');
+        setPlatform('ios');
+      } else {
+        console.log('✅ Detected platform: web');
+        setPlatform('web');
+      }
     };
     checkPlatform();
   }, []);
@@ -33,8 +50,8 @@ function AppContent() {
     records: '管理训练记录',
     metrics: '身体围度追踪',
     settings: '设置',
-    trainingPlan: '训练计划', // 添加新页面的标题
-    fitnessTheory: '健身理论图谱', // 添加健身理论页面的标题
+    trainingPlan: '训练计划',
+    fitnessTheory: '健身理论图谱',
   };
 
   const renderContent = () => {
@@ -48,9 +65,9 @@ function AppContent() {
       case 'settings':
         return <SettingsPage />;
       case 'trainingPlan':
-        return <TrainingPlanPage />; // 添加新页面的渲染逻辑
+        return <TrainingPlanPage />;
       case 'fitnessTheory':
-        return <FitnessTheoryPage />; // 添加健身理论页面的渲染逻辑
+        return <FitnessTheoryPage />;
       default:
         return null;
     }
@@ -77,7 +94,7 @@ function AppContent() {
         {/* Sticky Header */}
         <header
           className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg flex items-center"
-          style={platform === 'android' ? { paddingTop: 'env(safe-area-inset-top)' } : {}}
+          style={{ paddingTop: platform === 'android' ? 'calc(1rem + var(--safe-area-inset-top))' : '1rem' }}
         >
           {platform !== 'android' && (
             <Button
@@ -105,10 +122,10 @@ function AppContent() {
 
       {platform === 'android' && <BottomNavBar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
 
-      <AlertDialog 
-        isOpen={!!alertMessage} 
-        message={alertMessage} 
-        onConfirm={() => setAlertMessage(null)} 
+      <AlertDialog
+        isOpen={!!alertMessage}
+        message={alertMessage}
+        onConfirm={() => setAlertMessage(null)}
       />
     </div>
   );

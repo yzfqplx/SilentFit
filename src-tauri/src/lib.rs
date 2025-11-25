@@ -21,7 +21,9 @@ pub fn run() {
         commands::nedb_clear_collection,
         commands::nedb_bulk_insert,
         commands::theme_set,
-        commands::theme_get
+        commands::theme_get,
+        commands::export_data,
+        commands::share_file
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

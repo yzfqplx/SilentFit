@@ -15,3 +15,9 @@ export const themeApi = {
   set: (theme: string) => invoke('theme_set', { theme }),
   get: () => invoke('theme_get'),
 };
+
+// File API
+export const fileApi = {
+  exportData: (data: string, filename: string) => invoke<string>('export_data', { data, filename }),
+  shareFile: (filePath: string, title: string, text: string) => invoke('share_file', { filePath, title, text }),
+};

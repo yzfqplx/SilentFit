@@ -233,3 +233,44 @@ pub fn theme_get(app_handle: AppHandle) -> Result<Option<String>, String> {
         Ok(None)
     }
 }
+
+// Export data to a file
+#[tauri::command]
+pub fn export_data(app_handle: AppHandle, data: String, filename: String) -> Result<String, String> {
+    let downloads_dir = app_handle.path().download_dir()
+        .map_err(|e| format!("Failed to get downloads directory: {}", e))?;
+    
+    if !downloads_dir.exists() {
+        fs::create_dir_all(&downloads_dir).map_err(|e| e.to_string())?;
+    }
+    
+    let file_path = downloads_dir.join(&filename);
+    fs::write(&file_path, data).map_err(|e| e.to_string())?;
+    
+    Ok(file_path.to_string_lossy().to_string())
+}
+
+// Share file on Android using Tauri plugin
+#[tauri::command]
+pub async fn share_file(app_handle: AppHandle, file_path: String, title: String, text: String) -> Result<(), String> {
+    #[cfg(target_os = "android")]
+    {
+        use tauri::Emitter;
+        
+        // Emit an event to trigger Android share intent
+        app_handle.emit("share-file", serde_json::json!({
+            "filePath": file_path,
+            "title": title,
+            "text": text
+        })).map_err(|e| e.to_string())?;
+        
+        Ok(())
+    }
+    
+    #[cfg(not(target_os = "android"))]
+    {
+        // On non-Android platforms, just return success
+        // The file has already been saved by export_data
+        Ok(())
+    }
+}
