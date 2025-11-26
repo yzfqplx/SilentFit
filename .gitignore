@@ -24,3 +24,5 @@ mini-program
 *.njsproj
 *.sln
 *.sw?
+.gemini
+.claude
