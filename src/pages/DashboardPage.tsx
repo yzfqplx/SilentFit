@@ -22,50 +22,51 @@ const DashboardPage: React.FC = () => {
         setTrendRange,
         activityTrendData,
         oneRepMaxTrend,
+        availableActivities,
     } = useAppContext();
 
     return (
         <div className="space-y-4">
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
-                <KpiCard 
-                    icon={<ReactIcon size={24} />} 
-                    title="总训练次数" 
-                    value={totalWeightliftingSessions.toString()} 
-                    unit="次" 
-                    color="blue" 
+                <KpiCard
+                    icon={<ReactIcon size={24} />}
+                    title="总训练次数"
+                    value={totalWeightliftingSessions.toString()}
+                    unit="次"
+                    color="blue"
                 />
-                <KpiCard 
-                    icon={<ListChecksIcon size={24} />} 
-                    title="总组数" 
-                    value={totalSets.toString()} 
-                    unit="组" 
-                    color="blue" 
+                <KpiCard
+                    icon={<ListChecksIcon size={24} />}
+                    title="总组数"
+                    value={totalSets.toString()}
+                    unit="组"
+                    color="blue"
                 />
-                <KpiCard 
-                    icon={<TapeMeasureIcon size={24} />} 
-                    title="上次围度记录" 
-                    value={latestMetrics?.date || 'N/A'} 
-                    unit="" 
-                    color="indigo" 
+                <KpiCard
+                    icon={<TapeMeasureIcon size={24} />}
+                    title="上次围度记录"
+                    value={latestMetrics?.date || 'N/A'}
+                    unit=""
+                    color="indigo"
                 />
-                <KpiCard 
-                    icon={<TapeMeasureIcon size={24} />} 
-                    title="肩腰比" 
-                    value={shoulderWaistRatio ? shoulderWaistRatio.toFixed(2) : 'N/A'} 
-                    unit="" 
+                <KpiCard
+                    icon={<TapeMeasureIcon size={24} />}
+                    title="肩腰比"
+                    value={shoulderWaistRatio ? shoulderWaistRatio.toFixed(2) : 'N/A'}
+                    unit=""
                     color="purple"
                     description={shoulderWaistRatioDescription ? shoulderWaistRatioDescription.adjectives : '暂无数据'}
                 />
-                <KpiCard 
-                    icon={<WeightIcon />} 
-                    title="BMI" 
-                    value={bmi ? bmi.toFixed(2) : 'N/A'} 
-                    unit="" 
+                <KpiCard
+                    icon={<WeightIcon />}
+                    title="BMI"
+                    value={bmi ? bmi.toFixed(2) : 'N/A'}
+                    unit=""
                     color="emerald"
                     description={bmiDescription ? bmiDescription.category : '暂无数据'}
                 />
                 <KpiCard
-                    icon={<TrendingUpIcon/>}
+                    icon={<TrendingUpIcon />}
                     title="1RM 预估趋势"
                     value={oneRepMaxTrend.latest1RM !== null ? `${oneRepMaxTrend.latest1RM.toFixed(1)}kg` : 'N/A'}
                     unit={oneRepMaxTrend.trend !== null && oneRepMaxTrend.trend !== undefined ? `${oneRepMaxTrend.trend.toFixed(1)}%` : ''}
@@ -90,6 +91,7 @@ const DashboardPage: React.FC = () => {
                             trendRange={trendRange}
                             setTrendRange={setTrendRange}
                             activityTrendData={activityTrendData}
+                            availableActivities={availableActivities}
                         />
                     </CardContent>
                 </Card>

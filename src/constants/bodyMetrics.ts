@@ -1,5 +1,5 @@
 
-// --- BMI 分类数据 ---
+// BMI 分类数据 
 export interface BmiCategory {
   range: string;
   category: string;
@@ -12,7 +12,7 @@ export const BMI_CATEGORIES: BmiCategory[] = [
   { range: '≥ 28.0', category: '肥胖' },
 ];
 
-// --- 肩腰比分类数据 ---
+// 肩腰比分类数据
 export interface ShoulderWaistRatioCategory {
   range: string;
   visualFeature: string;

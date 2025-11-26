@@ -3,7 +3,7 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend } from '@/components/ui/chart';
 import type { ChartConfig } from '@/components/ui/chart';
-import { STRENGTH_ACTIVITIES } from '../../constants/activities';
+
 
 interface ActivityTrendData {
     date: string;
@@ -17,6 +17,7 @@ interface ActivityTrendChartProps {
     trendRange: '7' | '30' | '90' | 'all';
     setTrendRange: React.Dispatch<React.SetStateAction<'7' | '30' | '90' | 'all'>>;
     activityTrendData: ActivityTrendData[];
+    availableActivities: string[];
 }
 
 const chartConfig = {
@@ -37,6 +38,7 @@ const ActivityTrendChart: React.FC<ActivityTrendChartProps> = ({
     trendRange,
     setTrendRange,
     activityTrendData,
+    availableActivities,
 }) => {
 
     const formatDateTick = (tick: string) => {
@@ -72,7 +74,7 @@ const ActivityTrendChart: React.FC<ActivityTrendChartProps> = ({
                             <SelectValue placeholder="选择项目" />
                         </SelectTrigger>
                         <SelectContent>
-                            {STRENGTH_ACTIVITIES.map(act => (
+                            {availableActivities.map(act => (
                                 <SelectItem key={act} value={act}>{act}</SelectItem>
                             ))}
                         </SelectContent>

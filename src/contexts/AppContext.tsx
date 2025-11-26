@@ -13,20 +13,20 @@ import type { TrainingPlanItem } from '../types/Training';
 interface AppContextType {
   // Page state
   currentPage: Page;
-  setCurrentPage: React.Dispatch<React.SetStateAction<Page>>; 
+  setCurrentPage: React.Dispatch<React.SetStateAction<Page>>;
   // Alert state
   alertMessage: string | null;
-  setAlertMessage: React.Dispatch<React.SetStateAction<string | null>>; 
+  setAlertMessage: React.Dispatch<React.SetStateAction<string | null>>;
   // Data fetching
   records: TrainingRecord[];
   setRecords: React.Dispatch<React.SetStateAction<TrainingRecord[]>>;
-  metrics: MetricRecord[]; 
+  metrics: MetricRecord[];
   setMetrics: React.Dispatch<React.SetStateAction<MetricRecord[]>>;
   // Training data and handlers
   formData: Partial<TrainingRecord>;
   editingId: string | null;
   selectedActivity: string;
-  setSelectedActivity: React.Dispatch<React.SetStateAction<string>>; 
+  setSelectedActivity: React.Dispatch<React.SetStateAction<string>>;
   trendRange: '7' | '30' | '90' | 'all';
   setTrendRange: React.Dispatch<React.SetStateAction<'7' | '30' | '90' | 'all'>>;
   handleRecordChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
@@ -43,6 +43,7 @@ interface AppContextType {
   recommendation: Partial<TrainingRecord> | null;
   oneRepMaxTrend: { latest1RM: number | null; trend: number | null; };
   setFormData: React.Dispatch<React.SetStateAction<Partial<TrainingRecord>>>;
+  availableActivities: string[];
 
   // Metric data and handlers
   metricFormData: Partial<MetricRecord>;
@@ -51,11 +52,11 @@ interface AppContextType {
   handleMetricSubmit: (e: React.FormEvent) => Promise<void>;
   handleMetricEdit: (metric: MetricRecord) => void;
   handleMetricDelete: (id: string) => void;
-  handleCancelMetricEdit: () => void; 
+  handleCancelMetricEdit: () => void;
 
   // Settings data
   heightCm: number | '';
-  setHeightCm: React.Dispatch<React.SetStateAction<number | ''>>; 
+  setHeightCm: React.Dispatch<React.SetStateAction<number | ''>>;
   // Derived data
   latestMetrics: MetricRecord | null;
   shoulderWaistRatio: number | null;
@@ -65,7 +66,7 @@ interface AppContextType {
 
   // Training plan data
   trainingPlanItems: TrainingPlanItem[];
-  addTrainingPlanItem: (title: string, dueDate?: Date, repeat?: string, reminder?: Date) => Promise<void>;
+  addTrainingPlanItem: (title: string, dueDate?: Date, repeat?: string, reminder?: Date, weightKg?: number, sets?: number, reps?: number) => Promise<void>;
   toggleTrainingPlanItem: (id: string, completed: boolean) => Promise<void>;
   deleteTrainingPlanItem: (id: string) => Promise<void>;
   selectedTask: TrainingPlanItem | null;
@@ -95,6 +96,7 @@ interface TrainingDataContextType {
   oneRepMaxData: { date: string; estimated1RM: number }[];
   recommendation: Partial<TrainingRecord> | null;
   oneRepMaxTrend: { latest1RM: number | null; trend: number | null; };
+  availableActivities: string[];
 }
 
 
@@ -109,12 +111,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [selectedTask, setSelectedTask] = useState<TrainingPlanItem | null>(null);
 
   const { records, setRecords, metrics, setMetrics, trainingPlanItems, setTrainingPlanItems, fetchRecords } = useDataFetching(authReady);
-  
+
   const trainingData: TrainingDataContextType = useTrainingData(records, setRecords, fetchRecords, setAlertMessage, setCurrentPage);
   const metricData = useMetricData(metrics, setMetrics, fetchRecords, setAlertMessage, setCurrentPage);
   const settingsData = useSettingsData();
   const derivedData = useDerivedData(metrics, settingsData.heightCm);
-  const trainingPlanData = useTrainingPlanData(trainingPlanItems, setTrainingPlanItems, fetchRecords);
+  const trainingPlanData = useTrainingPlanData(trainingPlanItems, setTrainingPlanItems, fetchRecords, setRecords);
 
   const value: AppContextType = {
     currentPage,

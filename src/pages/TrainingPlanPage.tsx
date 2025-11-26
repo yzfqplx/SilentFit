@@ -3,8 +3,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '../contexts/AppContext';
-import { Trash2Icon, PlusIcon, CalendarIcon, RepeatIcon, BellIcon, ChevronRightIcon } from '../components/icons/Icons';
-import { XIcon } from 'lucide-react';
+import { Trash2Icon, PlusIcon, CalendarIcon, RepeatIcon, BellIcon, ChevronRightIcon, WeightIcon } from '../components/icons/Icons';
+import { XIcon, Layers, Hash } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
@@ -18,6 +18,9 @@ const TrainingPlanPage: React.FC = () => {
     const [dueDate, setDueDate] = useState<Date | undefined>();
     const [repeat, setRepeat] = useState<string | undefined>();
     const [reminder, setReminder] = useState<Date | undefined>();
+    const [weightKg, setWeightKg] = useState<number | undefined>();
+    const [sets, setSets] = useState<number | undefined>();
+    const [reps, setReps] = useState<number | undefined>();
     const [showCompleted, setShowCompleted] = useState(false); // New state for toggling completed tasks
     const listRef = useRef<HTMLUListElement>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -25,11 +28,14 @@ const TrainingPlanPage: React.FC = () => {
 
     const handleAddItem = () => {
         if (newItemTitle.trim() === '') return;
-        addTrainingPlanItem(newItemTitle, dueDate, repeat, reminder);
+        addTrainingPlanItem(newItemTitle, dueDate, repeat, reminder, weightKg, sets, reps);
         setNewItemTitle('');
         setDueDate(undefined);
         setRepeat(undefined);
         setReminder(undefined);
+        setWeightKg(undefined);
+        setSets(undefined);
+        setReps(undefined);
         setIsDrawerOpen(false);
     };
 
@@ -75,49 +81,112 @@ const TrainingPlanPage: React.FC = () => {
                                 />
                             </div>
                             {isDrawerOpen && (
-                                <div className="mt-2 p-2 border-t border-gray-200 dark:border-gray-800 flex gap-2">
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                                                <CalendarIcon className="h-4 w-4" />
-                                                {dueDate ? dueDate.toLocaleDateString() : '日期'}
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0">
-                                            <Calendar
-                                                mode="single"
-                                                selected={dueDate}
-                                                onSelect={setDueDate}
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                                                <RepeatIcon className="h-4 w-4" />
-                                                {repeat || '重复'}
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem onSelect={() => setRepeat('每天')}>每天</DropdownMenuItem>
-                                            <DropdownMenuItem onSelect={() => setRepeat('每周')}>每周</DropdownMenuItem>
-                                            <DropdownMenuItem onSelect={() => setRepeat('每月')}>每月</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                                                <BellIcon className="h-4 w-4" />
-                                                {reminder ? reminder.toLocaleTimeString() : '提醒'}
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem>暂不可用</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                <div className="mt-2 p-2 border-t border-gray-200 dark:border-gray-800 space-y-2">
+                                    {/* First row: Date, Repeat, Reminder */}
+                                    <div className="flex gap-2">
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                    <CalendarIcon className="h-4 w-4" />
+                                                    {dueDate ? dueDate.toLocaleDateString() : '日期'}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0">
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={dueDate}
+                                                    onSelect={setDueDate}
+                                                    initialFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                    <RepeatIcon className="h-4 w-4" />
+                                                    {repeat || '重复'}
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem onSelect={() => setRepeat('每天')}>每天</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => setRepeat('每周')}>每周</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => setRepeat('每月')}>每月</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                    <BellIcon className="h-4 w-4" />
+                                                    {reminder ? reminder.toLocaleTimeString() : '提醒'}
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem>暂不可用</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    {/* Second row: Weight, Sets, Reps */}
+                                    <div className="flex gap-2">
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                    <WeightIcon className="h-4 w-4" />
+                                                    {weightKg ? `${weightKg}kg` : '重量'}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-40 p-2">
+                                                <Input
+                                                    type="number"
+                                                    placeholder="重量(kg)"
+                                                    value={weightKg || ''}
+                                                    onChange={(e) => setWeightKg(e.target.value ? Number(e.target.value) : undefined)}
+                                                    min="0"
+                                                    step="0.5"
+                                                    autoFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                    <Layers className="h-4 w-4" />
+                                                    {sets ? `${sets}组` : '组数'}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-40 p-2">
+                                                <Input
+                                                    type="number"
+                                                    placeholder="组数"
+                                                    value={sets || ''}
+                                                    onChange={(e) => setSets(e.target.value ? Number(e.target.value) : undefined)}
+                                                    min="1"
+                                                    autoFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                    <Hash className="h-4 w-4" />
+                                                    {reps ? `${reps}次` : '次数'}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-40 p-2">
+                                                <Input
+                                                    type="number"
+                                                    placeholder="次数"
+                                                    value={reps || ''}
+                                                    onChange={(e) => setReps(e.target.value ? Number(e.target.value) : undefined)}
+                                                    min="1"
+                                                    autoFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
                                     {isDrawerOpen && newItemTitle && (
-                                        <Button onClick={handleAddItem} size="sm" className="ml-auto">添加</Button>
+                                        <Button onClick={handleAddItem} size="sm" className="w-full">添加</Button>
                                     )}
                                 </div>
                             )}
@@ -221,6 +290,21 @@ const TrainingPlanPage: React.FC = () => {
                             {selectedTask.reminder && (
                                 <p>
                                     <span className="font-semibold">提醒:</span> {new Date(selectedTask.reminder).toLocaleString()}
+                                </p>
+                            )}
+                            {selectedTask.weightKg !== undefined && (
+                                <p>
+                                    <span className="font-semibold">重量:</span> {selectedTask.weightKg} kg
+                                </p>
+                            )}
+                            {selectedTask.sets !== undefined && (
+                                <p>
+                                    <span className="font-semibold">组数:</span> {selectedTask.sets}
+                                </p>
+                            )}
+                            {selectedTask.reps !== undefined && (
+                                <p>
+                                    <span className="font-semibold">次数:</span> {selectedTask.reps}
                                 </p>
                             )}
                         </div>

@@ -1,7 +1,7 @@
 import { useAppContext, AppProvider } from './contexts/AppContext';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
-import RecordsPage from './pages/TrainingRecordPage';
+
 import MetricsPage from './pages/MetricsPage';
 import SettingsPage from './pages/SettingsPage';
 import TrainingPlanPage from './pages/TrainingPlanPage';
@@ -58,8 +58,7 @@ function AppContent() {
     switch (currentPage) {
       case 'dashboard':
         return <DashboardPage />;
-      case 'records':
-        return <RecordsPage />;
+
       case 'metrics':
         return <MetricsPage />;
       case 'settings':

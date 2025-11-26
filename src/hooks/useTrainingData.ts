@@ -48,10 +48,10 @@ export const useTrainingData = (
     const missing: string[] = [];
     if (!formData.activity) missing.push('训练项目');
     if (!formData.date) missing.push('日期');
-    // 注意：这里保留了原始的重量限制校验，您可以根据需要调整
+    // 保留原始的重量限制校验
     if (formData.weightKg === undefined || (formData.weightKg as number) < 0 || (formData.weightKg as number) > 300) missing.push('重量');
     if (formData.sets === undefined || (formData.sets as number) < 1) missing.push('组数');
-    if (formData.reps === undefined || (formData.reps as number) < 1) missing('次数');
+    if (formData.reps === undefined || (formData.reps as number) < 1) missing.push('次数');
     if (missing.length) {
       showAlert(`请检查以下字段：${missing.join('、')}`);
       return;
@@ -120,13 +120,13 @@ export const useTrainingData = (
   const handleCancelRecordEdit = useCallback(() => {
     setEditingId(null);
     setFormData({
-        type: 'Weightlifting',
-        activity: STRENGTH_ACTIVITIES[0],
-        date: new Date().toISOString().substring(0, 10),
-        sets: 4,
-        reps: 12,
-        weightKg: 0,
-        notes: ''
+      type: 'Weightlifting',
+      activity: STRENGTH_ACTIVITIES[0],
+      date: new Date().toISOString().substring(0, 10),
+      sets: 4,
+      reps: 12,
+      weightKg: 0,
+      notes: ''
     });
   }, []);
 
@@ -209,6 +209,14 @@ export const useTrainingData = (
     return { latest1RM, trend };
   }, [oneRepMaxData]);
 
+  const availableActivities = useMemo(() => {
+    const activities = new Set<string>(STRENGTH_ACTIVITIES);
+    records.forEach(r => {
+      if (r.activity) activities.add(r.activity);
+    });
+    return Array.from(activities).sort();
+  }, [records]);
+
   return {
     formData,
     setFormData,
@@ -231,5 +239,6 @@ export const useTrainingData = (
     oneRepMaxData,
     recommendation,
     oneRepMaxTrend,
+    availableActivities,
   };
 };

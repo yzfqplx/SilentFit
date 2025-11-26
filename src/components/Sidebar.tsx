@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
 
     const navItems = [
         { id: 'dashboard', icon: ReactIcon, label: '仪表板' },
-        { id: 'records', icon: ListChecksIcon, label: '训练记录' },
+
         { id: 'trainingPlan', icon: ClipboardListIcon, label: '训练计划' },
         { id: 'metrics', icon: TapeMeasureIcon, label: '身体围度' },
         { id: 'fitnessTheory', icon: NetworkIcon, label: '健身理论' },
@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
                     <ReactIcon className="w-8 h-8 text-primary mr-2 drop-shadow-lg" />
                     <h1 className="text-xl font-bold text-sidebar-foreground">SilentFit</h1>
                 </div>
-                
+
                 <nav className="flex-1 space-y-2 w-full">
                     {navItems.map(item => (
                         <Button
