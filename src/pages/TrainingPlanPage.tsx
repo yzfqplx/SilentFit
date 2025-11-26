@@ -86,7 +86,7 @@ const TrainingPlanPage: React.FC = () => {
                                     <div className="flex gap-2">
                                         <Popover>
                                             <PopoverTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="flex-1 flex items-center gap-1">
                                                     <CalendarIcon className="h-4 w-4" />
                                                     {dueDate ? dueDate.toLocaleDateString() : '日期'}
                                                 </Button>
@@ -102,7 +102,7 @@ const TrainingPlanPage: React.FC = () => {
                                         </Popover>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="flex-1 flex items-center gap-1">
                                                     <RepeatIcon className="h-4 w-4" />
                                                     {repeat || '重复'}
                                                 </Button>
@@ -115,7 +115,7 @@ const TrainingPlanPage: React.FC = () => {
                                         </DropdownMenu>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="flex-1 flex items-center gap-1">
                                                     <BellIcon className="h-4 w-4" />
                                                     {reminder ? reminder.toLocaleTimeString() : '提醒'}
                                                 </Button>
@@ -129,7 +129,7 @@ const TrainingPlanPage: React.FC = () => {
                                     <div className="flex gap-2">
                                         <Popover>
                                             <PopoverTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="flex-1 flex items-center gap-1">
                                                     <WeightIcon className="h-4 w-4" />
                                                     {weightKg ? `${weightKg}kg` : '重量'}
                                                 </Button>
@@ -149,7 +149,7 @@ const TrainingPlanPage: React.FC = () => {
 
                                         <Popover>
                                             <PopoverTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="flex-1 flex items-center gap-1">
                                                     <Layers className="h-4 w-4" />
                                                     {sets ? `${sets}组` : '组数'}
                                                 </Button>
@@ -168,7 +168,7 @@ const TrainingPlanPage: React.FC = () => {
 
                                         <Popover>
                                             <PopoverTrigger asChild>
-                                                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" className="flex-1 flex items-center gap-1">
                                                     <Hash className="h-4 w-4" />
                                                     {reps ? `${reps}次` : '次数'}
                                                 </Button>

@@ -73,7 +73,7 @@ function AppContent() {
   };
 
   return (
-    <div className={`flex h-screen font-sans antialiased w-full ${platform === 'android' ? 'pb-16' : ''}`}>
+    <div className="flex h-screen font-sans antialiased w-full">
       {platform !== 'android' && (
         <Sidebar
           currentPage={currentPage}
@@ -89,7 +89,7 @@ function AppContent() {
         ></div>
       )}
 
-      <main className="flex-1 overflow-y-auto hide-scrollbar">
+      <main className={`flex-1 hide-scrollbar ${currentPage === 'fitnessTheory' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {/* Sticky Header */}
         <header
           className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg flex items-center"
@@ -111,7 +111,14 @@ function AppContent() {
         </header>
 
         {/* Content */}
-        <div className={`${currentPage === 'fitnessTheory' ? '' : 'p-6 md:p-10'} ${currentPage === 'fitnessTheory' ? 'h-full' : ''}`}>
+        <div
+          className={currentPage === 'fitnessTheory' ? 'h-full' : 'p-6 md:p-10'}
+          style={platform === 'android' ? {
+            paddingBottom: currentPage === 'fitnessTheory'
+              ? 'calc(4rem + var(--safe-area-inset-bottom))'
+              : 'calc(4rem + var(--safe-area-inset-bottom) + 1.5rem)'
+          } : {}}
+        >
           <div key={currentPage} className={`page-enter-animation ${currentPage === 'fitnessTheory' ? 'h-full' : ''}`}>
             {renderContent()}
           </div>

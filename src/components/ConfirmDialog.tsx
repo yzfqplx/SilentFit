@@ -22,7 +22,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ children, title, descript
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-w-sm p-4 rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>

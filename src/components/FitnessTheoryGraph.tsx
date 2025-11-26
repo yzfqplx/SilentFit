@@ -22,7 +22,10 @@ const FitnessTheoryGraph: React.FC = () => {
 
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
+      <div
+        style={{ padding: '10px', borderBottom: '1px solid #eee' }}
+        onWheel={(e) => e.stopPropagation()}
+      >
         <Input
           type="text"
           placeholder="Filter nodes..."
@@ -54,7 +57,10 @@ const FitnessTheoryGraph: React.FC = () => {
           onNodeClick={onNodeClick}
           fitView
         >
-          <MiniMap />
+          <MiniMap
+            style={{ bottom: 80, width: 120, height: 80 }}
+            nodeStrokeWidth={3}
+          />
           <Controls position="top-right" />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         </ReactFlow>

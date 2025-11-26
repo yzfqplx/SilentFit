@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Page } from '../types/data';
-import { ReactIcon, ListChecksIcon, TapeMeasureIcon, SettingsIcon, ClipboardListIcon, NetworkIcon } from './icons/Icons';
+import { ReactIcon, TapeMeasureIcon, SettingsIcon, ClipboardListIcon, NetworkIcon } from './icons/Icons';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -12,7 +12,6 @@ interface BottomNavBarProps {
 const BottomNavBar: React.FC<BottomNavBarProps> = ({ currentPage, setCurrentPage }) => {
     const navItems = [
         { id: 'dashboard', icon: ReactIcon, label: '仪表板' },
-
         { id: 'trainingPlan', icon: ClipboardListIcon, label: '训练计划' },
         { id: 'metrics', icon: TapeMeasureIcon, label: '身体围度' },
         { id: 'fitnessTheory', icon: NetworkIcon, label: '健身理论' },
@@ -33,11 +32,14 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ currentPage, setCurrentPage
                     variant="ghost"
                     onClick={() => setCurrentPage(item.id as Page)}
                     className={cn(
-                        "flex flex-col items-center justify-center w-full h-full text-sm font-medium",
-                        currentPage === item.id ? "text-blue-400" : "text-gray-400"
+                        "flex flex-col items-center justify-center w-full h-full text-sm font-medium transition-colors duration-200",
+                        "hover:bg-transparent active:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
+                        currentPage === item.id
+                            ? "text-foreground font-semibold"
+                            : "text-muted-foreground hover:text-foreground"
                     )}
                 >
-                    <item.icon className="w-6 h-6" />
+                    <item.icon className="w-6 h-6 transition-transform duration-200" />
                     <span className='text-xs mt-1'>{item.label}</span>
                 </Button>
             ))}

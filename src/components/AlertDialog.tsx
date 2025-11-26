@@ -20,7 +20,7 @@ const CustomAlertDialog: React.FC<AlertDialogProps> = ({ message, onConfirm, isO
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onConfirm}>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-w-sm p-4 rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>提示</AlertDialogTitle>
           <AlertDialogDescription>
