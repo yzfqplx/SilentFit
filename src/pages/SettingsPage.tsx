@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useTheme } from '@/components/ui/theme-provider'; // Import useTheme
 import ConfirmDialog from '@/components/ConfirmDialog'; // Import ConfirmDialog
 import { dataApi, fileApi } from '../lib/tauri'; // Import dataApi and fileApi
+import { Github } from 'lucide-react'; // Import Github icon
 
 // Helper to get the data store (Tauri API)
 const getDataStore = () => {
@@ -222,6 +223,33 @@ const SettingsPage: React.FC = () => {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* About Section */}
+            <Card className="mt-8">
+                <CardHeader>
+                    <CardTitle>关于</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mb-2">SilentFit - 您的个人健身追踪助手</p>
+                        <p>版本: 1.1.0-Alpha</p>
+                        <p>作者: yzfqplx</p>
+                    </div>
+                    <div className="pt-2">
+                        <Button
+                            variant="outline"
+                            className="w-full sm:w-auto flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                            onClick={() => window.open('https://github.com/yzfqplx/SilentFit', '')}
+                        >
+                            <Github className="w-5 h-5" />
+                            <span>查看 GitHub 仓库</span>
+                        </Button>
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-500 pt-2">
+                        <p>© 2025 SilentFit. 使用 Tauri + React 构建。</p>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 };

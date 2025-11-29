@@ -9,7 +9,7 @@ import FitnessTheoryPage from './pages/FitnessTheoryPage';
 import AlertDialog from './components/AlertDialog';
 import './App.css';
 import type { Page } from './types/data';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PanelLeftIcon } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import BottomNavBar from './components/BottomNavBar';
@@ -18,6 +18,7 @@ function AppContent() {
   const { currentPage, setCurrentPage, alertMessage, setAlertMessage } = useAppContext();
   const [platform, setPlatform] = useState('web');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const checkPlatform = async () => {
@@ -44,6 +45,13 @@ function AppContent() {
     };
     checkPlatform();
   }, []);
+
+  // Reset scroll position when page changes
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
+  }, [currentPage]);
 
   const pageTitles: { [key in Page]: string } = {
     dashboard: '力量训练仪表板',
@@ -89,7 +97,7 @@ function AppContent() {
         ></div>
       )}
 
-      <main className={`flex-1 hide-scrollbar ${currentPage === 'fitnessTheory' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
+      <main ref={mainRef} className={`flex-1 hide-scrollbar ${currentPage === 'fitnessTheory' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {/* Sticky Header */}
         <header
           className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg flex items-center"
