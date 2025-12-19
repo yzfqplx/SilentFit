@@ -1,40 +1,62 @@
 #!/bin/bash
 
-# 复制自定义的 Android 文件到构建目录
+# 颜色定义
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
-echo "📋 Copying custom Android files..."
+echo -e "${GREEN}📋 Copying custom Android files...${NC}"
 
-# 定义源目录和目标目录
-CUSTOM_DIR="android"
-GEN_DIR="gen/android"
+# 获取脚本所在目录
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# 源文件路径
+CUSTOM_ANDROID_DIR="$SCRIPT_DIR/android"
+MAIN_ACTIVITY_SRC="$CUSTOM_ANDROID_DIR/app/src/main/java/com/silent/fitnesstracker/MainActivity.kt"
+THEMES_XML_SRC="$CUSTOM_ANDROID_DIR/app/src/main/res/values/themes.xml"
+THEMES_V21_XML_SRC="$CUSTOM_ANDROID_DIR/app/src/main/res/values-v21/themes.xml"
+
+# 目标文件路径
+GEN_ANDROID_DIR="$SCRIPT_DIR/gen/android"
+MAIN_ACTIVITY_DEST="$GEN_ANDROID_DIR/app/src/main/java/com/silent/fitnesstracker/MainActivity.kt"
+THEMES_XML_DEST="$GEN_ANDROID_DIR/app/src/main/res/values/themes.xml"
+THEMES_V21_XML_DEST="$GEN_ANDROID_DIR/app/src/main/res/values-v21/themes.xml"
+
+# 检查 gen/android 目录是否存在
+if [ ! -d "$GEN_ANDROID_DIR" ]; then
+    echo -e "${YELLOW}⚠️  gen/android directory not found. Please run 'npm run tauri android init' first.${NC}"
+    exit 1
+fi
 
 # 复制 MainActivity.kt
-if [ -f "$CUSTOM_DIR/app/src/main/java/com/silent/fitnesstracker/MainActivity.kt" ]; then
-    mkdir -p "$GEN_DIR/app/src/main/java/com/silent/fitnesstracker"
-    cp "$CUSTOM_DIR/app/src/main/java/com/silent/fitnesstracker/MainActivity.kt" \
-       "$GEN_DIR/app/src/main/java/com/silent/fitnesstracker/MainActivity.kt"
-    echo "✅ Copied MainActivity.kt"
+if [ -f "$MAIN_ACTIVITY_SRC" ]; then
+    # 确保目标目录存在
+    mkdir -p "$(dirname "$MAIN_ACTIVITY_DEST")"
+    cp "$MAIN_ACTIVITY_SRC" "$MAIN_ACTIVITY_DEST"
+    echo -e "${GREEN}✅ MainActivity.kt copied${NC}"
 else
-    echo "⚠️  MainActivity.kt not found in custom directory"
+    echo -e "${RED}❌ MainActivity.kt not found at: $MAIN_ACTIVITY_SRC${NC}"
+    exit 1
 fi
 
-# 复制主题文件
-if [ -f "$CUSTOM_DIR/app/src/main/res/values/themes.xml" ]; then
-    mkdir -p "$GEN_DIR/app/src/main/res/values"
-    cp "$CUSTOM_DIR/app/src/main/res/values/themes.xml" \
-       "$GEN_DIR/app/src/main/res/values/themes.xml"
-    echo "✅ Copied themes.xml"
+# 复制 themes.xml
+if [ -f "$THEMES_XML_SRC" ]; then
+    mkdir -p "$(dirname "$THEMES_XML_DEST")"
+    cp "$THEMES_XML_SRC" "$THEMES_XML_DEST"
+    echo -e "${GREEN}✅ themes.xml copied${NC}"
 else
-    echo "⚠️  themes.xml not found in custom directory"
+    echo -e "${YELLOW}⚠️  themes.xml not found, skipping...${NC}"
 fi
 
-if [ -f "$CUSTOM_DIR/app/src/main/res/values-v21/themes.xml" ]; then
-    mkdir -p "$GEN_DIR/app/src/main/res/values-v21"
-    cp "$CUSTOM_DIR/app/src/main/res/values-v21/themes.xml" \
-       "$GEN_DIR/app/src/main/res/values-v21/themes.xml"
-    echo "✅ Copied themes.xml (v21)"
+# 复制 themes.xml (v21)
+if [ -f "$THEMES_V21_XML_SRC" ]; then
+    mkdir -p "$(dirname "$THEMES_V21_XML_DEST")"
+    cp "$THEMES_V21_XML_SRC" "$THEMES_V21_XML_DEST"
+    echo -e "${GREEN}✅ themes.xml (v21) copied${NC}"
 else
-    echo "⚠️  themes.xml (v21) not found in custom directory"
+    echo -e "${YELLOW}⚠️  themes.xml (v21) not found, skipping...${NC}"
 fi
 
-echo "✨ Custom Android files copied successfully!"
+echo -e "${GREEN}✨ Custom Android files copied successfully!${NC}"
