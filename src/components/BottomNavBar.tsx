@@ -22,8 +22,8 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ currentPage, setCurrentPage
         <nav
             className="fixed bottom-0 left-0 right-0 bg-background dark:bg-gray-950 border-t border-gray-200/30 dark:border-gray-800 backdrop-blur-xl flex justify-around items-center shadow-t-lg"
             style={{
-                height: 'calc(4rem + var(--safe-area-inset-bottom))',
-                paddingBottom: 'var(--safe-area-inset-bottom)',
+                height: 'calc(4rem + max(env(safe-area-inset-bottom), 16px))',
+                paddingBottom: 'max(env(safe-area-inset-bottom), 16px)',
             }}
         >
             {navItems.map(item => (

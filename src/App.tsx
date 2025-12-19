@@ -35,6 +35,24 @@ function AppContent() {
       if (userAgent.includes('android')) {
         console.log('✅ Detected platform: android');
         setPlatform('android');
+
+        // 初始化 Android 状态栏
+        try {
+          // 等待 JavaScript 接口可用
+          const checkAndSetStatusBar = () => {
+            if (window.AndroidStatusBar) {
+              const isDark = document.documentElement.classList.contains('dark');
+              window.AndroidStatusBar.setStyle(isDark);
+              console.log('✅ Status bar initialized with theme:', isDark ? 'dark' : 'light');
+            } else {
+              // 如果接口还未准备好，稍后重试
+              setTimeout(checkAndSetStatusBar, 100);
+            }
+          };
+          checkAndSetStatusBar();
+        } catch (error) {
+          console.log('Status bar initialization failed:', error);
+        }
       } else if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
         console.log('✅ Detected platform: ios');
         setPlatform('ios');
@@ -100,8 +118,10 @@ function AppContent() {
       <main ref={mainRef} className={`flex-1 hide-scrollbar ${currentPage === 'fitnessTheory' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
         {/* Sticky Header */}
         <header
-          className="sticky top-0 z-10 bg-background/50 p-4 border-t border-b backdrop-blur-lg flex items-center"
-          style={{ paddingTop: platform === 'android' ? 'calc(1rem + var(--safe-area-inset-top))' : '1rem' }}
+          className="sticky top-0 z-10 bg-background/50 p-4 border-b backdrop-blur-lg flex items-center"
+          style={{
+            paddingTop: platform === 'android' ? '48px' : '1rem'
+          }}
         >
           {platform !== 'android' && (
             <Button
@@ -123,8 +143,8 @@ function AppContent() {
           className={currentPage === 'fitnessTheory' ? 'h-full' : 'p-6 md:p-10'}
           style={platform === 'android' ? {
             paddingBottom: currentPage === 'fitnessTheory'
-              ? 'calc(4rem + var(--safe-area-inset-bottom))'
-              : 'calc(4rem + var(--safe-area-inset-bottom) + 1.5rem)'
+              ? 'calc(4rem + max(env(safe-area-inset-bottom), 16px))'
+              : 'calc(4rem + max(env(safe-area-inset-bottom), 16px) + 1.5rem)'
           } : {}}
         >
           <div key={currentPage} className={`page-enter-animation ${currentPage === 'fitnessTheory' ? 'h-full' : ''}`}>

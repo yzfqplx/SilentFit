@@ -237,17 +237,40 @@ pub fn theme_get(app_handle: AppHandle) -> Result<Option<String>, String> {
 // Export data to a file
 #[tauri::command]
 pub fn export_data(app_handle: AppHandle, data: String, filename: String) -> Result<String, String> {
-    let downloads_dir = app_handle.path().download_dir()
-        .map_err(|e| format!("Failed to get downloads directory: {}", e))?;
-    
-    if !downloads_dir.exists() {
-        fs::create_dir_all(&downloads_dir).map_err(|e| e.to_string())?;
+    #[cfg(target_os = "android")]
+    {
+        use std::path::PathBuf;
+        
+        // 在 Android 上使用公共下载目录
+        // 注意：这需要 WRITE_EXTERNAL_STORAGE 权限（Android 10 以下）
+        // Android 10+ 不需要权限即可写入 Download 目录
+        let download_path = PathBuf::from("/storage/emulated/0/Download");
+        
+        if !download_path.exists() {
+            fs::create_dir_all(&download_path).map_err(|e| e.to_string())?;
+        }
+        
+        let file_path = download_path.join(&filename);
+        fs::write(&file_path, data).map_err(|e| e.to_string())?;
+        
+        Ok(file_path.to_string_lossy().to_string())
     }
     
-    let file_path = downloads_dir.join(&filename);
-    fs::write(&file_path, data).map_err(|e| e.to_string())?;
-    
-    Ok(file_path.to_string_lossy().to_string())
+    #[cfg(not(target_os = "android"))]
+    {
+        // On other platforms, use downloads directory
+        let downloads_dir = app_handle.path().download_dir()
+            .map_err(|e| format!("Failed to get downloads directory: {}", e))?;
+        
+        if !downloads_dir.exists() {
+            fs::create_dir_all(&downloads_dir).map_err(|e| e.to_string())?;
+        }
+        
+        let file_path = downloads_dir.join(&filename);
+        fs::write(&file_path, data).map_err(|e| e.to_string())?;
+        
+        Ok(file_path.to_string_lossy().to_string())
+    }
 }
 
 // Share file on Android using Tauri plugin

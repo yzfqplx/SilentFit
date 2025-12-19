@@ -50,6 +50,7 @@ export function ThemeProvider({
     const root = window.document.documentElement
     root.classList.remove("light", "dark")
 
+    let actualTheme: "light" | "dark";
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
         .matches
@@ -57,10 +58,32 @@ export function ThemeProvider({
         : "light"
 
       root.classList.add(systemTheme)
-      return
+      actualTheme = systemTheme;
+    } else {
+      root.classList.add(theme)
+      actualTheme = theme;
     }
 
-    root.classList.add(theme)
+    // 更新 Android 状态栏样式
+    const updateStatusBar = async () => {
+      try {
+        // 检查是否在 Android 环境中
+        const userAgent = navigator.userAgent.toLowerCase();
+        if (userAgent.includes('android')) {
+          // 直接调用 Android 的 JavaScript 接口
+          if (window.AndroidStatusBar) {
+            window.AndroidStatusBar.setStyle(actualTheme === 'dark');
+            console.log('✅ Status bar style updated to:', actualTheme);
+          } else {
+            console.log('⚠️ AndroidStatusBar interface not available yet');
+          }
+        }
+      } catch (error) {
+        console.log('Status bar update failed:', error);
+      }
+    };
+
+    updateStatusBar();
   }, [theme])
 
   const setTheme = async (theme: Theme) => {

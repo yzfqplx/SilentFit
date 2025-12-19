@@ -1,0 +1,273 @@
+{
+    "heightCm": 175,
+    "records": [
+        {
+            "_id": "rec_001",
+            "type": "Weightlifting",
+            "activity": "平板卧推",
+            "date": "2024-12-15",
+            "sets": 4,
+            "reps": 10,
+            "weightKg": 60,
+            "notes": "感觉不错，下次可以加重",
+            "completed": true,
+            "createdAt": "2024-12-15T10:30:00.000Z"
+        },
+        {
+            "_id": "rec_002",
+            "type": "Weightlifting",
+            "activity": "深蹲",
+            "date": "2024-12-16",
+            "sets": 3,
+            "reps": 12,
+            "weightKg": 80,
+            "notes": "膝盖有点不舒服，注意姿势",
+            "completed": true,
+            "createdAt": "2024-12-16T14:20:00.000Z"
+        },
+        {
+            "_id": "rec_003",
+            "type": "Weightlifting",
+            "activity": "硬拉",
+            "date": "2024-12-17",
+            "sets": 5,
+            "reps": 5,
+            "weightKg": 100,
+            "notes": "新PR！",
+            "completed": true,
+            "createdAt": "2024-12-17T16:45:00.000Z"
+        },
+        {
+            "_id": "rec_004",
+            "type": "Weightlifting",
+            "activity": "杠铃划船",
+            "date": "2024-12-18",
+            "sets": 4,
+            "reps": 8,
+            "weightKg": 70,
+            "notes": "背部泵感很好",
+            "completed": true,
+            "createdAt": "2024-12-18T11:15:00.000Z"
+        },
+        {
+            "_id": "rec_005",
+            "type": "Weightlifting",
+            "activity": "肩推",
+            "date": "2024-12-19",
+            "sets": 3,
+            "reps": 10,
+            "weightKg": 40,
+            "notes": "肩部训练日",
+            "completed": true,
+            "createdAt": "2024-12-19T09:00:00.000Z"
+        },
+        {
+            "_id": "rec_006",
+            "type": "Weightlifting",
+            "activity": "引体向上",
+            "date": "2024-12-19",
+            "sets": 4,
+            "reps": 8,
+            "weightKg": 0,
+            "notes": "自重训练",
+            "completed": true,
+            "createdAt": "2024-12-19T09:30:00.000Z"
+        }
+    ],
+    "metrics": [
+        {
+            "_id": "metric_001",
+            "date": "2024-12-01",
+            "shoulderCm": 110,
+            "chestCm": 95,
+            "armCm": 35,
+            "waistCm": 80,
+            "weightKg": 70,
+            "notes": "月初测量",
+            "createdAt": "2024-12-01T08:00:00.000Z"
+        },
+        {
+            "_id": "metric_002",
+            "date": "2024-12-08",
+            "shoulderCm": 111,
+            "chestCm": 96,
+            "armCm": 35.5,
+            "waistCm": 79,
+            "weightKg": 71,
+            "notes": "有进步！",
+            "createdAt": "2024-12-08T08:00:00.000Z"
+        },
+        {
+            "_id": "metric_003",
+            "date": "2024-12-15",
+            "shoulderCm": 112,
+            "chestCm": 97,
+            "armCm": 36,
+            "waistCm": 78,
+            "weightKg": 72,
+            "notes": "继续保持",
+            "createdAt": "2024-12-15T08:00:00.000Z"
+        }
+    ],
+    "trainingPlan": [
+        {
+            "_id": "plan_001",
+            "title": "平板卧推",
+            "completed": true,
+            "weightKg": 60,
+            "sets": 4,
+            "reps": 10,
+            "relatedRecordId": "rec_001",
+            "createdAt": "2024-12-15T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_002",
+            "title": "上斜卧推",
+            "completed": false,
+            "weightKg": 50,
+            "sets": 4,
+            "reps": 10,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_003",
+            "title": "哑铃飞鸟",
+            "completed": false,
+            "weightKg": 15,
+            "sets": 3,
+            "reps": 12,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_004",
+            "title": "深蹲",
+            "completed": true,
+            "weightKg": 80,
+            "sets": 3,
+            "reps": 12,
+            "relatedRecordId": "rec_002",
+            "createdAt": "2024-12-16T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_005",
+            "title": "腿举",
+            "completed": false,
+            "weightKg": 120,
+            "sets": 4,
+            "reps": 15,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_006",
+            "title": "腿弯举",
+            "completed": false,
+            "weightKg": 40,
+            "sets": 3,
+            "reps": 12,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_007",
+            "title": "硬拉",
+            "completed": true,
+            "weightKg": 100,
+            "sets": 5,
+            "reps": 5,
+            "relatedRecordId": "rec_003",
+            "createdAt": "2024-12-17T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_008",
+            "title": "杠铃划船",
+            "completed": true,
+            "weightKg": 70,
+            "sets": 4,
+            "reps": 8,
+            "relatedRecordId": "rec_004",
+            "createdAt": "2024-12-18T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_009",
+            "title": "引体向上",
+            "completed": true,
+            "weightKg": 0,
+            "sets": 4,
+            "reps": 8,
+            "relatedRecordId": "rec_006",
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_010",
+            "title": "高位下拉",
+            "completed": false,
+            "weightKg": 60,
+            "sets": 4,
+            "reps": 10,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_011",
+            "title": "肩推",
+            "completed": true,
+            "weightKg": 40,
+            "sets": 3,
+            "reps": 10,
+            "relatedRecordId": "rec_005",
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_012",
+            "title": "侧平举",
+            "completed": false,
+            "weightKg": 10,
+            "sets": 3,
+            "reps": 15,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_013",
+            "title": "俯身飞鸟",
+            "completed": false,
+            "weightKg": 8,
+            "sets": 3,
+            "reps": 15,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_014",
+            "title": "杠铃弯举",
+            "completed": false,
+            "weightKg": 30,
+            "sets": 3,
+            "reps": 12,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_015",
+            "title": "锤式弯举",
+            "completed": false,
+            "weightKg": 15,
+            "sets": 3,
+            "reps": 12,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_016",
+            "title": "三头臂屈伸",
+            "completed": false,
+            "weightKg": 0,
+            "sets": 3,
+            "reps": 12,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        },
+        {
+            "_id": "plan_017",
+            "title": "绳索下压",
+            "completed": false,
+            "weightKg": 25,
+            "sets": 3,
+            "reps": 15,
+            "createdAt": "2024-12-19T08:00:00.000Z"
+        }
+    ]
+}

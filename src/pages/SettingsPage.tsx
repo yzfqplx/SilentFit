@@ -15,42 +15,46 @@ const getDataStore = () => {
 };
 
 const SettingsPage: React.FC = () => {
-    const { heightCm, setHeightCm, records, setRecords, metrics, setMetrics, setAlertMessage } = useAppContext();
+    const { heightCm, setHeightCm, records, setRecords, metrics, setMetrics, trainingPlanItems, setAlertMessage } = useAppContext();
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
     const { theme, setTheme } = useTheme(); // Use the useTheme hook
 
     const handleExportData = async () => {
+        console.log('📤 开始导出数据...');
         const data = {
             heightCm,
             records,
             metrics,
+            trainingPlan: trainingPlanItems,
         };
         const jsonString = JSON.stringify(data, null, 2);
         const fileName = 'fitness_tracker_data.json';
+        console.log('📦 数据大小:', jsonString.length, 'bytes');
 
         try {
             // 检查是否在 Tauri 环境中
-            const isTauri = '__TAURI__' in window;
+            const userAgent = navigator.userAgent.toLowerCase();
+            // 检查 __TAURI_INTERNALS__ 更可靠，因为它总是存在
+            const isTauri = '__TAURI_INTERNALS__' in window || '__TAURI__' in window;
+            console.log('🔍 UserAgent:', userAgent);
+            console.log('🔍 window.__TAURI_INTERNALS__:', '__TAURI_INTERNALS__' in window);
+            console.log('🔍 window.__TAURI__:', '__TAURI__' in window);
+            console.log('🔍 是否在 Tauri 环境:', isTauri);
 
             if (isTauri) {
                 // 使用 Tauri 后端 API 导出文件
+                console.log('💾 调用 fileApi.exportData...');
                 const filePath = await fileApi.exportData(jsonString, fileName);
-                console.log('文件已保存到:', filePath);
+                console.log('✅ 文件已保存到:', filePath);
 
                 // 检查是否在 Android 上，如果是则触发分享
-                const userAgent = navigator.userAgent.toLowerCase();
-                if (userAgent.includes('android')) {
-                    try {
-                        await fileApi.shareFile(
-                            filePath,
-                            '健身追踪器数据',
-                            '这是您的健身追踪器数据备份。'
-                        );
-                        setAlertMessage('数据已导出并可分享！');
-                    } catch (shareError) {
-                        console.error('分享失败:', shareError);
-                        setAlertMessage(`数据已保存到: ${filePath}`);
-                    }
+                const isAndroid = userAgent.includes('android');
+                console.log('📱 是否在 Android:', isAndroid);
+
+                if (isAndroid) {
+                    // Android 上保存文件到下载目录
+                    console.log('💾 文件已保存到下载目录');
+                    setAlertMessage(`数据已成功导出！\n\n文件已保存到：\n/storage/emulated/0/Download/\n\n您可以在文件管理器的"下载"文件夹中找到该文件。`);
                 } else {
                     setAlertMessage(`数据已保存到: ${filePath}`);
                 }
@@ -68,7 +72,7 @@ const SettingsPage: React.FC = () => {
                 setAlertMessage('数据已成功导出！');
             }
         } catch (error) {
-            console.error('数据导出失败:', error);
+            console.error('❌ 数据导出失败:', error);
             setAlertMessage('数据导出失败。');
         }
     };
@@ -77,9 +81,10 @@ const SettingsPage: React.FC = () => {
         try {
             await store.clearCollection('training');
             await store.clearCollection('metrics');
+            await store.clearCollection('trainingPlan');
             setRecords([]);
             setMetrics([]);
-            setAlertMessage('所有数据已清除！');
+            setAlertMessage('所有数据已清除！包括训练记录、围度数据和训练计划。');
         } catch (error) {
             console.error('清除数据失败:', error);
             setAlertMessage('清除数据失败。');
@@ -123,12 +128,16 @@ const SettingsPage: React.FC = () => {
                     await store.clearCollection('metrics');
                     await store.bulkInsert('metrics', importedData.metrics);
                 }
+                if (importedData.trainingPlan) {
+                    await store.clearCollection('trainingPlan');
+                    await store.bulkInsert('trainingPlan', importedData.trainingPlan);
+                }
                 // heightCm 是一个单独的值，直接设置即可，不需要通过 store
                 // setHeightCm 已经在上面调用，这里不需要再次调用
                 // if (importedData.heightCm !== undefined) {
                 // }
 
-                setAlertMessage('数据已成功导入！');
+                setAlertMessage('数据已成功导入！包括训练记录、围度数据和训练计划。');
             } catch (error) {
                 console.error('导入数据失败:', error);
                 setAlertMessage('导入数据失败，请检查文件格式。');
